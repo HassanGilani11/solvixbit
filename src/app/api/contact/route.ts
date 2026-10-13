@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { sendContactNotification, sendContactConfirmation } from '../../../lib/email/mailer';
 
 export interface ContactSubmissionBody {
   name: string;
@@ -110,6 +111,16 @@ export async function POST(req: NextRequest) {
       } catch (err) {
         console.error('Failed to forward contact inquiry to external webhook:', err);
       }
+    }
+
+    // Send SMTP notification to hello@solvixbit.com and confirmation to client
+    try {
+      await Promise.allSettled([
+        sendContactNotification(sanitizedData),
+        sendContactConfirmation(sanitizedData),
+      ]);
+    } catch (emailErr) {
+      console.error('[SMTP EMAIL DISPATCH ERROR]', emailErr);
     }
 
     return NextResponse.json<ContactSubmissionResponse>(

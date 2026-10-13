@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { ProjectDiscoveryData, ProjectSubmissionResponse } from '@/types/content';
+import { sendProjectDiscoveryNotification, sendProjectDiscoveryConfirmation } from '../../../lib/email/mailer';
 
 export async function POST(req: NextRequest) {
   try {
@@ -96,8 +97,8 @@ export async function POST(req: NextRequest) {
     const sanitizedData = {
       referenceId,
       submittedAt: new Date().toISOString(),
-      objectives,
-      challenges,
+      objectives: objectives || [],
+      challenges: challenges || [],
       customChallenge: customChallenge || challengeCustom || null,
       scopeDeliverables: scopeDeliverables || scope || [],
       budgetRange: budgetRange || budget || 'Unspecified',
@@ -125,6 +126,16 @@ export async function POST(req: NextRequest) {
       } catch (err) {
         console.error('Failed to forward enquiry to external webhook:', err);
       }
+    }
+
+    // Send SMTP notification to hello@solvixbit.com and confirmation to client
+    try {
+      await Promise.allSettled([
+        sendProjectDiscoveryNotification(sanitizedData),
+        sendProjectDiscoveryConfirmation(sanitizedData),
+      ]);
+    } catch (emailErr) {
+      console.error('[SMTP EMAIL DISPATCH ERROR]', emailErr);
     }
 
     return NextResponse.json<ProjectSubmissionResponse>(
