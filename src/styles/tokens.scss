@@ -1,0 +1,45 @@
+/**
+ * SOLVIXBIT Design Tokens (SCSS Variables & Maps) — Premium Creative Agency
+ */
+
+$color-primary-blue: #598BFF;
+$color-secondary-green: #02C415;
+$color-light-grey: #EFEFEF;
+$color-black: #000000;
+$color-white: #FFFFFF;
+
+$theme-light: (
+  background: #FFFFFF,
+  surface: #FAFAFA,
+  surfaceAlt: #EFEFEF,
+  text: #000000,
+  muted: #555555,
+  border: #E5E7EB,
+);
+
+$theme-dark: (
+  background: #000000,
+  surface: #0E0E0E,
+  surfaceAlt: #161616,
+  text: #FFFFFF,
+  muted: #A0A0A0,
+  border: #222222,
+);
+
+$font-family-heading: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+$font-family-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+$font-family-mono: 'JetBrains Mono', ui-monospace, monospace;
+
+$space-1: 4px;
+$space-2: 8px;
+$space-3: 12px;
+$space-4: 16px;
+$space-6: 24px;
+$space-8: 32px;
+$space-10: 40px;
+$space-12: 48px;
+$space-16: 64px;
+$space-20: 80px;
+$space-24: 96px;
+$space-30: 120px;
+$space-40: 160px;

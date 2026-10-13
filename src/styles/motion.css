@@ -1,0 +1,293 @@
+/**
+ * SOLVIXBIT Motion System
+ * Phase 5: Consistent, performant, GPU-accelerated micro-interactions & reveals.
+ * Strict prefers-reduced-motion compliance.
+ */
+
+:root {
+  /* Motion Durations */
+  --motion-duration-fast: 150ms;       /* 120ms - 180ms */
+  --motion-duration-standard: 250ms;   /* 200ms - 300ms */
+  --motion-duration-large: 500ms;      /* 400ms - 700ms */
+
+  /* Preferred Brand Easing (Smooth Out-Quint / Spring feel) */
+  --motion-ease-brand: cubic-bezier(0.22, 1, 0.36, 1);
+  --motion-ease-linear: linear;
+  --motion-ease-in: cubic-bezier(0.4, 0, 1, 1);
+  --motion-ease-out: cubic-bezier(0, 0, 0.2, 1);
+}
+
+/* ==========================================================================
+   1. INTERACTION TRANSITIONS (BUTTONS, CARDS, LINKS)
+   ========================================================================== */
+.sb-btn {
+  transition: transform 300ms cubic-bezier(0, 0, 0.2, 1),
+              background-color 300ms cubic-bezier(0, 0, 0.2, 1),
+              border-color 300ms cubic-bezier(0, 0, 0.2, 1),
+              box-shadow 300ms cubic-bezier(0, 0, 0.2, 1),
+              color 300ms cubic-bezier(0, 0, 0.2, 1);
+  will-change: transform;
+}
+
+.sb-btn:hover:not(:disabled) {
+  transform: translateY(-2px) scale(1.02);
+}
+
+.sb-btn:active:not(:disabled) {
+  transform: translateY(0px) scale(0.99);
+}
+
+.sb-btn .sb-btn__arrow,
+.sb-btn .sb-btn__icon-right {
+  display: inline-block;
+  transition: transform 300ms cubic-bezier(0, 0, 0.2, 1);
+  will-change: transform;
+}
+
+.sb-btn:hover:not(:disabled) .sb-btn__arrow,
+.sb-btn:hover:not(:disabled) .sb-btn__icon-right {
+  transform: translateX(6px);
+}
+
+.sb-link {
+  transition: color var(--motion-duration-fast) var(--motion-ease-brand),
+              opacity var(--motion-duration-fast) var(--motion-ease-brand);
+}
+
+.sb-card,
+.sb-service-card,
+.sb-case-study-card {
+  transition: transform var(--motion-duration-standard) var(--motion-ease-brand),
+              border-color var(--motion-duration-standard) var(--motion-ease-brand),
+              box-shadow var(--motion-duration-standard) var(--motion-ease-brand);
+  will-change: transform, box-shadow;
+}
+
+.sb-card--interactive:hover,
+.sb-service-card:hover,
+.sb-case-study-card:hover {
+  transform: translateY(-2px);
+}
+
+/* ==========================================================================
+   2. REVEALS & ENTRANCE ANIMATIONS (GPU ACCELERATED: OPACITY + TRANSFORM)
+   ========================================================================== */
+@keyframes sb-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes sb-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes sb-scale-in {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes sb-slide-down {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes sb-radar-ping {
+  0% {
+    transform: scale(1);
+    opacity: 0.85;
+  }
+  75%, 100% {
+    transform: scale(2.5);
+    opacity: 0;
+  }
+}
+
+.sb-radar-ping {
+  animation: sb-radar-ping 2s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
+.sb-hero-nested-card {
+  transition: transform 300ms cubic-bezier(0, 0, 0.2, 1),
+              box-shadow 300ms cubic-bezier(0, 0, 0.2, 1),
+              border-color 300ms cubic-bezier(0, 0, 0.2, 1);
+  will-change: transform, box-shadow, border-color;
+}
+
+.sb-hero-nested-card:hover {
+  transform: translateY(-4px);
+  border-color: #02C415 !important;
+  box-shadow: 0 14px 28px -8px rgba(2, 196, 21, 0.15), 0 4px 10px -2px rgba(0, 0, 0, 0.04) !important;
+}
+
+/* Utility reveal classes */
+.sb-animate-fade-in {
+  animation: sb-fade-in var(--motion-duration-standard) var(--motion-ease-brand) forwards;
+}
+
+.sb-animate-fade-up {
+  animation: sb-fade-up var(--motion-duration-large) var(--motion-ease-brand) forwards;
+}
+
+.sb-animate-scale-in {
+  animation: sb-scale-in var(--motion-duration-standard) var(--motion-ease-brand) forwards;
+}
+
+/* ==========================================================================
+   3. OVERLAY, MODAL & MOBILE MENU TRANSITIONS
+   ========================================================================== */
+.sb-modal-overlay {
+  animation: sb-fade-in var(--motion-duration-fast) var(--motion-ease-brand) forwards;
+}
+
+.sb-modal {
+  animation: sb-scale-in var(--motion-duration-standard) var(--motion-ease-brand) forwards;
+}
+
+.sb-toast {
+  animation: sb-fade-up var(--motion-duration-standard) var(--motion-ease-brand) forwards;
+}
+
+.sb-mobile-menu {
+  animation: sb-slide-down var(--motion-duration-standard) var(--motion-ease-brand) forwards;
+}
+
+/* ==========================================================================
+   4. SCROLL-TRIGGERED REVEAL STATES
+   ========================================================================== */
+.sb-reveal {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity var(--motion-duration-large) var(--motion-ease-brand),
+              transform var(--motion-duration-large) var(--motion-ease-brand);
+  will-change: opacity, transform;
+}
+
+.sb-reveal--visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Stagger delays for child items */
+.sb-stagger-1 { transition-delay: 50ms; }
+.sb-stagger-2 { transition-delay: 100ms; }
+.sb-stagger-3 { transition-delay: 150ms; }
+.sb-stagger-4 { transition-delay: 200ms; }
+.sb-stagger-5 { transition-delay: 250ms; }
+.sb-stagger-6 { transition-delay: 300ms; }
+
+/* ==========================================================================
+   5. PORTFOLIO SHOWCASE GRID & CARDS
+   ========================================================================== */
+.sb-portfolio-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: clamp(1.5rem, 2.5vw, 2rem);
+  width: 100%;
+  align-items: stretch;
+}
+
+@media (min-width: 768px) {
+  .sb-portfolio-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1024px) {
+  .sb-portfolio-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.sb-portfolio-card {
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  box-sizing: border-box !important;
+  transition: transform 300ms cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 300ms cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 300ms cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform, box-shadow;
+}
+
+.sb-portfolio-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.12);
+}
+
+.sb-portfolio-card:hover .sb-card-visual-img {
+  transform: scale(1.06);
+}
+
+/* Split-text masking container */
+.sb-split-line {
+  overflow: hidden;
+  display: block;
+}
+
+.sb-split-inner {
+  display: inline-block;
+  will-change: transform, opacity;
+}
+
+/* Image reveal mask */
+.sb-mask-reveal-wrapper {
+  overflow: hidden;
+  position: relative;
+}
+
+/* ==========================================================================
+   6. ACCESSIBILITY: STRICT PREFERS-REDUCED-MOTION
+   ========================================================================== */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .sb-reveal {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+
+
+  .sb-split-inner {
+    transform: none !important;
+    opacity: 1 !important;
+  }
+
+  .sb-btn:hover,
+  .sb-card:hover,
+  .sb-service-card:hover,
+  .sb-case-study-card:hover,
+  .sb-portfolio-card:hover {
+    transform: none !important;
+  }
+}

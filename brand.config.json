@@ -1,0 +1,81 @@
+{
+  "name": "SOLVIXBIT",
+  "tagline": "Technology That Solves.",
+  "corePrinciple": "Solve first. Build with purpose. Scale with confidence.",
+  "positioning": "SOLVIXBIT is a technology solutions company helping businesses build, automate and scale through software engineering, AI, SaaS, ecommerce, mobile applications and digital transformation.",
+  "mission": "To help businesses solve meaningful problems through intelligent, scalable and practical technology.",
+  "vision": "To become a globally trusted technology partner that transforms complex business challenges into simple, scalable digital solutions.",
+  "personality": [
+    { "trait": "Intelligent", "manifestation": "Data-driven, analytically sound, and technically sharp." },
+    { "trait": "Modern", "manifestation": "Forward-thinking, embracing state-of-the-art tech." },
+    { "trait": "Confident", "manifestation": "Clear, decisive, and results-oriented." },
+    { "trait": "Practical", "manifestation": "Grounded in real-world business outcomes." },
+    { "trait": "Reliable", "manifestation": "Dependable, robust, delivering enterprise-grade quality." },
+    { "trait": "Ambitious", "manifestation": "Focused on growth, scale, and digital leadership." },
+    { "trait": "Human", "manifestation": "Approachable, collaborative, and empathetic." }
+  ],
+  "messagingPillars": [
+    {
+      "id": "solve",
+      "title": "Solve",
+      "tag": "01 / DIAGNOSE & ARCHITECT",
+      "description": "Understanding root business challenges before writing code to design high-impact solutions."
+    },
+    {
+      "id": "build",
+      "title": "Build",
+      "tag": "02 / ENGINEER & CRAFT",
+      "description": "Engineering resilient, modern software, web platforms, SaaS products, and mobile applications."
+    },
+    {
+      "id": "automate",
+      "title": "Automate",
+      "tag": "03 / AI & WORKFLOWS",
+      "description": "Integrating intelligent AI and workflow automations to eliminate friction and accelerate speed."
+    },
+    {
+      "id": "scale",
+      "title": "Scale",
+      "tag": "04 / EXPAND & ACCELERATE",
+      "description": "Deploying cloud architectures and integrations built for high concurrency and long-term expansion."
+    }
+  ],
+  "services": [
+    {
+      "id": "software-engineering",
+      "title": "Software Engineering",
+      "shortDescription": "Custom enterprise software, robust backend architectures, APIs, and mission-critical systems.",
+      "category": "Engineering"
+    },
+    {
+      "id": "ai-automation",
+      "title": "AI & Automation",
+      "shortDescription": "Intelligent AI agents, workflow automation, and custom predictive models driving business efficiency.",
+      "category": "Intelligence"
+    },
+    {
+      "id": "saas-digital-products",
+      "title": "SaaS & Digital Products",
+      "shortDescription": "End-to-end SaaS product development, multi-tenant architectures, and subscription platforms.",
+      "category": "Products"
+    },
+    {
+      "id": "web-ecommerce",
+      "title": "Web & Ecommerce",
+      "shortDescription": "Modern web platforms, headless commerce solutions, and performant storefronts.",
+      "category": "Commerce"
+    },
+    {
+      "id": "mobile-applications",
+      "title": "Mobile Applications",
+      "shortDescription": "Native and cross-platform mobile apps for iOS and Android with real-time sync.",
+      "category": "Mobile"
+    },
+    {
+      "id": "cloud-integrations",
+      "title": "Cloud & Integrations",
+      "shortDescription": "Cloud infrastructure setup, DevOps automation, microservices, and system integrations.",
+      "category": "Infrastructure"
+    }
+  ]
+}

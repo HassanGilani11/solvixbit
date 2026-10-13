@@ -1,0 +1,214 @@
+/**
+ * SOLVIXBIT Design Tokens — Premium Creative Agency
+ * Approved Color Palette:
+ * Primary Blue: #598BFF | Secondary Green: #02C415 | Light Grey: #EFEFEF | Black: #000000 | White: #FFFFFF
+ */
+
+:root {
+  /* ==========================================================================
+     1. APPROVED BRAND COLORS
+     ========================================================================== */
+  --color-primary-blue: #598BFF;
+  --color-secondary-green: #02C415;
+  --color-light-grey: #EFEFEF;
+  --color-black: #000000;
+  --color-white: #FFFFFF;
+
+  /* Semantic Color Aliases */
+  --color-brand-blue: #598BFF;
+  --color-brand-green: #02C415;
+  --color-brand-cyan: #02C415; /* Redirected to approved secondary green */
+  --color-brand-violet: #598BFF; /* Redirected to approved primary blue */
+  --color-brand-navy: #000000;
+
+  /* ==========================================================================
+     2. NEUTRAL SCALE
+     ========================================================================== */
+  --color-neutral-white: #FFFFFF;
+  --color-neutral-50: #FAFAFA;
+  --color-neutral-100: #EFEFEF;
+  --color-neutral-200: #E5E7EB;
+  --color-neutral-300: #D1D5DB;
+  --color-neutral-500: #6B7280;
+  --color-neutral-600: #4B5563;
+  --color-neutral-700: #374151;
+  --color-neutral-800: #1F2937;
+  --color-neutral-900: #111827;
+  --color-neutral-black: #000000;
+
+  /* ==========================================================================
+     3. SEMANTIC STATUS COLORS
+     ========================================================================== */
+  --color-semantic-success: #02C415;
+  --color-semantic-warning: #D97706;
+  --color-semantic-error: #DC2626;
+  --color-semantic-info: #598BFF;
+
+  /* ==========================================================================
+     4. TYPOGRAPHY & FONTS
+     ========================================================================== */
+  --font-family-heading: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-family-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-family-mono: 'JetBrains Mono', ui-monospace, monospace;
+
+  /* Font Weights */
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+  --font-weight-extrabold: 800;
+
+  /* Font Sizes */
+  --font-size-xs: 0.75rem;    /* 12px */
+  --font-size-sm: 0.875rem;   /* 14px */
+  --font-size-base: 1rem;     /* 16px */
+  --font-size-lg: 1.125rem;   /* 18px */
+  --font-size-xl: 1.25rem;    /* 20px */
+  --font-size-2xl: 1.5rem;    /* 24px */
+  --font-size-3xl: 1.875rem;  /* 30px */
+  --font-size-4xl: 2.25rem;   /* 36px */
+  --font-size-5xl: 3rem;      /* 48px */
+  --font-size-6xl: 3.75rem;   /* 60px */
+  --font-size-7xl: 4.75rem;   /* 76px */
+
+  /* Line Heights */
+  --line-height-none: 1;
+  --line-height-tight: 1.12;
+  --line-height-snug: 1.28;
+  --line-height-normal: 1.5;
+  --line-height-relaxed: 1.65;
+  --line-height-loose: 2;
+
+  /* Letter Spacing */
+  --letter-spacing-tighter: -0.04em;
+  --letter-spacing-tight: -0.02em;
+  --letter-spacing-normal: 0em;
+  --letter-spacing-wide: 0.025em;
+  --letter-spacing-wider: 0.08em;
+
+  /* ==========================================================================
+     5. SPACING (8px Grid System)
+     ========================================================================== */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+  --space-20: 80px;
+  --space-24: 96px;
+  --space-30: 120px;
+  --space-40: 160px;
+
+  /* ==========================================================================
+     6. BORDER RADIUS
+     ========================================================================== */
+  --radius-sm: 6px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+  --radius-full: 999px;
+
+  /* ==========================================================================
+     7. SHADOWS & GLOWS
+     ========================================================================== */
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.04);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.08);
+  --shadow-xl: 0 24px 48px rgba(0, 0, 0, 0.12);
+  --shadow-glow-blue: 0 8px 32px -4px rgba(89, 139, 255, 0.25);
+  --shadow-glow-green: 0 8px 32px -4px rgba(2, 196, 21, 0.20);
+  --shadow-glow-cyan: 0 8px 32px -4px rgba(2, 196, 21, 0.20);
+  --shadow-glow-violet: 0 8px 32px -4px rgba(89, 139, 255, 0.25);
+
+  /* ==========================================================================
+     8. CONTAINER & BREAKPOINTS
+     ========================================================================== */
+  --container-max-width: 1280px;
+  --container-padding: 1.5rem;
+
+  --breakpoint-sm: 640px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 1024px;
+  --breakpoint-xl: 1280px;
+  --breakpoint-2xl: 1536px;
+
+  /* ==========================================================================
+     9. Z-INDEX SYSTEM
+     ========================================================================== */
+  --z-hide: -1;
+  --z-base: 0;
+  --z-raised: 10;
+  --z-dropdown: 100;
+  --z-sticky: 200;
+  --z-overlay: 300;
+  --z-modal: 400;
+  --z-popover: 500;
+  --z-toast: 600;
+  --z-tooltip: 700;
+
+  /* ==========================================================================
+     10. MOTION & TRANSITIONS
+     ========================================================================== */
+  --duration-fast: 150ms;
+  --duration-standard: 250ms;
+  --duration-normal: 250ms;
+  --duration-large: 500ms;
+  --duration-slow: 500ms;
+
+  --ease-brand: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-default: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-linear: linear;
+  --ease-in: cubic-bezier(0.4, 0, 1, 1);
+  --ease-out: cubic-bezier(0, 0, 0.2, 1);
+  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-spring: cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* ==========================================================================
+     11. THEME VARIABLES (DEFAULT: BRIGHT AGENCY THEME)
+     ========================================================================== */
+  --theme-bg: #FFFFFF;
+  --theme-surface: #FAFAFA;
+  --theme-surface-alt: #EFEFEF;
+  --theme-text: #000000;
+  --theme-muted: #555555;
+  --theme-border: #E5E7EB;
+}
+
+/* ==========================================================================
+   DARK SECTIONS & DARK THEME OVERRIDES
+   ========================================================================== */
+.dark,
+[data-theme="dark"] {
+  --theme-bg: #000000;
+  --theme-surface: #0E0E0E;
+  --theme-surface-alt: #161616;
+  --theme-text: #FFFFFF;
+  --theme-muted: #A0A0A0;
+  --theme-border: #222222;
+}
+
+.sb-section-dark {
+  background-color: #000000 !important;
+  color: #FFFFFF !important;
+  --theme-bg: #000000;
+  --theme-surface: #0E0E0E;
+  --theme-surface-alt: #161616;
+  --theme-text: #FFFFFF;
+  --theme-muted: #A0A0A0;
+  --theme-border: #222222;
+}
+
+.sb-section-grey {
+  background-color: #EFEFEF !important;
+  color: #000000 !important;
+  --theme-bg: #EFEFEF;
+  --theme-surface: #FFFFFF;
+  --theme-surface-alt: #E8E8E8;
+  --theme-text: #000000;
+  --theme-muted: #555555;
+  --theme-border: #DCDCDC;
+}
