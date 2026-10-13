@@ -30,7 +30,7 @@ export const StructuredData: React.FC<StructuredDataProps> = () => {
     },
     sameAs: [
       'https://twitter.com/solvixbit',
-      'https://linkedin.com/company/solvixbit',
+      'https://www.linkedin.com/company/solvixbit/',
       'https://github.com/solvixbit',
     ],
     knowsAbout: [

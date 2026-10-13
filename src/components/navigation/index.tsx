@@ -8,7 +8,7 @@ import { Logo } from '../brand/Logo';
 import { servicesData } from '../../config/services';
 import { solutionsData } from '../../config/solutions';
 import { caseStudiesData } from '../../config/work';
-import { ChevronDown, ArrowRight } from '../icons';
+import { ChevronDown, ArrowRight, LinkedInIcon } from '../icons';
 
 export interface NavItem {
   label: string;
@@ -471,6 +471,7 @@ const defaultFooterColumns: FooterColumn[] = [
     links: [
       { label: 'Start a Project Consultation', href: '/start-a-project' },
       { label: 'hello@solvixbit.com', href: 'mailto:hello@solvixbit.com' },
+      { label: 'LinkedIn Company Page', href: 'https://www.linkedin.com/company/solvixbit/' },
       { label: 'Contact Hub', href: '/contact' },
       { label: 'Engineering SLA: < 24h', href: '/start-a-project' },
     ],
@@ -522,6 +523,49 @@ export const Footer: React.FC<FooterProps> = ({
               <span style={{ fontSize: '0.75rem', fontFamily: 'var(--font-family-mono)', color: '#E5E7EB', fontWeight: 500 }}>
                 Available for Project Bookings
               </span>
+            </div>
+
+            {/* LinkedIn Company Page Link */}
+            <div style={{ marginTop: '2px' }}>
+              <a
+                href="https://www.linkedin.com/company/solvixbit/"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Connect with SOLVIXBIT on LinkedIn"
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '10px',
+                  padding: '9px 16px',
+                  backgroundColor: '#111827',
+                  border: '1px solid #1F2937',
+                  borderRadius: '10px',
+                  color: '#E5E7EB',
+                  textDecoration: 'none',
+                  fontSize: '0.8125rem',
+                  fontWeight: 600,
+                  transition: 'all 200ms ease',
+                  width: 'fit-content',
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.borderColor = '#598BFF';
+                  e.currentTarget.style.backgroundColor = '#161F33';
+                  e.currentTarget.style.color = '#FFFFFF';
+                  e.currentTarget.style.transform = 'translateY(-1px)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.borderColor = '#1F2937';
+                  e.currentTarget.style.backgroundColor = '#111827';
+                  e.currentTarget.style.color = '#E5E7EB';
+                  e.currentTarget.style.transform = 'none';
+                }}
+              >
+                <span style={{ color: '#598BFF', display: 'flex', alignItems: 'center' }}>
+                  <LinkedInIcon size={16} />
+                </span>
+                <span>Connect on LinkedIn</span>
+                <span style={{ color: '#9CA3AF', fontSize: '0.75rem' }}>↗</span>
+              </a>
             </div>
           </div>
 
@@ -603,6 +647,17 @@ export const Footer: React.FC<FooterProps> = ({
             <Link href="/about" style={{ color: '#9CA3AF', textDecoration: 'none' }}>
               About
             </Link>
+            <span style={{ color: '#374151' }}>·</span>
+            <a
+              href="https://www.linkedin.com/company/solvixbit/"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ color: '#9CA3AF', textDecoration: 'none', transition: 'color 150ms ease' }}
+              onMouseEnter={(e) => (e.currentTarget.style.color = '#598BFF')}
+              onMouseLeave={(e) => (e.currentTarget.style.color = '#9CA3AF')}
+            >
+              LinkedIn
+            </a>
             <span style={{ color: '#374151' }}>·</span>
             <Link
               href="/contact"

@@ -6,7 +6,7 @@ import { Container, Section } from '../../components/layout';
 import { Reveal, FadeUp } from '../../components/motion';
 import { Input, Textarea, Select } from '../../components/forms';
 import { Toast } from '../../components/feedback';
-import { ArrowRight } from '../../components/icons';
+import { ArrowRight, LinkedInIcon } from '../../components/icons';
 
 export default function ContactPage() {
   const [toastMessage, setToastMessage] = useState<string | null>(null);
@@ -430,6 +430,57 @@ export default function ContactPage() {
                       >
                         hello@solvixbit.com
                         <span style={{ fontSize: '1rem' }}>↗</span>
+                      </a>
+                    </div>
+
+                    {/* LinkedIn Corporate Presence */}
+                    <div
+                      style={{
+                        backgroundColor: '#0D1117',
+                        border: '1px solid #21262D',
+                        borderRadius: '12px',
+                        padding: '14px 18px',
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                        marginBottom: '24px',
+                      }}
+                    >
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                        <span style={{ color: '#598BFF', display: 'flex' }}>
+                          <LinkedInIcon size={20} />
+                        </span>
+                        <div>
+                          <div style={{ fontSize: '0.75rem', color: '#8B949E', fontWeight: 500 }}>LinkedIn Company Page</div>
+                          <div style={{ fontSize: '0.875rem', fontWeight: 600, color: '#FFFFFF' }}>/company/solvixbit</div>
+                        </div>
+                      </div>
+                      <a
+                        href="https://www.linkedin.com/company/solvixbit/"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        style={{
+                          color: '#598BFF',
+                          textDecoration: 'none',
+                          fontSize: '0.8125rem',
+                          fontWeight: 600,
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          gap: '4px',
+                          padding: '6px 12px',
+                          borderRadius: '6px',
+                          backgroundColor: 'rgba(89, 139, 255, 0.08)',
+                          border: '1px solid rgba(89, 139, 255, 0.2)',
+                          transition: 'all 150ms ease',
+                        }}
+                        onMouseEnter={(e) => {
+                          e.currentTarget.style.backgroundColor = 'rgba(89, 139, 255, 0.16)';
+                        }}
+                        onMouseLeave={(e) => {
+                          e.currentTarget.style.backgroundColor = 'rgba(89, 139, 255, 0.08)';
+                        }}
+                      >
+                        Follow ↗
                       </a>
                     </div>
 
