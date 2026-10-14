@@ -199,7 +199,7 @@ export default function ContactPage() {
                       style={{ position: 'absolute', opacity: 0, pointerEvents: 'none', height: 0, width: 0 }}
                     />
                     {/* Row 1: Name & Email */}
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '20px 24px' }}>
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 240px), 1fr))', gap: '20px 24px' }}>
                       <Input
                         label="Your Full Name"
                         required
@@ -218,7 +218,7 @@ export default function ContactPage() {
                     </div>
 
                     {/* Row 2: Company & Phone */}
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '20px 24px' }}>
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 240px), 1fr))', gap: '20px 24px' }}>
                       <Input
                         label="Company / Organization"
                         placeholder="Acme Corp, Inc."
@@ -234,7 +234,7 @@ export default function ContactPage() {
                     </div>
 
                     {/* Row 3: Service & Budget */}
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '20px 24px' }}>
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 240px), 1fr))', gap: '20px 24px' }}>
                       <Select
                         label="Primary Service Interest"
                         required

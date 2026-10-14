@@ -73,7 +73,7 @@ export default function SolutionsOverviewPage() {
           </p>
         </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '32px' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 320px), 1fr))', gap: '32px' }}>
           {featuredSolutions.slice(0, 4).map((solution) => (
             <div
               key={solution.slug}
@@ -174,7 +174,7 @@ export default function SolutionsOverviewPage() {
             </p>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(360px, 1fr))', gap: '24px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 340px), 1fr))', gap: '24px' }}>
             {SOLUTIONS.map((solution, idx) => {
               const problemDesc = solution.problemStatement || solution.problem || '';
               return (

@@ -276,7 +276,7 @@ export default function InsightsClient({ articles }: InsightsClientProps) {
           </button>
         </div>
       ) : (
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(340px, 1fr))', gap: '32px' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 320px), 1fr))', gap: '32px' }}>
           {filteredArticles.map((article) => (
             <article key={article.slug} className="sb-article-card">
               {/* Cover Image Showcase */}
