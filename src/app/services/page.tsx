@@ -6,7 +6,7 @@ import { ArrowRight, CheckIcon, ArrowUpRight } from '../../components/icons';
 import { TechnologyMatrix } from '../../components/home/TechnologyMatrix';
 
 export const metadata: Metadata = {
-  title: 'Engineering Services & Core Disciplines | SOLVIXBIT',
+  title: 'Engineering Services | SOLVIXBIT',
   description:
     'Comprehensive software engineering, autonomous AI workflows, SaaS product architecture, headless ecommerce, API integration, and resilient cloud systems built to enterprise standards.',
   openGraph: {
@@ -62,7 +62,7 @@ export default function ServicesPage() {
               margin: '0 auto 12px',
             }}
           >
-            Specialized engineering disciplines built with <span style={{ color: '#598BFF' }}>uncompromising standards.</span>
+            Specialized engineering services built with <span style={{ color: '#598BFF' }}>uncompromising standards.</span>
           </h1>
 
           <p
@@ -83,7 +83,7 @@ export default function ServicesPage() {
               <ArrowRight size={18} />
             </Link>
             <a href="#services-matrix" className="sb-btn sb-btn--secondary">
-              Browse All 9 Disciplines
+              Browse All 9 Services
             </a>
           </div>
 

@@ -65,7 +65,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               alignItems: 'center',
             }}
           >
-            <Logo height={50} />
+            <Logo height={48} className="sb-navbar__logo" />
           </Link>
 
           {/* Desktop Navigation with Dropdowns */}
@@ -108,7 +108,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                   }}
                 >
                   <div style={{ fontSize: '0.7rem', fontFamily: 'var(--font-family-mono)', color: '#6B7280', fontWeight: 700, textTransform: 'uppercase', marginBottom: '12px', letterSpacing: '0.05em' }}>
-                    SPECIALIZED ENGINEERING DISCIPLINES
+                    SPECIALIZED SERVICES
                   </div>
                   <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
                     {servicesData.map((service) => (
@@ -326,8 +326,8 @@ export const Navbar: React.FC<NavbarProps> = ({
             <Link
               href="/start-a-project"
               onClick={onCtaClick ? (e) => { e.preventDefault(); onCtaClick(); } : undefined}
-              className="sb-btn sb-btn--sm sb-btn--primary"
-              style={{ textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '8px' }}
+              className="sb-btn sb-btn--sm sb-btn--primary sb-desktop-cta"
+              style={{ textDecoration: 'none', alignItems: 'center', gap: '8px' }}
             >
               <span>{ctaText}</span>
               <ArrowRight size={14} className="sb-btn__arrow" />
@@ -364,14 +364,14 @@ export const Navbar: React.FC<NavbarProps> = ({
               onClick={() => setMobileOpen(false)}
               style={{ fontSize: '1.1rem', fontWeight: 700, color: '#000000', textDecoration: 'none', padding: '6px 0' }}
             >
-              Services (9 Disciplines)
+              Services
             </Link>
             <Link
               href="/solutions"
               onClick={() => setMobileOpen(false)}
               style={{ fontSize: '1.1rem', fontWeight: 700, color: '#000000', textDecoration: 'none', padding: '6px 0' }}
             >
-              Solutions (10 Disciplines)
+              Solutions
             </Link>
             <Link
               href="/work"

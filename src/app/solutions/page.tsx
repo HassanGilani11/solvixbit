@@ -167,7 +167,7 @@ export default function SolutionsOverviewPage() {
               COMPLETE CATALOG
             </span>
             <h2 style={{ fontSize: 'clamp(28px, 4vw, 40px)', fontWeight: 800, color: '#000000', letterSpacing: '-0.02em', marginBottom: '16px' }}>
-              Explore All 10 Solution Disciplines
+              Explore All 10 Solutions
             </h2>
             <p style={{ color: '#6B7280', fontSize: '17px', maxWidth: '640px', margin: '0 auto' }}>
               Comprehensive engineering and architectural consulting mapped to the distinct stages of your technical evolution.
