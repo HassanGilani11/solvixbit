@@ -216,7 +216,7 @@ export default function AboutPage() {
               </p>
               <a
                 href="/start-a-project"
-                className="sb-btn sb-btn--lg sb-btn--white"
+                className="sb-btn sb-btn--lg sb-btn--on-dark"
                 style={{ textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '8px' }}
               >
                 <span>Start a Project Consultation</span>

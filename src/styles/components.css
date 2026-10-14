@@ -279,6 +279,49 @@ body {
   box-shadow: 0 8px 20px -4px rgba(89, 139, 255, 0.4);
 }
 
+/* High-Contrast Action Button on Dark / Black Surfaces */
+.sb-btn--on-dark,
+.sb-article-featured-card .sb-btn,
+.sb-dark-surface .sb-btn--primary,
+.sb-dark-surface .sb-btn--on-dark,
+section[style*="#000000"] .sb-btn--primary,
+section[style*="#000000"] .sb-btn--on-dark,
+section[style*="background-color: rgb(0, 0, 0)"] .sb-btn--primary,
+section[style*="background-color: rgb(0, 0, 0)"] .sb-btn--on-dark,
+div[style*="#000000"] .sb-btn--primary,
+div[style*="#000000"] .sb-btn--on-dark {
+  background-color: var(--color-primary-blue) !important;
+  color: #FFFFFF !important;
+  border-color: var(--color-primary-blue) !important;
+  box-shadow: 0 4px 16px rgba(89, 139, 255, 0.4) !important;
+}
+
+.sb-btn--on-dark:hover,
+.sb-article-featured-card .sb-btn:hover,
+.sb-dark-surface .sb-btn--primary:hover,
+.sb-dark-surface .sb-btn--on-dark:hover,
+section[style*="#000000"] .sb-btn--primary:hover,
+section[style*="#000000"] .sb-btn--on-dark:hover,
+section[style*="background-color: rgb(0, 0, 0)"] .sb-btn--primary:hover,
+section[style*="background-color: rgb(0, 0, 0)"] .sb-btn--on-dark:hover,
+div[style*="#000000"] .sb-btn--primary:hover,
+div[style*="#000000"] .sb-btn--on-dark:hover {
+  background-color: #FFFFFF !important;
+  color: #000000 !important;
+  border-color: #FFFFFF !important;
+  box-shadow: 0 10px 26px -4px rgba(255, 255, 255, 0.35), 0 4px 14px rgba(89, 139, 255, 0.25) !important;
+  transform: translateY(-2px);
+}
+
+.sb-btn--on-dark:hover .sb-btn__arrow,
+.sb-article-featured-card .sb-btn:hover .sb-btn__arrow,
+section[style*="#000000"] .sb-btn--primary:hover .sb-btn__arrow,
+section[style*="#000000"] .sb-btn--on-dark:hover .sb-btn__arrow,
+div[style*="#000000"] .sb-btn--primary:hover .sb-btn__arrow,
+div[style*="#000000"] .sb-btn--on-dark:hover .sb-btn__arrow {
+  color: #000000 !important;
+}
+
 /* White Button for Dark Cards */
 .sb-btn--white {
   background-color: #FFFFFF;
@@ -893,4 +936,99 @@ h1, h2, h3, h4, h5, h6 {
   border-color: #CBD5E1 !important;
   box-shadow: 0 10px 24px -6px rgba(0, 0, 0, 0.08);
 }
+
+/* ==========================================================================
+   EDITORIAL INSIGHTS & BLOG ARTICLE CARDS
+   ========================================================================== */
+.sb-article-featured-card {
+  background-color: #000000;
+  border-radius: 20px;
+  overflow: hidden;
+  color: #FFFFFF;
+  border: 1px solid #1E2229;
+  display: grid;
+  grid-template-columns: 1fr;
+  transition: border-color 220ms ease, box-shadow 220ms ease;
+}
+
+@media (min-width: 960px) {
+  .sb-article-featured-card {
+    grid-template-columns: 1.15fr 1fr;
+  }
+}
+
+.sb-article-featured-card:hover {
+  border-color: rgba(89, 139, 255, 0.4);
+  box-shadow: 0 20px 48px rgba(0, 0, 0, 0.35);
+}
+
+.sb-article-card {
+  background-color: #FFFFFF;
+  border: 1px solid #E5E7EB;
+  border-radius: 16px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: transform 240ms cubic-bezier(0.16, 1, 0.3, 1), border-color 240ms ease, box-shadow 240ms ease;
+  position: relative;
+}
+
+.sb-article-card:hover {
+  transform: translateY(-5px);
+  border-color: #598BFF;
+  box-shadow: 0 16px 36px -8px rgba(89, 139, 255, 0.12), 0 4px 12px rgba(0, 0, 0, 0.04);
+}
+
+.sb-article-card__img-wrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  background-color: #0E121A;
+}
+
+.sb-article-card__img {
+  object-fit: cover;
+  transition: transform 500ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.sb-article-card:hover .sb-article-card__img,
+.sb-article-featured-card:hover .sb-article-card__img {
+  transform: scale(1.05);
+}
+
+.sb-article-card__title {
+  color: #111827;
+  transition: color 180ms ease;
+}
+
+.sb-article-card:hover .sb-article-card__title {
+  color: #598BFF;
+}
+
+.sb-article-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 4px 10px;
+  border-radius: 6px;
+}
+
+.sb-article-pill--blue {
+  background-color: rgba(89, 139, 255, 0.12);
+  color: #1D4ED8;
+}
+
+.sb-article-pill--overlay {
+  background-color: rgba(0, 0, 0, 0.72);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  color: #FFFFFF;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
 

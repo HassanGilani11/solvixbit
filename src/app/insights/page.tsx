@@ -66,7 +66,7 @@ export default function InsightsPage() {
           <p style={{ fontSize: '18px', color: '#9CA3AF', lineHeight: 1.6, maxWidth: '640px', margin: '0 auto 36px' }}>
             Our engineering team designs and delivers tailored software, AI workflows, and cloud platforms built for lasting business outcomes.
           </p>
-          <Link href="/start-a-project" className="sb-btn sb-btn--primary">
+          <Link href="/start-a-project" className="sb-btn sb-btn--lg sb-btn--on-dark">
             Start a Project Consultation
             <ArrowRight size={18} />
           </Link>

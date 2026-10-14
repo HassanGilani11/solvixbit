@@ -14,6 +14,7 @@ import { HeroSection } from './HeroSection';
 import { HorizontalPortfolio } from './HorizontalPortfolio';
 import { TechLogoMarquee } from './TechLogoMarquee';
 import { TechnologyMatrix } from './TechnologyMatrix';
+import { HomeInsightsSection } from './HomeInsightsSection';
 import { ArrowRight } from '../icons';
 import { brandConfig } from '../../config/brand';
 import { caseStudiesData } from '../../config/work';
@@ -632,7 +633,10 @@ export const HomePage: React.FC = () => {
           </Container>
         </Section>
 
-        {/* 8. CLOSING CTA SECTION */}
+        {/* 8. EDITORIAL & INSIGHTS / BLOGS SECTION */}
+        <HomeInsightsSection />
+
+        {/* 9. CLOSING CTA SECTION */}
         <Section id="contact" style={{ backgroundColor: '#FFFFFF', borderTop: '1px solid #EFEFEF' }}>
           <Container>
             <ScrollSectionReveal animation="scale-up">
@@ -667,7 +671,7 @@ export const HomePage: React.FC = () => {
                     fontWeight: 800,
                     color: '#000000',
                     lineHeight: 1.15,
-                    marginBottom: 'var(--space-4)',
+                    margin: '0 0 var(--space-4) 0',
                   }}
                 >
                   Have something worth building?

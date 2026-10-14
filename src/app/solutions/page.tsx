@@ -3,6 +3,7 @@ import Link from 'next/link';
 import type { Metadata } from 'next';
 import { SOLUTIONS } from '@/config/solutions';
 import { ArrowRight, ArrowUpRight, CheckIcon } from '@/components/icons';
+import { Container } from '@/components/layout';
 
 export const metadata: Metadata = {
   title: 'Business Technology Solutions | SOLVIXBIT',
@@ -15,8 +16,9 @@ export default function SolutionsOverviewPage() {
   return (
     <main style={{ minHeight: '100vh', backgroundColor: '#FFFFFF' }}>
       {/* Hero Section */}
-      <section style={{ padding: '80px 24px 60px', borderBottom: '1px solid #EFEFEF', backgroundColor: '#FAFAFA' }}>
-        <div style={{ maxWidth: '1200px', margin: '0 auto', textAlign: 'center' }}>
+      <section style={{ padding: 'clamp(3.5rem, 6vw, 5.5rem) 0 60px', borderBottom: '1px solid #EFEFEF', backgroundColor: '#FAFAFA' }}>
+        <Container>
+          <div style={{ textAlign: 'center' }}>
           <span className="sb-badge" style={{ marginBottom: '20px' }}>
             BUSINESS SOLUTIONS
           </span>
@@ -50,11 +52,13 @@ export default function SolutionsOverviewPage() {
               Explore Solutions
             </a>
           </div>
-        </div>
+          </div>
+        </Container>
       </section>
 
       {/* Featured Strategic Solutions */}
-      <section style={{ padding: '80px 24px', maxWidth: '1200px', margin: '0 auto' }}>
+      <section style={{ padding: '80px 0' }}>
+        <Container>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '48px', flexWrap: 'wrap', gap: '20px' }}>
           <div>
             <span style={{ fontSize: '13px', fontWeight: 700, color: '#598BFF', letterSpacing: '0.08em', textTransform: 'uppercase' }}>
@@ -152,11 +156,12 @@ export default function SolutionsOverviewPage() {
             </div>
           ))}
         </div>
+        </Container>
       </section>
 
       {/* Complete Solutions Grid */}
-      <section id="all-solutions" style={{ padding: '80px 24px', backgroundColor: '#F9FAFB', borderTop: '1px solid #E5E7EB' }}>
-        <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
+      <section id="all-solutions" style={{ padding: '80px 0', backgroundColor: '#F9FAFB', borderTop: '1px solid #E5E7EB' }}>
+        <Container>
           <div style={{ textAlign: 'center', marginBottom: '56px' }}>
             <span className="sb-badge" style={{ marginBottom: '16px' }}>
               COMPLETE CATALOG
@@ -230,12 +235,13 @@ export default function SolutionsOverviewPage() {
               );
             })}
           </div>
-        </div>
+        </Container>
       </section>
 
       {/* Consultation Banner CTA */}
-      <section style={{ padding: '80px 24px', backgroundColor: '#000000', color: '#FFFFFF' }}>
-        <div style={{ maxWidth: '900px', margin: '0 auto', textAlign: 'center' }}>
+      <section style={{ padding: '80px 0', backgroundColor: '#000000', color: '#FFFFFF' }}>
+        <Container>
+          <div style={{ maxWidth: '900px', margin: '0 auto', textAlign: 'center' }}>
           <span style={{ color: '#02C415', fontWeight: 700, fontSize: '13px', letterSpacing: '0.1em', textTransform: 'uppercase', display: 'block', marginBottom: '16px' }}>
             ENGINEERED FOR MEASURABLE IMPACT
           </span>
@@ -245,11 +251,12 @@ export default function SolutionsOverviewPage() {
           <p style={{ fontSize: '18px', color: '#9CA3AF', lineHeight: 1.6, maxWidth: '640px', margin: '0 auto 36px' }}>
             Schedule a technical discovery call with a principal engineer to review your requirements, evaluate architecture options, and identify the most pragmatic path forward.
           </p>
-          <Link href="/start-a-project" className="sb-btn sb-btn--primary">
+          <Link href="/start-a-project" className="sb-btn sb-btn--lg sb-btn--on-dark">
             Start a Project Consultation
             <ArrowRight size={18} />
           </Link>
-        </div>
+          </div>
+        </Container>
       </section>
     </main>
   );

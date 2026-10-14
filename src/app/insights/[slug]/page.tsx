@@ -1,5 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
 import { ARTICLES } from '@/config/insights';
@@ -41,6 +42,200 @@ export async function generateMetadata({ params }: ArticlePageProps): Promise<Me
       url: `https://solvixbit.com/insights/${article.slug}`,
     },
   };
+}
+
+function renderInlineText(text: string): React.ReactNode[] {
+  const parts: React.ReactNode[] = [];
+  const regex = /(\*\*[^*]+?\*\*|`[^`]+?`|\*[^*]+?\*)/g;
+  let lastIndex = 0;
+  let match: RegExpExecArray | null;
+
+  while ((match = regex.exec(text)) !== null) {
+    if (match.index > lastIndex) {
+      const plainText = text.substring(lastIndex, match.index).replace(/\*\*/g, '');
+      if (plainText) {
+        parts.push(plainText);
+      }
+    }
+
+    const token = match[0];
+    if (token.startsWith('**') && token.endsWith('**')) {
+      const boldContent = token.slice(2, -2).replace(/\*\*/g, '');
+      parts.push(
+        <strong key={`b-${match.index}`} style={{ fontWeight: 700, color: '#111827' }}>
+          {boldContent}
+        </strong>
+      );
+    } else if (token.startsWith('`') && token.endsWith('`')) {
+      const codeContent = token.slice(1, -1);
+      parts.push(
+        <code
+          key={`c-${match.index}`}
+          style={{
+            backgroundColor: '#F3F4F6',
+            color: '#111827',
+            padding: '2px 6px',
+            borderRadius: '4px',
+            fontSize: '0.88em',
+            fontFamily: 'monospace',
+          }}
+        >
+          {codeContent}
+        </code>
+      );
+    } else if (token.startsWith('*') && token.endsWith('*')) {
+      const italicContent = token.slice(1, -1).replace(/\*\*/g, '');
+      parts.push(
+        <em key={`i-${match.index}`} style={{ fontStyle: 'italic', color: '#374151' }}>
+          {italicContent}
+        </em>
+      );
+    }
+
+    lastIndex = regex.lastIndex;
+  }
+
+  if (lastIndex < text.length) {
+    const trailingText = text.substring(lastIndex).replace(/\*\*/g, '');
+    if (trailingText) {
+      parts.push(trailingText);
+    }
+  }
+
+  return parts;
+}
+
+interface ContentBlock {
+  type: 'p' | 'ol' | 'ul';
+  items?: string[];
+  text?: string;
+}
+
+function renderFormattedContent(rawContent: string | string[]): React.ReactNode {
+  const contentString = Array.isArray(rawContent) ? rawContent.join('\n\n') : rawContent;
+  const normalized = contentString.replace(/\r\n/g, '\n');
+  const lines = normalized.split('\n');
+
+  const blocks: ContentBlock[] = [];
+  let currentBlock: ContentBlock | null = null;
+
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i];
+    const trimmed = line.trim();
+
+    if (!trimmed) {
+      if (currentBlock) {
+        blocks.push(currentBlock);
+        currentBlock = null;
+      }
+      continue;
+    }
+
+    const numMatch = trimmed.match(/^(\d+)\.\s+(.*)$/);
+    const bulletMatch = trimmed.match(/^[*•-]\s+(.*)$/);
+
+    if (numMatch) {
+      if (!currentBlock || currentBlock.type !== 'ol') {
+        if (currentBlock) blocks.push(currentBlock);
+        currentBlock = { type: 'ol', items: [] };
+      }
+      currentBlock.items?.push(numMatch[2]);
+    } else if (bulletMatch) {
+      if (!currentBlock || currentBlock.type !== 'ul') {
+        if (currentBlock) blocks.push(currentBlock);
+        currentBlock = { type: 'ul', items: [] };
+      }
+      currentBlock.items?.push(bulletMatch[1]);
+    } else {
+      if (!currentBlock || currentBlock.type !== 'p') {
+        if (currentBlock) blocks.push(currentBlock);
+        currentBlock = { type: 'p', text: trimmed };
+      } else {
+        currentBlock.text += ' ' + trimmed;
+      }
+    }
+  }
+
+  if (currentBlock) {
+    blocks.push(currentBlock);
+  }
+
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '18px' }}>
+      {blocks.map((block, idx) => {
+        if (block.type === 'ol') {
+          return (
+            <ol
+              key={idx}
+              style={{
+                margin: '8px 0 16px 0',
+                paddingLeft: '24px',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '12px',
+                listStyleType: 'decimal',
+              }}
+            >
+              {block.items?.map((item, itemIdx) => (
+                <li
+                  key={itemIdx}
+                  style={{
+                    lineHeight: 1.75,
+                    color: '#374151',
+                    paddingLeft: '4px',
+                  }}
+                >
+                  {renderInlineText(item)}
+                </li>
+              ))}
+            </ol>
+          );
+        }
+
+        if (block.type === 'ul') {
+          return (
+            <ul
+              key={idx}
+              style={{
+                margin: '8px 0 16px 0',
+                paddingLeft: '24px',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '12px',
+                listStyleType: 'disc',
+              }}
+            >
+              {block.items?.map((item, itemIdx) => (
+                <li
+                  key={itemIdx}
+                  style={{
+                    lineHeight: 1.75,
+                    color: '#374151',
+                    paddingLeft: '4px',
+                  }}
+                >
+                  {renderInlineText(item)}
+                </li>
+              ))}
+            </ul>
+          );
+        }
+
+        return (
+          <p
+            key={idx}
+            style={{
+              margin: 0,
+              lineHeight: 1.8,
+              color: '#374151',
+            }}
+          >
+            {renderInlineText(block.text || '')}
+          </p>
+        );
+      })}
+    </div>
+  );
 }
 
 export default async function ArticleDetailPage({ params }: ArticlePageProps) {
@@ -135,16 +330,62 @@ export default async function ArticleDetailPage({ params }: ArticlePageProps) {
             {article.excerpt}
           </p>
 
-          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', fontSize: '14px', color: '#6B7280', borderTop: '1px solid #E5E7EB', paddingTop: '16px' }}>
-            <span>By <strong style={{ color: '#111827' }}>{article.author.name}</strong></span>
-            <span>•</span>
-            <span>Published on {article.publishedAt}</span>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '14px', borderTop: '1px solid #E5E7EB', paddingTop: '20px' }}>
+            <div style={{
+              width: '44px',
+              height: '44px',
+              borderRadius: '50%',
+              overflow: 'hidden',
+              position: 'relative',
+              border: '2px solid #E5E7EB',
+              backgroundColor: '#F3F4F6',
+              flexShrink: 0,
+            }}>
+              <Image
+                src={article.author.avatar || '/images/avatar-editorial.png'}
+                alt={article.author.name}
+                fill
+                sizes="44px"
+                style={{ objectFit: 'cover' }}
+              />
+            </div>
+            <div>
+              <div style={{ fontSize: '14px', fontWeight: 700, color: '#111827' }}>
+                {article.author.name}
+              </div>
+              <div style={{ fontSize: '12px', color: '#6B7280' }}>
+                {article.author.role} • Published {article.publishedAt}
+              </div>
+            </div>
           </div>
         </div>
       </header>
 
       {/* Main Article Body Layout */}
-      <div style={{ maxWidth: '860px', margin: '0 auto', padding: '60px 24px 100px' }}>
+      <div style={{ maxWidth: '860px', margin: '0 auto', padding: '48px 24px 100px' }}>
+        {/* Editorial Cover Image */}
+        {article.coverImage && (
+          <div style={{
+            position: 'relative',
+            width: '100%',
+            aspectRatio: '16/9',
+            borderRadius: '16px',
+            overflow: 'hidden',
+            marginBottom: '48px',
+            border: '1px solid #E5E7EB',
+            boxShadow: '0 20px 40px rgba(0,0,0,0.06)',
+            backgroundColor: '#0F172A',
+          }}>
+            <Image
+              src={article.coverImage}
+              alt={article.title}
+              fill
+              priority
+              sizes="(max-width: 900px) 100vw, 860px"
+              style={{ objectFit: 'cover' }}
+            />
+          </div>
+        )}
         {/* Table of Contents */}
         {article.tableOfContents && article.tableOfContents.length > 0 && (
           <nav aria-label="Table of Contents" style={{
@@ -192,9 +433,7 @@ export default async function ArticleDetailPage({ params }: ArticlePageProps) {
                 {sec.heading}
               </h2>
 
-              <div style={{ whiteSpace: 'pre-line' }}>
-                {sec.content}
-              </div>
+              {renderFormattedContent(sec.content)}
             </section>
           ))}
         </article>
@@ -235,7 +474,7 @@ export default async function ArticleDetailPage({ params }: ArticlePageProps) {
             <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap', marginTop: '8px' }}>
               <Link
                 href={`/start-a-project?solution=${article.relatedSolutionSlug}`}
-                className="sb-btn sb-btn--primary"
+                className="sb-btn sb-btn--on-dark"
                 style={{ fontSize: '14px', padding: '10px 20px', minHeight: '42px' }}
               >
                 Discuss This Solution
@@ -264,40 +503,66 @@ export default async function ArticleDetailPage({ params }: ArticlePageProps) {
               </Link>
             </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '20px' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '24px' }}>
               {relatedArticles.map((rel) => (
                 <div
                   key={rel.slug}
-                  style={{
-                    backgroundColor: '#FFFFFF',
-                    border: '1px solid #E5E7EB',
-                    borderRadius: '12px',
-                    padding: '24px',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    justifyContent: 'space-between',
-                  }}
+                  className="sb-article-card"
+                  style={{ borderRadius: '14px' }}
                 >
-                  <div>
-                    <span style={{ fontSize: '11px', fontWeight: 700, color: '#598BFF', textTransform: 'uppercase' }}>
-                      {rel.category}
-                    </span>
-                    <h4 style={{ fontSize: '17px', fontWeight: 700, color: '#111827', margin: '8px 0' }}>
-                      <Link href={`/insights/${rel.slug}`} style={{ textDecoration: 'none', color: 'inherit' }}>
-                        {rel.title}
-                      </Link>
-                    </h4>
-                    <p style={{ fontSize: '13px', color: '#6B7280', lineHeight: 1.5, marginBottom: '16px' }}>
-                      {rel.excerpt}
-                    </p>
+                  {rel.coverImage && (
+                    <Link
+                      href={`/insights/${rel.slug}`}
+                      className="sb-article-card__img-wrap"
+                      style={{ aspectRatio: '16/10', display: 'block', textDecoration: 'none' }}
+                    >
+                      <Image
+                        src={rel.coverImage}
+                        alt={rel.title}
+                        fill
+                        sizes="(max-width: 768px) 100vw, 400px"
+                        className="sb-article-card__img"
+                      />
+                      <div style={{
+                        position: 'absolute',
+                        top: '10px',
+                        left: '10px',
+                        zIndex: 2,
+                      }}>
+                        <span className="sb-article-pill sb-article-pill--overlay" style={{ fontSize: '10px', padding: '3px 8px' }}>
+                          {rel.category}
+                        </span>
+                      </div>
+                    </Link>
+                  )}
+                  <div style={{ padding: '20px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', flexGrow: 1 }}>
+                    <div>
+                      <h4 style={{ fontSize: '16px', fontWeight: 700, margin: '0 0 8px 0', lineHeight: 1.4 }}>
+                        <Link href={`/insights/${rel.slug}`} className="sb-article-card__title" style={{ textDecoration: 'none' }}>
+                          {rel.title}
+                        </Link>
+                      </h4>
+                      <p style={{
+                        fontSize: '13px',
+                        color: '#6B7280',
+                        lineHeight: 1.5,
+                        marginBottom: '16px',
+                        display: '-webkit-box',
+                        WebkitLineClamp: 2,
+                        WebkitBoxOrient: 'vertical',
+                        overflow: 'hidden',
+                      }}>
+                        {rel.excerpt}
+                      </p>
+                    </div>
+                    <Link
+                      href={`/insights/${rel.slug}`}
+                      style={{ fontSize: '13px', fontWeight: 600, color: '#598BFF', display: 'flex', alignItems: 'center', gap: '4px', textDecoration: 'none' }}
+                    >
+                      Read Perspective
+                      <ArrowUpRight size={14} />
+                    </Link>
                   </div>
-                  <Link
-                    href={`/insights/${rel.slug}`}
-                    style={{ fontSize: '13px', fontWeight: 600, color: '#598BFF', display: 'flex', alignItems: 'center', gap: '4px', textDecoration: 'none' }}
-                  >
-                    Read Perspective
-                    <ArrowUpRight size={14} />
-                  </Link>
                 </div>
               ))}
             </div>

@@ -333,7 +333,7 @@ export default function ServicesPage() {
           <p style={{ fontSize: '18px', color: '#9CA3AF', lineHeight: 1.6, marginBottom: '36px' }}>
             Start a project discovery consultation to review your technical requirements with a principal engineer.
           </p>
-          <Link href="/start-a-project" className="sb-btn sb-btn--primary">
+          <Link href="/start-a-project" className="sb-btn sb-btn--lg sb-btn--on-dark">
             Start a Project Consultation
             <ArrowRight size={18} />
           </Link>
