@@ -2,9 +2,11 @@ import React from 'react';
 import type { Metadata, Viewport } from 'next';
 import { StructuredData } from '../components/seo/StructuredData';
 import { Navbar, Footer } from '../components/navigation';
+import { ChatWidget } from '../components/chat';
 import '../styles/tokens.css';
 import '../styles/motion.css';
 import '../styles/components.css';
+import '../styles/chat.css';
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://solvixbit.com';
 
@@ -125,6 +127,7 @@ export default function RootLayout({
           {children}
         </div>
         <Footer />
+        <ChatWidget />
       </body>
     </html>
   );
