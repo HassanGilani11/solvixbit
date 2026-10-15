@@ -27,7 +27,7 @@ export const ChatWidget: React.FC = () => {
       id: 'welcome',
       role: 'assistant',
       content:
-        "Hello! I'm Solvixbit's **AI Solutions Architect**.\n\nAsk me anything about our **9 engineering disciplines**, architecture modernizations, headless ecommerce, custom AI workflows, or project pricing.\n\nHow can we help engineer your next breakthrough?",
+        "Hello! I am Solvixbit's AI Solutions Architect.\n\nAsk me anything about our 9 engineering disciplines, architecture modernizations, headless ecommerce, custom AI workflows, or project pricing.\n\nHow can we help engineer your next breakthrough?",
     },
   ]);
 
@@ -122,26 +122,70 @@ export const ChatWidget: React.FC = () => {
         id: 'welcome-reset',
         role: 'assistant',
         content:
-          "Conversation reset.\n\nAsk me about our **engineering capabilities**, solution architectures, deliverables, or project scopes.",
+          "Conversation reset.\n\nAsk me about our engineering capabilities, solution architectures, deliverables, or project scopes.",
       },
     ]);
   };
 
   /**
-   * Simple markdown parser that converts **bold**, *italic*, and [links](url) into React elements
+   * Pre-cleans raw markdown to ensure zero raw asterisks or raw markdown hashes leak into view
+   */
+  const cleanMarkdownText = (raw: string): string => {
+    let text = raw;
+    // Strip bold asterisks around markdown links: **[Title](/path)** -> [Title](/path)
+    text = text.replace(/\*\*\[([^\]]+)\]\(([^)]+)\)\*\*/g, '[$1]($2)');
+    text = text.replace(/\*\[([^\]]+)\]\(([^)]+)\)\*/g, '[$1]($2)');
+
+    // Strip bold asterisks around bare paths: **/start-a-project** -> /start-a-project
+    text = text.replace(/\*\*(\/(?:start-a-project|contact|services(?:\/[a-z0-9-]+)?|solutions(?:\/[a-z0-9-]+)?|work(?:\/[a-z0-9-]+)?))\*\*/g, '$1');
+
+    // Strip asterisks around bold words or phrases: **Word** -> Word
+    text = text.replace(/\*\*([^*]+)\*\*/g, '$1');
+
+    // Strip any lingering double or single asterisks that might have been left unclosed
+    text = text.replace(/\*\*/g, '');
+
+    return text;
+  };
+
+  /**
+   * Simple markdown parser that converts clean text, lists, and [links](url) into React elements
    */
   const renderFormattedContent = (content: string) => {
-    // Split into paragraphs
-    const paragraphs = content.split('\n\n');
+    // Strip raw asterisks and clean format
+    const cleaned = cleanMarkdownText(content);
+    const paragraphs = cleaned.split('\n\n');
 
     return paragraphs.map((para, pIdx) => {
+      const trimmed = para.trim();
+
+      // Check if it's a markdown heading like "### Heading" or "## Heading"
+      if (/^#{1,6}\s+/.test(trimmed)) {
+        const headingText = trimmed.replace(/^#{1,6}\s+/, '');
+        return (
+          <div
+            key={pIdx}
+            style={{
+              fontWeight: 700,
+              fontSize: '0.9375rem',
+              color: '#0A0F1D',
+              marginTop: pIdx === 0 ? 0 : '10px',
+              marginBottom: '6px',
+              letterSpacing: '-0.01em',
+            }}
+          >
+            {parseInlineMarkdown(headingText)}
+          </div>
+        );
+      }
+
       // Check if it's a bulleted list
-      if (para.trim().startsWith('- ') || para.trim().startsWith('* ')) {
+      if (trimmed.startsWith('- ') || trimmed.startsWith('* ') || trimmed.startsWith('• ')) {
         const items = para.split('\n').filter((l) => l.trim().length > 0);
         return (
           <ul key={pIdx}>
             {items.map((item, iIdx) => {
-              const cleanItem = item.replace(/^[-*]\s+/, '');
+              const cleanItem = item.replace(/^[-*•]\s+/, '');
               return <li key={iIdx}>{parseInlineMarkdown(cleanItem)}</li>;
             })}
           </ul>
@@ -164,7 +208,7 @@ export const ChatWidget: React.FC = () => {
   };
 
   /**
-   * Parses bold and [markdown](links) in text
+   * Parses [markdown](links), emails, and inline paths into interactive Next.js links
    */
   const parseInlineMarkdown = (text: string) => {
     const parts: React.ReactNode[] = [];
@@ -174,7 +218,7 @@ export const ChatWidget: React.FC = () => {
 
     while ((match = linkRegex.exec(text)) !== null) {
       if (match.index > lastIndex) {
-        parts.push(parseBold(text.slice(lastIndex, match.index)));
+        parts.push(parsePlainInline(text.slice(lastIndex, match.index), `txt-${lastIndex}`));
       }
 
       const label = match[1];
@@ -187,7 +231,6 @@ export const ChatWidget: React.FC = () => {
             key={`link-${match.index}`}
             href={href}
             onClick={() => {
-              // On mobile, close chat when navigating to page
               if (window.innerWidth < 768) {
                 setIsOpen(false);
               }
@@ -208,20 +251,57 @@ export const ChatWidget: React.FC = () => {
     }
 
     if (lastIndex < text.length) {
-      parts.push(parseBold(text.slice(lastIndex)));
+      parts.push(parsePlainInline(text.slice(lastIndex), `txt-${lastIndex}`));
     }
 
     return parts;
   };
 
-  const parseBold = (text: string) => {
-    const boldParts = text.split(/(\*\*[^*]+\*\*)/g);
-    return boldParts.map((part, idx) => {
-      if (part.startsWith('**') && part.endsWith('**')) {
-        return <strong key={idx}>{part.slice(2, -2)}</strong>;
+  /**
+   * Auto-links bare paths (/start-a-project, /contact) and email addresses
+   */
+  const parsePlainInline = (text: string, keyPrefix: string): React.ReactNode => {
+    const emailOrPathRegex = /(hello@solvixbit\.com|\/(?:start-a-project|contact|services(?:\/[a-z0-9-]+)?|solutions(?:\/[a-z0-9-]+)?|work(?:\/[a-z0-9-]+)?))/g;
+    const parts: React.ReactNode[] = [];
+    let lastIdx = 0;
+    let m: RegExpExecArray | null;
+
+    while ((m = emailOrPathRegex.exec(text)) !== null) {
+      if (m.index > lastIdx) {
+        parts.push(text.slice(lastIdx, m.index));
       }
-      return part;
-    });
+
+      const matchText = m[1];
+      if (matchText === 'hello@solvixbit.com') {
+        parts.push(
+          <a key={`${keyPrefix}-mail-${m.index}`} href="mailto:hello@solvixbit.com">
+            hello@solvixbit.com
+          </a>
+        );
+      } else {
+        parts.push(
+          <Link
+            key={`${keyPrefix}-path-${m.index}`}
+            href={matchText}
+            onClick={() => {
+              if (window.innerWidth < 768) {
+                setIsOpen(false);
+              }
+            }}
+          >
+            {matchText}
+          </Link>
+        );
+      }
+
+      lastIdx = emailOrPathRegex.lastIndex;
+    }
+
+    if (lastIdx < text.length) {
+      parts.push(text.slice(lastIdx));
+    }
+
+    return parts.length > 0 ? parts : text;
   };
 
   /**
