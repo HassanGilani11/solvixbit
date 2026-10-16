@@ -5,7 +5,7 @@ export interface StructuredDataProps {
 }
 
 export const StructuredData: React.FC<StructuredDataProps> = () => {
-  const baseUrl = 'https://solvixbit.com';
+  const baseUrl = (process.env.NEXT_PUBLIC_SITE_URL || 'https://www.solvixbit.com').replace(/\/+$/, '');
 
   const organizationSchema = {
     '@context': 'https://schema.org',

@@ -39,7 +39,7 @@ export async function generateMetadata({ params }: ArticlePageProps): Promise<Me
       modifiedTime: article.updatedAt,
       authors: [article.author.name],
       tags: article.tags,
-      url: `https://solvixbit.com/insights/${article.slug}`,
+      url: `https://www.solvixbit.com/insights/${article.slug}`,
     },
   };
 }
@@ -264,11 +264,11 @@ export default async function ArticleDetailPage({ params }: ArticlePageProps) {
     publisher: {
       '@type': 'Organization',
       name: 'SOLVIXBIT',
-      url: 'https://solvixbit.com',
+      url: 'https://www.solvixbit.com',
     },
     mainEntityOfPage: {
       '@type': 'WebPage',
-      '@id': `https://solvixbit.com/insights/${article.slug}`,
+      '@id': `https://www.solvixbit.com/insights/${article.slug}`,
     },
   };
 

@@ -8,7 +8,7 @@ import '../styles/motion.css';
 import '../styles/components.css';
 import '../styles/chat.css';
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://solvixbit.com';
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.solvixbit.com';
 
 export const viewport: Viewport = {
   themeColor: [

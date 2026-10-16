@@ -11,7 +11,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Insights & Perspectives | SOLVIXBIT',
     description: 'Practical perspectives on software engineering, AI, digital products, ecommerce, and the technology decisions shaping modern businesses.',
-    url: 'https://solvixbit.com/insights',
+    url: 'https://www.solvixbit.com/insights',
   },
 };
 

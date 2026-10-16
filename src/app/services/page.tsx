@@ -13,7 +13,7 @@ export const metadata: Metadata = {
     title: 'Engineering Services | SOLVIXBIT',
     description:
       'Explore SOLVIXBIT core engineering capabilities designed for scale, durability, and business impact.',
-    url: 'https://solvixbit.com/services',
+    url: 'https://www.solvixbit.com/services',
   },
 };
 

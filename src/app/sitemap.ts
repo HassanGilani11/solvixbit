@@ -5,92 +5,92 @@ import { caseStudiesData } from '../config/work';
 import { ARTICLES } from '../config/insights';
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://solvixbit.com';
-  const lastModified = new Date();
+  const baseUrl = (process.env.NEXT_PUBLIC_SITE_URL || 'https://www.solvixbit.com').replace(/\/+$/, '');
+  const now = new Date();
 
-  // Static core routes
+  // Static core brand and conversion routes
   const staticRoutes: MetadataRoute.Sitemap = [
     {
       url: `${baseUrl}`,
-      lastModified,
-      changeFrequency: 'weekly',
+      lastModified: now,
+      changeFrequency: 'daily',
       priority: 1.0,
     },
     {
       url: `${baseUrl}/start-a-project`,
-      lastModified,
+      lastModified: now,
       changeFrequency: 'weekly',
       priority: 0.95,
     },
     {
       url: `${baseUrl}/solutions`,
-      lastModified,
-      changeFrequency: 'weekly',
-      priority: 0.9,
-    },
-    {
-      url: `${baseUrl}/insights`,
-      lastModified,
+      lastModified: now,
       changeFrequency: 'weekly',
       priority: 0.9,
     },
     {
       url: `${baseUrl}/services`,
-      lastModified,
+      lastModified: now,
       changeFrequency: 'weekly',
-      priority: 0.85,
+      priority: 0.9,
     },
     {
       url: `${baseUrl}/work`,
-      lastModified,
+      lastModified: now,
       changeFrequency: 'weekly',
-      priority: 0.85,
+      priority: 0.9,
+    },
+    {
+      url: `${baseUrl}/insights`,
+      lastModified: now,
+      changeFrequency: 'weekly',
+      priority: 0.9,
     },
     {
       url: `${baseUrl}/about`,
-      lastModified,
+      lastModified: now,
       changeFrequency: 'monthly',
-      priority: 0.8,
+      priority: 0.85,
     },
     {
       url: `${baseUrl}/contact`,
-      lastModified,
+      lastModified: now,
       changeFrequency: 'monthly',
-      priority: 0.8,
+      priority: 0.85,
     },
   ];
 
-  // Dynamic service routes
-  const serviceRoutes: MetadataRoute.Sitemap = servicesData.map((s) => ({
-    url: `${baseUrl}/services/${s.slug}`,
-    lastModified,
-    changeFrequency: 'monthly',
-    priority: 0.85,
-  }));
-
-  // Dynamic solution routes (all 10 solutions)
+  // Dynamic industry solutions (10 comprehensive solution architectures)
   const solutionRoutes: MetadataRoute.Sitemap = SOLUTIONS.map((s) => ({
     url: `${baseUrl}/solutions/${s.slug}`,
-    lastModified,
-    changeFrequency: 'monthly',
+    lastModified: now,
+    changeFrequency: 'weekly',
     priority: 0.85,
   }));
 
-  // Dynamic insight articles routes (published starter articles)
+  // Dynamic engineering services (9 core capabilities)
+  const serviceRoutes: MetadataRoute.Sitemap = servicesData.map((s) => ({
+    url: `${baseUrl}/services/${s.slug}`,
+    lastModified: now,
+    changeFrequency: 'weekly',
+    priority: 0.85,
+  }));
+
+  // Dynamic insight articles (published thought-leadership and engineering deep-dives)
   const insightRoutes: MetadataRoute.Sitemap = ARTICLES.filter((a) => a.status === 'published').map((a) => ({
     url: `${baseUrl}/insights/${a.slug}`,
-    lastModified: new Date(a.updatedAt || a.publishedAt),
+    lastModified: new Date(a.updatedAt || a.publishedAt || now),
     changeFrequency: 'monthly',
     priority: 0.8,
   }));
 
-  // Dynamic case study routes
+  // Dynamic case study routes (proven client outcomes and metrics)
   const workRoutes: MetadataRoute.Sitemap = caseStudiesData.map((w) => ({
     url: `${baseUrl}/work/${w.slug}`,
-    lastModified,
-    changeFrequency: 'monthly',
-    priority: 0.8,
+    lastModified: now,
+    changeFrequency: 'weekly',
+    priority: 0.85,
   }));
 
-  return [...staticRoutes, ...solutionRoutes, ...insightRoutes, ...serviceRoutes, ...workRoutes];
+  return [...staticRoutes, ...solutionRoutes, ...serviceRoutes, ...insightRoutes, ...workRoutes];
 }

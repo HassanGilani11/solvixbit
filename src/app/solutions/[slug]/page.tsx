@@ -33,7 +33,7 @@ export async function generateMetadata({ params }: SolutionPageProps): Promise<M
     openGraph: {
       title: `${solution.title} | SOLVIXBIT Solutions`,
       description: solution.summary,
-      url: `https://solvixbit.com/solutions/${solution.slug}`,
+      url: `https://www.solvixbit.com/solutions/${solution.slug}`,
     },
   };
 }
