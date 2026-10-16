@@ -23,9 +23,21 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const service = servicesData.find((s) => s.slug === slug);
   if (!service) return { title: 'Service Not Found' };
 
+  const url = `https://www.solvixbit.com/services/${service.slug}`;
+
   return {
     title: `${service.title} | SOLVIXBIT Engineering`,
     description: service.shortDescription,
+    keywords: [service.title, ...(service.techStack || []), 'Software Engineering', 'SOLVIXBIT'],
+    alternates: {
+      canonical: url,
+    },
+    openGraph: {
+      title: `${service.title} | SOLVIXBIT Engineering`,
+      description: service.shortDescription,
+      url,
+      type: 'website',
+    },
   };
 }
 

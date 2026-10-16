@@ -7,7 +7,25 @@ import { Container } from '@/components/layout';
 
 export const metadata: Metadata = {
   title: 'Business Technology Solutions | SOLVIXBIT',
-  description: 'Outcome-driven technology solutions engineered around real business challenges: enterprise modernization, AI automation, product acceleration, headless commerce, and cloud reliability.',
+  description:
+    'Outcome-driven technology solutions engineered around real business challenges: enterprise modernization, AI automation, product acceleration, headless commerce, and cloud reliability.',
+  keywords: [
+    'Business Technology Solutions',
+    'Enterprise Modernization',
+    'AI Process Automation',
+    'Startup MVP Development',
+    'Headless Global Commerce',
+    'Cloud Reliability Engineering',
+  ],
+  alternates: {
+    canonical: 'https://www.solvixbit.com/solutions',
+  },
+  openGraph: {
+    title: 'Business Technology Solutions | SOLVIXBIT',
+    description:
+      'Outcome-driven technology solutions engineered around real business challenges: enterprise modernization, AI automation, product acceleration, headless commerce, and cloud reliability.',
+    url: 'https://www.solvixbit.com/solutions',
+  },
 };
 
 export default function SolutionsOverviewPage() {

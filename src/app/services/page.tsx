@@ -9,6 +9,18 @@ export const metadata: Metadata = {
   title: 'Engineering Services | SOLVIXBIT',
   description:
     'Comprehensive software engineering, autonomous AI workflows, SaaS product architecture, headless ecommerce, API integration, and resilient cloud systems built to enterprise standards.',
+  keywords: [
+    'Engineering Services',
+    'Custom Software Development',
+    'AI Workflow Automation',
+    'SaaS Engineering',
+    'Headless Ecommerce',
+    'Cloud DevOps',
+    'API Integration',
+  ],
+  alternates: {
+    canonical: 'https://www.solvixbit.com/services',
+  },
   openGraph: {
     title: 'Engineering Services | SOLVIXBIT',
     description:

@@ -22,9 +22,21 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const study = caseStudiesData.find((s) => s.slug === slug);
   if (!study) return { title: 'Case Study Not Found' };
 
+  const url = `https://www.solvixbit.com/work/${study.slug}`;
+
   return {
     title: `${study.client} Case Study: ${study.title} | SOLVIXBIT`,
     description: study.summary,
+    keywords: [study.client, study.title, study.industry, ...(study.techStack || []), 'Case Study', 'SOLVIXBIT'],
+    alternates: {
+      canonical: url,
+    },
+    openGraph: {
+      title: `${study.client} Case Study: ${study.title} | SOLVIXBIT`,
+      description: study.summary,
+      url,
+      type: 'article',
+    },
   };
 }
 

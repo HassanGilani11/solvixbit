@@ -8,9 +8,25 @@ import { teamMembers, companyValues } from '../../config/about';
 import { servicesData } from '../../config/services';
 
 export const metadata: Metadata = {
-  title: 'About Us & Engineering Philosophy',
+  title: 'About Us & Engineering Philosophy | SOLVIXBIT',
   description:
     'Learn about SOLVIXBIT: A creative technology and software engineering partner helping businesses design, build, automate, and scale digital products.',
+  keywords: [
+    'About SOLVIXBIT',
+    'Software Engineering Firm',
+    'Engineering Philosophy',
+    'Technology Consulting Leadership',
+    'Custom Software Company',
+  ],
+  alternates: {
+    canonical: 'https://www.solvixbit.com/about',
+  },
+  openGraph: {
+    title: 'About Us & Engineering Philosophy | SOLVIXBIT',
+    description:
+      'Learn about SOLVIXBIT: A creative technology and software engineering partner helping businesses design, build, automate, and scale digital products.',
+    url: 'https://www.solvixbit.com/about',
+  },
 };
 
 export default function AboutPage() {

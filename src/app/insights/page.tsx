@@ -7,10 +7,23 @@ import { ArrowRight } from '@/components/icons';
 
 export const metadata: Metadata = {
   title: 'Insights & Perspectives on Engineering, AI & Architecture | SOLVIXBIT',
-  description: 'Practical perspectives on software engineering, AI, digital products, ecommerce, and the technology decisions shaping modern businesses.',
+  description:
+    'Practical perspectives on software engineering, AI, digital products, ecommerce, and the technology decisions shaping modern businesses.',
+  keywords: [
+    'Technology Insights',
+    'AI Engineering Articles',
+    'SaaS Architecture Guide',
+    'Headless Commerce Guide',
+    'Legacy Modernization Roadmap',
+    'Build vs Buy Analysis',
+  ],
+  alternates: {
+    canonical: 'https://www.solvixbit.com/insights',
+  },
   openGraph: {
     title: 'Insights & Perspectives | SOLVIXBIT',
-    description: 'Practical perspectives on software engineering, AI, digital products, ecommerce, and the technology decisions shaping modern businesses.',
+    description:
+      'Practical perspectives on software engineering, AI, digital products, ecommerce, and the technology decisions shaping modern businesses.',
     url: 'https://www.solvixbit.com/insights',
   },
 };

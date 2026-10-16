@@ -28,9 +28,15 @@ export async function generateMetadata({ params }: ArticlePageProps): Promise<Me
     };
   }
 
+  const url = `https://www.solvixbit.com/insights/${article.slug}`;
+
   return {
     title: `${article.seoTitle || article.title}`,
     description: article.seoDescription || article.excerpt,
+    keywords: [...(article.tags || []), article.category, 'SOLVIXBIT Insights'],
+    alternates: {
+      canonical: url,
+    },
     openGraph: {
       title: article.title,
       description: article.excerpt,
@@ -39,7 +45,7 @@ export async function generateMetadata({ params }: ArticlePageProps): Promise<Me
       modifiedTime: article.updatedAt,
       authors: [article.author.name],
       tags: article.tags,
-      url: `https://www.solvixbit.com/insights/${article.slug}`,
+      url,
     },
   };
 }

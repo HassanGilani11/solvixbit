@@ -8,9 +8,25 @@ import { caseStudiesData } from '../../config/work';
 import { servicesData } from '../../config/services';
 
 export const metadata: Metadata = {
-  title: 'Selected Work & Engineering Case Studies',
+  title: 'Selected Work & Engineering Case Studies | SOLVIXBIT',
   description:
     'Explore verified case studies and production outcomes delivered by SOLVIXBIT across FinTech, Luxury Commerce, and Healthcare.',
+  keywords: [
+    'Software Engineering Case Studies',
+    'FinTech Payment Engine',
+    'Headless Commerce Case Study',
+    'Enterprise AI Copilot Case Study',
+    'Client Outcomes SOLVIXBIT',
+  ],
+  alternates: {
+    canonical: 'https://www.solvixbit.com/work',
+  },
+  openGraph: {
+    title: 'Selected Work & Engineering Case Studies | SOLVIXBIT',
+    description:
+      'Explore verified case studies and production outcomes delivered by SOLVIXBIT across FinTech, Luxury Commerce, and Healthcare.',
+    url: 'https://www.solvixbit.com/work',
+  },
 };
 
 export default function WorkPage() {

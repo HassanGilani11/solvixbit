@@ -27,13 +27,26 @@ export async function generateMetadata({ params }: SolutionPageProps): Promise<M
     };
   }
 
+  const url = `https://www.solvixbit.com/solutions/${solution.slug}`;
+
   return {
     title: `${solution.title} | SOLVIXBIT Solutions`,
     description: solution.summary,
+    keywords: [
+      solution.title,
+      solution.category,
+      ...(solution.capabilities ? solution.capabilities.map((c) => c.title) : []),
+      'Enterprise Technology Solutions',
+      'SOLVIXBIT',
+    ],
+    alternates: {
+      canonical: url,
+    },
     openGraph: {
       title: `${solution.title} | SOLVIXBIT Solutions`,
       description: solution.summary,
-      url: `https://www.solvixbit.com/solutions/${solution.slug}`,
+      url,
+      type: 'website',
     },
   };
 }
