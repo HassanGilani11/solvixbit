@@ -59,6 +59,9 @@ export const metadata: Metadata = {
   alternates: {
     canonical: siteUrl,
   },
+  verification: {
+    google: 'pfF0rT6Tl73cpsETyQloNCtoi1tjfvaaZDV2juIazTQ',
+  },
   openGraph: {
     type: 'website',
     locale: 'en_US',
@@ -106,6 +109,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
+        <meta name="google-site-verification" content="pfF0rT6Tl73cpsETyQloNCtoi1tjfvaaZDV2juIazTQ" />
         <link rel="icon" href="/favicon.ico" sizes="any" />
         <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
