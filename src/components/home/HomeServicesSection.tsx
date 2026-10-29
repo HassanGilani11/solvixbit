@@ -192,7 +192,7 @@ export const HomeServicesSection: React.FC = () => {
           </div>
         </div>
 
-        {/* Asymmetrical Editorial Services Grid */}
+        {/* Symmetrical Services Grid */}
         <div
           ref={gridRef}
           style={{
@@ -201,8 +201,7 @@ export const HomeServicesSection: React.FC = () => {
             gap: 'var(--space-6)',
           }}
         >
-          {filteredServices.map((service, index) => {
-            const isFeatured = index === 0;
+          {filteredServices.map((service) => {
             return (
               <div
                 key={service.slug}
@@ -216,7 +215,6 @@ export const HomeServicesSection: React.FC = () => {
                   flexDirection: 'column',
                   position: 'relative',
                   transition: 'border-color 220ms ease, box-shadow 220ms ease, transform 220ms ease',
-                  gridColumn: isFeatured ? 'span min(2, auto)' : 'auto',
                 }}
               >
                 {/* Header: Number and Kicker */}
@@ -257,7 +255,7 @@ export const HomeServicesSection: React.FC = () => {
                 <h3
                   style={{
                     fontFamily: 'var(--font-family-heading)',
-                    fontSize: isFeatured ? 'clamp(1.5rem, 2.5vw, 2rem)' : '1.35rem',
+                    fontSize: '1.35rem',
                     fontWeight: 700,
                     lineHeight: 1.25,
                     marginBottom: '12px',
