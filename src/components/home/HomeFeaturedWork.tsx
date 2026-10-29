@@ -134,7 +134,7 @@ export const HomeFeaturedWork: React.FC = () => {
                 margin: 0,
               }}
             >
-              A selection of mission-critical systems and digital platforms engineered with rigorous architectural standards.
+              A selection of representative architecture case studies and mission-critical digital systems engineered to rigorous standards.
             </p>
           </div>
 
@@ -193,7 +193,7 @@ export const HomeFeaturedWork: React.FC = () => {
                         letterSpacing: '0.04em',
                       }}
                     >
-                      {project.client}
+                      {project.client} • ARCHITECTURE CASE STUDY
                     </span>
                   </div>
 

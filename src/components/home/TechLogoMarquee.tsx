@@ -124,6 +124,7 @@ export const TechLogoMarquee: React.FC = () => {
             <div
               key={`row1-${idx}`}
               className="sb-tech-card"
+              aria-hidden={idx >= ROW_ONE_TECHS.length ? 'true' : undefined}
             >
               <div className="sb-tech-card__icon">
                 {tech.iconText}
@@ -146,6 +147,7 @@ export const TechLogoMarquee: React.FC = () => {
             <div
               key={`row2-${idx}`}
               className="sb-tech-card"
+              aria-hidden={idx >= ROW_TWO_TECHS.length ? 'true' : undefined}
             >
               <div className="sb-tech-card__icon">
                 {tech.iconText}
