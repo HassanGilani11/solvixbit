@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useRef, useEffect, useMemo } from 'react';
+import React, { useState, useRef, useEffect, useMemo, useCallback } from 'react';
 import Link from 'next/link';
 import { useGSAP } from '@gsap/react';
 import { Container } from '../layout';
@@ -41,11 +41,15 @@ const CATEGORY_MAP: Record<CategoryFilter, string[]> = {
 
 export const HomeSolutionsSection: React.FC = () => {
   const [activeCategory, setActiveCategory] = useState<CategoryFilter>('all');
-  const [activeSlug, setActiveSlug] = useState<string>(solutionsData[0]?.slug || 'enterprise-scale');
+  const [scrollProgress, setScrollProgress] = useState<number>(0);
+  const [activeCardIndex, setActiveCardIndex] = useState<number>(1);
   const sectionRef = useRef<HTMLElement>(null);
-  const listRef = useRef<HTMLDivElement>(null);
-  const itemRefs = useRef<Record<string, HTMLButtonElement | null>>({});
-  const lastWheelTime = useRef<number>(0);
+  const trackRef = useRef<HTMLDivElement>(null);
+
+  // Drag-to-scroll state
+  const isDragging = useRef<boolean>(false);
+  const startX = useRef<number>(0);
+  const scrollLeftStart = useRef<number>(0);
 
   // Compute filtered solutions based on selected category tab
   const filteredSolutions = useMemo(() => {
@@ -53,96 +57,110 @@ export const HomeSolutionsSection: React.FC = () => {
     return solutionsData.filter((s) => allowedSlugs.includes(s.slug));
   }, [activeCategory]);
 
-  // When category changes, ensure activeSlug is valid in this filter
+  // When category changes, reset scroll position smoothly
   const handleCategoryChange = (category: CategoryFilter) => {
     setActiveCategory(category);
-    const allowedSlugs = CATEGORY_MAP[category];
-    if (!allowedSlugs.includes(activeSlug)) {
-      const firstInGroup = solutionsData.find((s) => allowedSlugs.includes(s.slug));
-      if (firstInGroup) {
-        setActiveSlug(firstInGroup.slug);
-      }
+    setActiveCardIndex(1);
+    setScrollProgress(0);
+    if (trackRef.current) {
+      trackRef.current.scrollTo({ left: 0, behavior: 'smooth' });
     }
   };
 
-  const activeSolution = solutionsData.find((s) => s.slug === activeSlug) || filteredSolutions[0] || solutionsData[0];
-  const currentIndex = filteredSolutions.findIndex((s) => s.slug === activeSlug);
-  const totalInFilter = filteredSolutions.length;
-  const globalIndex = solutionsData.findIndex((s) => s.slug === activeSlug);
+  // Track horizontal scroll progress and active card indicator
+  const handleScroll = useCallback(() => {
+    const track = trackRef.current;
+    if (!track) return;
 
-  // Auto-scroll active item into comfortable view in the left rail
-  useEffect(() => {
-    const el = itemRefs.current[activeSlug];
-    if (el && listRef.current) {
-      el.scrollIntoView({
-        behavior: 'smooth',
-        block: 'nearest',
-      });
+    const maxScroll = track.scrollWidth - track.clientWidth;
+    if (maxScroll <= 0) {
+      setScrollProgress(100);
+      setActiveCardIndex(1);
+      return;
     }
-  }, [activeSlug]);
 
-  // Mouse Wheel navigation: scroll up/down cycles solutions smoothly
+    const currentScroll = track.scrollLeft;
+    const progress = Math.min(100, Math.max(0, (currentScroll / maxScroll) * 100));
+    setScrollProgress(progress);
+
+    // Approximate active card index based on card width
+    const cardElement = track.querySelector('.sb-solutions-hcard') as HTMLElement | null;
+    const cardWidth = cardElement ? cardElement.offsetWidth + 22 : 360;
+    const calculatedIndex = Math.min(
+      filteredSolutions.length,
+      Math.max(1, Math.round(currentScroll / cardWidth) + 1)
+    );
+    setActiveCardIndex(calculatedIndex);
+  }, [filteredSolutions.length]);
+
+  // Mouse wheel horizontal mapping: rolling mouse wheel glides horizontally
   const handleWheel = (e: React.WheelEvent<HTMLDivElement>) => {
-    // Ignore minor mouse jitter
-    if (Math.abs(e.deltaY) < 16) return;
+    const track = trackRef.current;
+    if (!track) return;
 
-    const now = Date.now();
-    const WHEEL_COOLDOWN = 220; // ms
+    // Ignore horizontal trackpad swipes (allow native handling)
+    if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) return;
+    if (Math.abs(e.deltaY) < 6) return;
 
+    const maxScroll = track.scrollWidth - track.clientWidth;
+    if (maxScroll <= 0) return;
+
+    const currentScroll = track.scrollLeft;
+
+    // Scrolling down (move track right)
     if (e.deltaY > 0) {
-      // Scrolling DOWN
-      if (currentIndex < filteredSolutions.length - 1) {
+      if (currentScroll < maxScroll - 8) {
         e.preventDefault();
-        if (now - lastWheelTime.current > WHEEL_COOLDOWN) {
-          lastWheelTime.current = now;
-          setActiveSlug(filteredSolutions[currentIndex + 1].slug);
-        }
+        track.scrollLeft += e.deltaY * 1.15;
       }
-      // If at last solution, do not preventDefault -> natural page scroll down continues
+      // If at rightmost edge, allow normal page scroll down
     } else {
-      // Scrolling UP
-      if (currentIndex > 0) {
+      // Scrolling up (move track left)
+      if (currentScroll > 8) {
         e.preventDefault();
-        if (now - lastWheelTime.current > WHEEL_COOLDOWN) {
-          lastWheelTime.current = now;
-          setActiveSlug(filteredSolutions[currentIndex - 1].slug);
-        }
+        track.scrollLeft += e.deltaY * 1.15;
       }
-      // If at first solution, do not preventDefault -> natural page scroll up continues
+      // If at leftmost edge, allow normal page scroll up
     }
   };
 
-  // Keyboard navigation
-  const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'ArrowDown' || e.key === 'ArrowRight') {
-      if (currentIndex < filteredSolutions.length - 1) {
-        e.preventDefault();
-        setActiveSlug(filteredSolutions[currentIndex + 1].slug);
-      }
-    } else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
-      if (currentIndex > 0) {
-        e.preventDefault();
-        setActiveSlug(filteredSolutions[currentIndex - 1].slug);
-      }
-    }
+  // Mouse Drag to scroll
+  const handleMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
+    const track = trackRef.current;
+    if (!track) return;
+
+    isDragging.current = true;
+    startX.current = e.pageX - track.offsetLeft;
+    scrollLeftStart.current = track.scrollLeft;
   };
 
-  const handlePrev = () => {
-    if (currentIndex > 0) {
-      setActiveSlug(filteredSolutions[currentIndex - 1].slug);
-    }
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!isDragging.current || !trackRef.current) return;
+    e.preventDefault();
+    const x = e.pageX - trackRef.current.offsetLeft;
+    const walk = (x - startX.current) * 1.4;
+    trackRef.current.scrollLeft = scrollLeftStart.current - walk;
   };
 
-  const handleNext = () => {
-    if (currentIndex < filteredSolutions.length - 1) {
-      setActiveSlug(filteredSolutions[currentIndex + 1].slug);
-    } else {
-      // Loop back to first item if at end
-      setActiveSlug(filteredSolutions[0].slug);
-    }
+  const handleMouseUpOrLeave = () => {
+    isDragging.current = false;
   };
 
-  // GSAP entrance animation
+  // Stepper Buttons
+  const scrollStep = (direction: 'prev' | 'next') => {
+    const track = trackRef.current;
+    if (!track) return;
+
+    const cardElement = track.querySelector('.sb-solutions-hcard') as HTMLElement | null;
+    const scrollAmount = cardElement ? cardElement.offsetWidth + 22 : 380;
+
+    track.scrollBy({
+      left: direction === 'next' ? scrollAmount : -scrollAmount,
+      behavior: 'smooth',
+    });
+  };
+
+  // GSAP Entrance
   useGSAP(
     () => {
       if (checkPrefersReducedMotion()) return;
@@ -189,6 +207,7 @@ export const HomeSolutionsSection: React.FC = () => {
         paddingTop: 'clamp(4.5rem, 8vw, 7rem)',
         paddingBottom: 'clamp(4.5rem, 8vw, 7rem)',
         position: 'relative',
+        overflow: 'hidden',
       }}
     >
       <Container>
@@ -244,18 +263,18 @@ export const HomeSolutionsSection: React.FC = () => {
           </p>
         </div>
 
-        {/* Category Filter Pills & Interaction Hint Bar */}
+        {/* Top Control Bar: Category Filters & Stepper Navigation */}
         <div
           style={{
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
-            gap: '12px',
-            marginBottom: '24px',
+            gap: '16px',
+            marginBottom: '20px',
             flexWrap: 'wrap',
           }}
         >
-          {/* Domain Filter Tabs */}
+          {/* Domain Filter Pills */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
             {filterOptions.map((opt) => {
               const isSelected = activeCategory === opt.id;
@@ -270,7 +289,7 @@ export const HomeSolutionsSection: React.FC = () => {
                   <span
                     style={{
                       marginLeft: '6px',
-                      fontSize: '0.7rem',
+                      fontSize: '0.72rem',
                       opacity: isSelected ? 1 : 0.6,
                       fontFamily: 'var(--font-family-mono)',
                     }}
@@ -282,472 +301,373 @@ export const HomeSolutionsSection: React.FC = () => {
             })}
           </div>
 
-          {/* Mouse Scroll / Keyboard Hint */}
-          <div
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '6px',
-              fontSize: '0.75rem',
-              color: '#8A93A0',
-              fontFamily: 'var(--font-family-mono)',
-            }}
-          >
-            <span style={{ color: 'var(--color-primary-blue)' }}>✦</span>
-            <span>Scroll mouse wheel or click to navigate</span>
+          {/* Stepper Controls & Counter */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+            <div
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '6px',
+                fontSize: '0.75rem',
+                color: '#8A93A0',
+                fontFamily: 'var(--font-family-mono)',
+              }}
+            >
+              <span style={{ color: 'var(--color-primary-blue)' }}>✦</span>
+              <span className="sb-hide-mobile">Scroll mouse wheel or drag</span>
+            </div>
+
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <span
+                style={{
+                  fontSize: '0.78rem',
+                  fontFamily: 'var(--font-family-mono)',
+                  color: '#9CA3AF',
+                  fontWeight: 700,
+                  marginRight: '4px',
+                }}
+              >
+                {String(activeCardIndex).padStart(2, '0')} / {String(filteredSolutions.length).padStart(2, '0')}
+              </span>
+
+              <button
+                type="button"
+                onClick={() => scrollStep('prev')}
+                disabled={activeCardIndex <= 1}
+                className="sb-solutions-nav-btn"
+                title="Scroll previous cards"
+                aria-label="Previous cards"
+              >
+                ←
+              </button>
+              <button
+                type="button"
+                onClick={() => scrollStep('next')}
+                disabled={activeCardIndex >= filteredSolutions.length}
+                className="sb-solutions-nav-btn"
+                title="Scroll next cards"
+                aria-label="Next cards"
+              >
+                →
+              </button>
+            </div>
           </div>
         </div>
 
-        {/* Interactive Split-Screen Solution Explorer */}
+        {/* Luminous Horizontal Scroll Progress Track */}
         <div
-          tabIndex={0}
-          onKeyDown={handleKeyDown}
-          onWheel={handleWheel}
           style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 380px), 1fr))',
-            gap: 'clamp(1.5rem, 3vw, 2.5rem)',
-            alignItems: 'start',
-            outline: 'none',
+            width: '100%',
+            height: '2px',
+            backgroundColor: 'rgba(255, 255, 255, 0.06)',
+            borderRadius: '999px',
+            marginBottom: '28px',
+            overflow: 'hidden',
+            position: 'relative',
           }}
         >
-          {/* Left Column: Solution Selector Rail with Custom Smooth Scroll */}
           <div
-            ref={listRef}
-            className="sb-solutions-scroll-rail"
             style={{
-              display: 'flex',
-              flexDirection: 'column',
-              gap: '8px',
-              maxHeight: '640px',
-              overflowY: 'auto',
-              paddingRight: '8px',
+              height: '100%',
+              width: `${Math.max(8, scrollProgress)}%`,
+              backgroundColor: 'var(--color-primary-blue)',
+              boxShadow: '0 0 10px rgba(89, 139, 255, 0.8)',
+              transition: 'width 140ms ease-out',
             }}
-          >
-            {filteredSolutions.map((sol) => {
-              const isActive = sol.slug === activeSlug;
-              const globalIdx = solutionsData.findIndex((s) => s.slug === sol.slug);
+          />
+        </div>
 
-              return (
-                <button
-                  key={sol.slug}
-                  ref={(el) => {
-                    itemRefs.current[sol.slug] = el;
-                  }}
-                  type="button"
-                  onClick={() => setActiveSlug(sol.slug)}
-                  className={`sb-solutions-tab-item ${isActive ? 'is-active' : ''}`}
-                >
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '14px', minWidth: 0 }}>
-                    <span
-                      style={{
-                        fontFamily: 'var(--font-family-mono)',
-                        fontSize: '0.8rem',
-                        fontWeight: 700,
-                        color: isActive ? 'var(--color-primary-blue)' : '#6B7280',
-                        flexShrink: 0,
-                      }}
-                    >
-                      {String(globalIdx + 1).padStart(2, '0')}
-                    </span>
-                    <div style={{ minWidth: 0 }}>
-                      <div
+        {/* Horizontal Card Stream Track with Smooth Mouse-Wheel Glide */}
+        <div
+          ref={trackRef}
+          onScroll={handleScroll}
+          onWheel={handleWheel}
+          onMouseDown={handleMouseDown}
+          onMouseMove={handleMouseMove}
+          onMouseUp={handleMouseUpOrLeave}
+          onMouseLeave={handleMouseUpOrLeave}
+          className="sb-solutions-hstream"
+        >
+          {filteredSolutions.map((sol) => {
+            const globalIndex = solutionsData.findIndex((s) => s.slug === sol.slug);
+
+            return (
+              <article
+                key={sol.slug}
+                className="sb-solutions-hcard"
+              >
+                {/* Top Section: Telemetry, Domain, and Headline */}
+                <div>
+                  {/* Top Status Row */}
+                  <div
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                      marginBottom: '16px',
+                      flexWrap: 'wrap',
+                      gap: '8px',
+                    }}
+                  >
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                      <span
                         style={{
-                          fontSize: '0.92rem',
-                          fontWeight: 700,
-                          color: isActive ? '#FFFFFF' : '#D1D5DB',
-                          lineHeight: 1.35,
-                          whiteSpace: 'nowrap',
-                          overflow: 'hidden',
-                          textOverflow: 'ellipsis',
-                        }}
-                      >
-                        {sol.title}
-                      </div>
-                      <div
-                        style={{
-                          fontSize: '0.72rem',
-                          color: isActive ? 'var(--color-primary-blue)' : '#6B7280',
                           fontFamily: 'var(--font-family-mono)',
-                          marginTop: '3px',
-                          letterSpacing: '0.04em',
-                          textTransform: 'uppercase',
-                        }}
-                      >
-                        {sol.kicker}
-                      </div>
-                    </div>
-                  </div>
-
-                  <span
-                    style={{
-                      color: isActive ? 'var(--color-primary-blue)' : '#4B5563',
-                      fontSize: '1rem',
-                      transform: isActive ? 'translateX(4px)' : 'none',
-                      transition: 'transform 200ms ease, color 200ms ease',
-                      flexShrink: 0,
-                      marginLeft: '12px',
-                    }}
-                  >
-                    →
-                  </span>
-                </button>
-              );
-            })}
-          </div>
-
-          {/* Right Column: Dynamic Architecture Details Panel */}
-          <div
-            className="sb-solutions-card-panel"
-            style={{
-              padding: 'clamp(1.75rem, 3.5vw, 2.75rem)',
-              position: 'relative',
-            }}
-          >
-            {/* Top Telemetry & Control Bar */}
-            <div
-              style={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                marginBottom: '16px',
-                flexWrap: 'wrap',
-                gap: '12px',
-                borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
-                paddingBottom: '14px',
-              }}
-            >
-              {/* Domain & Kicker Badges */}
-              <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
-                <span
-                  style={{
-                    fontSize: '0.75rem',
-                    fontFamily: 'var(--font-family-mono)',
-                    color: 'var(--color-primary-blue)',
-                    fontWeight: 700,
-                    letterSpacing: '0.06em',
-                    textTransform: 'uppercase',
-                  }}
-                >
-                  {activeSolution.kicker}
-                </span>
-
-                <span
-                  style={{
-                    fontSize: '0.72rem',
-                    color: '#9CA3AF',
-                    backgroundColor: 'rgba(255, 255, 255, 0.06)',
-                    padding: '3px 10px',
-                    borderRadius: '999px',
-                    border: '1px solid rgba(255, 255, 255, 0.08)',
-                  }}
-                >
-                  {activeSolution.category}
-                </span>
-
-                <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
-                  <span className="sb-solutions-beacon" />
-                  <span
-                    style={{
-                      fontSize: '0.68rem',
-                      fontFamily: 'var(--font-family-mono)',
-                      color: '#02C415',
-                      fontWeight: 600,
-                      letterSpacing: '0.04em',
-                    }}
-                  >
-                    ACTIVE BLUEPRINT
-                  </span>
-                </div>
-              </div>
-
-              {/* Step Navigation Controls & Counter */}
-              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                <span
-                  style={{
-                    fontSize: '0.75rem',
-                    fontFamily: 'var(--font-family-mono)',
-                    color: '#9CA3AF',
-                    fontWeight: 700,
-                  }}
-                >
-                  {String(globalIndex + 1).padStart(2, '0')} / {String(solutionsData.length).padStart(2, '0')}
-                </span>
-
-                <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                  <button
-                    type="button"
-                    onClick={handlePrev}
-                    disabled={currentIndex === 0}
-                    className="sb-solutions-nav-btn"
-                    title="Previous solution (Arrow Up)"
-                    aria-label="Previous solution"
-                  >
-                    ←
-                  </button>
-                  <button
-                    type="button"
-                    onClick={handleNext}
-                    className="sb-solutions-nav-btn"
-                    title="Next solution (Arrow Down)"
-                    aria-label="Next solution"
-                  >
-                    →
-                  </button>
-                </div>
-              </div>
-            </div>
-
-            {/* Glowing Linear Progress Bar */}
-            <div
-              style={{
-                width: '100%',
-                height: '2px',
-                backgroundColor: 'rgba(255, 255, 255, 0.06)',
-                borderRadius: '999px',
-                marginBottom: '20px',
-                overflow: 'hidden',
-                position: 'relative',
-              }}
-            >
-              <div
-                style={{
-                  height: '100%',
-                  width: `${((currentIndex + 1) / totalInFilter) * 100}%`,
-                  backgroundColor: 'var(--color-primary-blue)',
-                  boxShadow: '0 0 10px rgba(89, 139, 255, 0.8)',
-                  transition: 'width 260ms cubic-bezier(0.16, 1, 0.3, 1)',
-                }}
-              />
-            </div>
-
-            {/* Headline */}
-            <h3
-              key={`headline-${activeSolution.slug}`}
-              style={{
-                fontFamily: 'var(--font-family-heading)',
-                fontSize: 'clamp(1.4rem, 2.2vw, 1.85rem)',
-                fontWeight: 700,
-                lineHeight: 1.25,
-                color: '#FFFFFF',
-                marginBottom: '14px',
-              }}
-            >
-              {activeSolution.headline}
-            </h3>
-
-            {/* Problem Statement Callout */}
-            <div
-              key={`problem-${activeSolution.slug}`}
-              style={{
-                backgroundColor: 'rgba(255, 255, 255, 0.03)',
-                border: '1px solid rgba(255, 255, 255, 0.08)',
-                borderLeft: '3px solid #F59E0B',
-                borderRadius: '8px',
-                padding: '12px 16px',
-                marginBottom: '20px',
-              }}
-            >
-              <div
-                style={{
-                  fontSize: '0.7rem',
-                  fontFamily: 'var(--font-family-mono)',
-                  color: '#F59E0B',
-                  fontWeight: 700,
-                  letterSpacing: '0.06em',
-                  textTransform: 'uppercase',
-                  marginBottom: '4px',
-                }}
-              >
-                OPERATIONAL FRICTION
-              </div>
-              <p
-                style={{
-                  fontSize: '0.9rem',
-                  color: '#D1D5DB',
-                  lineHeight: 1.55,
-                  margin: 0,
-                }}
-              >
-                {activeSolution.problemStatement}
-              </p>
-            </div>
-
-            {/* Strategic Outcomes Metrics Ribbon */}
-            {activeSolution.outcomes && activeSolution.outcomes.length > 0 && (
-              <div style={{ marginBottom: '22px' }}>
-                <div
-                  style={{
-                    fontSize: '0.7rem',
-                    fontFamily: 'var(--font-family-mono)',
-                    color: '#6B7280',
-                    textTransform: 'uppercase',
-                    letterSpacing: '0.05em',
-                    marginBottom: '8px',
-                  }}
-                >
-                  MEASURABLE ENTERPRISE OUTCOMES:
-                </div>
-                <div
-                  style={{
-                    display: 'grid',
-                    gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))',
-                    gap: '10px',
-                  }}
-                >
-                  {activeSolution.outcomes.map((outcome) => (
-                    <div
-                      key={outcome.label}
-                      style={{
-                        backgroundColor: 'rgba(89, 139, 255, 0.05)',
-                        border: '1px solid rgba(89, 139, 255, 0.2)',
-                        borderRadius: '10px',
-                        padding: '10px 14px',
-                      }}
-                    >
-                      <div
-                        style={{
-                          fontSize: '1.25rem',
+                          fontSize: '0.85rem',
                           fontWeight: 800,
-                          color: '#598BFF',
-                          fontFamily: 'var(--font-family-mono)',
-                          lineHeight: 1.1,
+                          color: 'var(--color-primary-blue)',
+                          backgroundColor: 'rgba(89, 139, 255, 0.12)',
+                          padding: '3px 8px',
+                          borderRadius: '6px',
+                          border: '1px solid rgba(89, 139, 255, 0.25)',
                         }}
                       >
-                        {outcome.value}
-                      </div>
-                      <div
-                        style={{
-                          fontSize: '0.72rem',
-                          fontWeight: 700,
-                          color: '#FFFFFF',
-                          textTransform: 'uppercase',
-                          letterSpacing: '0.04em',
-                          marginTop: '3px',
-                        }}
-                      >
-                        {outcome.label}
-                      </div>
-                      <div
+                        {String(globalIndex + 1).padStart(2, '0')}
+                      </span>
+
+                      <span
                         style={{
                           fontSize: '0.7rem',
                           color: '#9CA3AF',
-                          marginTop: '2px',
-                          lineHeight: 1.3,
+                          backgroundColor: 'rgba(255, 255, 255, 0.05)',
+                          padding: '3px 10px',
+                          borderRadius: '999px',
+                          border: '1px solid rgba(255, 255, 255, 0.08)',
                         }}
                       >
-                        {outcome.description}
-                      </div>
+                        {sol.category}
+                      </span>
                     </div>
-                  ))}
-                </div>
-              </div>
-            )}
 
-            {/* Core Capabilities 2x2 Grid */}
-            <div style={{ marginBottom: '24px' }}>
-              <div
-                style={{
-                  fontSize: '0.7rem',
-                  fontFamily: 'var(--font-family-mono)',
-                  color: '#6B7280',
-                  textTransform: 'uppercase',
-                  letterSpacing: '0.05em',
-                  marginBottom: '10px',
-                }}
-              >
-                ENGINEERING CAPABILITIES IN THIS SOLUTION:
-              </div>
-              <div
-                style={{
-                  display: 'grid',
-                  gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
-                  gap: '10px',
-                }}
-              >
-                {activeSolution.capabilities.slice(0, 4).map((cap) => (
+                    <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+                      <span className="sb-solutions-beacon" />
+                      <span
+                        style={{
+                          fontSize: '0.65rem',
+                          fontFamily: 'var(--font-family-mono)',
+                          color: '#02C415',
+                          fontWeight: 700,
+                          letterSpacing: '0.04em',
+                        }}
+                      >
+                        DEPLOYABLE
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Kicker */}
                   <div
-                    key={cap.title}
+                    style={{
+                      fontSize: '0.72rem',
+                      fontFamily: 'var(--font-family-mono)',
+                      color: 'var(--color-primary-blue)',
+                      fontWeight: 700,
+                      letterSpacing: '0.06em',
+                      textTransform: 'uppercase',
+                      marginBottom: '8px',
+                    }}
+                  >
+                    {sol.kicker}
+                  </div>
+
+                  {/* Solution Title */}
+                  <h3
+                    style={{
+                      fontFamily: 'var(--font-family-heading)',
+                      fontSize: 'clamp(1.2rem, 1.8vw, 1.45rem)',
+                      fontWeight: 700,
+                      lineHeight: 1.25,
+                      color: '#FFFFFF',
+                      marginBottom: '10px',
+                    }}
+                  >
+                    {sol.title}
+                  </h3>
+
+                  {/* Architectural Headline */}
+                  <p
+                    style={{
+                      fontSize: '0.88rem',
+                      color: '#D1D5DB',
+                      lineHeight: 1.5,
+                      marginBottom: '16px',
+                    }}
+                  >
+                    {sol.headline}
+                  </p>
+
+                  {/* Operational Friction Callout */}
+                  <div
                     style={{
                       backgroundColor: 'rgba(255, 255, 255, 0.03)',
                       border: '1px solid rgba(255, 255, 255, 0.07)',
+                      borderLeft: '3px solid #F59E0B',
                       borderRadius: '8px',
-                      padding: '12px',
-                      transition: 'border-color 180ms ease',
+                      padding: '10px 14px',
+                      marginBottom: '16px',
                     }}
                   >
-                    <div style={{ fontSize: '0.825rem', fontWeight: 700, color: '#FFFFFF', marginBottom: '3px' }}>
-                      {cap.title}
+                    <div
+                      style={{
+                        fontSize: '0.65rem',
+                        fontFamily: 'var(--font-family-mono)',
+                        color: '#F59E0B',
+                        fontWeight: 700,
+                        letterSpacing: '0.05em',
+                        textTransform: 'uppercase',
+                        marginBottom: '3px',
+                      }}
+                    >
+                      OPERATIONAL FRICTION
                     </div>
-                    <div style={{ fontSize: '0.74rem', color: '#9CA3AF', lineHeight: 1.4 }}>
-                      {cap.description}
+                    <div
+                      style={{
+                        fontSize: '0.8rem',
+                        color: '#9CA3AF',
+                        lineHeight: 1.4,
+                        display: '-webkit-box',
+                        WebkitLineClamp: 3,
+                        WebkitBoxOrient: 'vertical',
+                        overflow: 'hidden',
+                      }}
+                    >
+                      {sol.problemStatement}
                     </div>
                   </div>
-                ))}
-              </div>
-            </div>
 
-            {/* Action CTA Footer */}
-            <div
-              style={{
-                borderTop: '1px solid rgba(255, 255, 255, 0.08)',
-                paddingTop: '18px',
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                flexWrap: 'wrap',
-                gap: '12px',
-              }}
-            >
-              <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap' }}>
-                <Link
-                  href={`/solutions/${activeSolution.slug}`}
-                  className="sb-btn sb-btn--md sb-btn--primary"
-                  style={{ textDecoration: 'none' }}
-                >
-                  <span>View Full Architectural Solution</span>
-                  <ArrowRight size={14} className="sb-btn__arrow" />
-                </Link>
+                  {/* Measurable Enterprise Outcomes Ribbon */}
+                  {sol.outcomes && sol.outcomes.length > 0 && (
+                    <div
+                      style={{
+                        display: 'grid',
+                        gridTemplateColumns: 'repeat(2, 1fr)',
+                        gap: '8px',
+                        marginBottom: '16px',
+                      }}
+                    >
+                      {sol.outcomes.slice(0, 2).map((outcome) => (
+                        <div
+                          key={outcome.label}
+                          style={{
+                            backgroundColor: 'rgba(89, 139, 255, 0.05)',
+                            border: '1px solid rgba(89, 139, 255, 0.18)',
+                            borderRadius: '8px',
+                            padding: '8px 10px',
+                          }}
+                        >
+                          <div
+                            style={{
+                              fontSize: '1.1rem',
+                              fontWeight: 800,
+                              color: '#598BFF',
+                              fontFamily: 'var(--font-family-mono)',
+                              lineHeight: 1.1,
+                            }}
+                          >
+                            {outcome.value}
+                          </div>
+                          <div
+                            style={{
+                              fontSize: '0.68rem',
+                              fontWeight: 700,
+                              color: '#FFFFFF',
+                              textTransform: 'uppercase',
+                              letterSpacing: '0.04em',
+                              marginTop: '2px',
+                              whiteSpace: 'nowrap',
+                              overflow: 'hidden',
+                              textOverflow: 'ellipsis',
+                            }}
+                          >
+                            {outcome.label}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
 
-                <button
-                  type="button"
-                  onClick={handleNext}
+                  {/* Capabilities Tags */}
+                  <div style={{ marginBottom: '18px' }}>
+                    <div
+                      style={{
+                        fontSize: '0.68rem',
+                        fontFamily: 'var(--font-family-mono)',
+                        color: '#6B7280',
+                        textTransform: 'uppercase',
+                        letterSpacing: '0.04em',
+                        marginBottom: '8px',
+                      }}
+                    >
+                      KEY CAPABILITIES:
+                    </div>
+                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
+                      {sol.capabilities.slice(0, 3).map((cap) => (
+                        <span
+                          key={cap.title}
+                          style={{
+                            fontSize: '0.72rem',
+                            color: '#D1D5DB',
+                            backgroundColor: 'rgba(255, 255, 255, 0.04)',
+                            border: '1px solid rgba(255, 255, 255, 0.08)',
+                            padding: '3px 8px',
+                            borderRadius: '6px',
+                          }}
+                        >
+                          {cap.title}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Bottom Card Action Footer */}
+                <div
                   style={{
-                    display: 'inline-flex',
+                    borderTop: '1px solid rgba(255, 255, 255, 0.08)',
+                    paddingTop: '16px',
+                    display: 'flex',
                     alignItems: 'center',
-                    gap: '6px',
-                    fontSize: '0.825rem',
-                    color: '#D1D5DB',
-                    backgroundColor: 'rgba(255, 255, 255, 0.05)',
-                    border: '1px solid rgba(255, 255, 255, 0.1)',
-                    borderRadius: '8px',
-                    padding: '8px 14px',
-                    cursor: 'pointer',
-                    transition: 'all 180ms ease',
+                    justifyContent: 'space-between',
                   }}
                 >
-                  <span>Next Domain</span>
-                  <span>→</span>
-                </button>
-              </div>
+                  <Link
+                    href={`/solutions/${sol.slug}`}
+                    className="sb-btn sb-btn--sm sb-btn--primary"
+                    style={{ textDecoration: 'none', width: '100%', justifyContent: 'center' }}
+                  >
+                    <span>View Architectural Solution</span>
+                    <ArrowRight size={13} className="sb-btn__arrow" />
+                  </Link>
+                </div>
+              </article>
+            );
+          })}
+        </div>
 
-              <Link
-                href="/solutions"
-                style={{
-                  fontSize: '0.825rem',
-                  color: '#9CA3AF',
-                  textDecoration: 'none',
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: '6px',
-                  transition: 'color 180ms ease',
-                }}
-              >
-                <span>All Solutions Index</span>
-                <span>→</span>
-              </Link>
-            </div>
-          </div>
+        {/* Global Bottom Link */}
+        <div
+          style={{
+            marginTop: '20px',
+            display: 'flex',
+            justifyContent: 'flex-end',
+            alignItems: 'center',
+          }}
+        >
+          <Link
+            href="/solutions"
+            style={{
+              fontSize: '0.85rem',
+              color: '#9CA3AF',
+              textDecoration: 'none',
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '6px',
+              transition: 'color 180ms ease',
+            }}
+          >
+            <span>Explore All 10 Solutions in Architecture Index</span>
+            <span>→</span>
+          </Link>
         </div>
       </Container>
     </section>
