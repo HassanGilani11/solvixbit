@@ -4,7 +4,7 @@ import React, { useRef } from 'react';
 import Link from 'next/link';
 import { useGSAP } from '@gsap/react';
 import { Container } from '../layout';
-import { HeroCardTilt } from './HeroCardTilt';
+import { HeroSculpture } from './HeroSculpture';
 import { ArrowRight } from '../icons';
 import { initGSAP, checkPrefersReducedMotion } from '../../lib/animation/gsap';
 import { ANIMATION_CONFIG } from '../../lib/animation/config';
@@ -34,61 +34,71 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onStartProjectClick })
 
       // 1. Eyebrow badge entrance
       tl.from('.sb-hero-eyebrow', {
-        y: -12,
+        y: -14,
         opacity: 0,
-        duration: 0.45,
+        duration: 0.5,
       });
 
-      // 2. Headline lines reveal (clean mask roll up)
+      // 2. Headline reveals
       tl.from(
-        '.sb-hero-headline-line',
+        '.sb-hero-headline-main',
         {
-          y: '105%',
+          y: '100%',
           opacity: 0,
-          duration: 0.65,
-          stagger: 0.12,
+          duration: 0.7,
         },
         '-=0.25'
       );
 
-      // 3. Supporting paragraph
+      // 3. Sub-headline
+      tl.from(
+        '.sb-hero-headline-sub',
+        {
+          y: 20,
+          opacity: 0,
+          duration: 0.6,
+        },
+        '-=0.4'
+      );
+
+      // 4. Supporting paragraph
       tl.from(
         '.sb-hero-paragraph',
         {
-          y: 16,
+          y: 18,
           opacity: 0,
-          duration: 0.5,
+          duration: 0.55,
         },
         '-=0.35'
       );
 
-      // 4. CTA buttons and trust indicator (fail-safe fromTo with clearProps)
+      // 5. CTA buttons
       tl.fromTo(
         '.sb-hero-cta-item',
         {
-          y: 14,
+          y: 16,
           opacity: 0,
         },
         {
           y: 0,
           opacity: 1,
-          duration: 0.45,
+          duration: 0.5,
           stagger: 0.08,
           clearProps: 'opacity,transform',
         },
         '-=0.3'
       );
 
-      // 5. Hero visual card reveal (gentle scale + rise)
+      // 6. Hero 3D Sculpture reveal
       tl.from(
-        '.sb-hero-visual-card',
+        '.sb-hero-sculpture-col',
         {
-          scale: 0.96,
-          y: 20,
+          scale: 0.95,
+          y: 24,
           opacity: 0,
-          duration: 0.7,
+          duration: 0.8,
         },
-        '-=0.55'
+        '-=0.6'
       );
 
       return () => {
@@ -105,8 +115,8 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onStartProjectClick })
       style={{
         position: 'relative',
         overflow: 'hidden',
-        paddingTop: 'clamp(1.5rem, 3vw, 2.5rem)',
-        paddingBottom: 'clamp(1.5rem, 3vw, 2.5rem)',
+        paddingTop: 'clamp(2.5rem, 5vw, 4.5rem)',
+        paddingBottom: 'clamp(2.5rem, 5vw, 4.5rem)',
         borderBottom: '1px solid #E5E7EB',
       }}
     >
@@ -114,29 +124,30 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onStartProjectClick })
         <div
           style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))',
-            gap: 'clamp(1.5rem, 3vw, 2.5rem)',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 460px), 1fr))',
+            gap: 'clamp(2rem, 4vw, 4rem)',
             alignItems: 'center',
           }}
         >
-          {/* Left Column: Refined Editorial Typography & CTAs */}
-          <div style={{ maxWidth: '720px' }}>
-            {/* Eyebrow */}
-            <div className="sb-hero-eyebrow" style={{ display: 'inline-flex', marginBottom: '12px' }}>
+          {/* Left Column: Editorial Typography & Actions */}
+          <div style={{ maxWidth: '640px' }}>
+            {/* Primary Eyebrow */}
+            <div className="sb-hero-eyebrow" style={{ display: 'inline-flex', marginBottom: '16px' }}>
               <span
                 style={{
                   display: 'inline-flex',
                   alignItems: 'center',
                   gap: '8px',
-                  padding: '5px 12px',
+                  padding: '6px 14px',
                   backgroundColor: '#FFFFFF',
                   border: '1px solid #E5E7EB',
                   boxShadow: '0 2px 8px rgba(0, 0, 0, 0.04)',
                   borderRadius: 'var(--radius-full)',
                   fontSize: 'var(--font-size-xs)',
-                  fontWeight: 'var(--font-weight-semibold)',
-                  color: '#000000',
-                  letterSpacing: 'var(--letter-spacing-wide)',
+                  fontWeight: 700,
+                  color: '#111827',
+                  letterSpacing: '0.06em',
+                  textTransform: 'uppercase',
                 }}
               >
                 <span
@@ -144,131 +155,121 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onStartProjectClick })
                     width: '8px',
                     height: '8px',
                     borderRadius: '50%',
-                    backgroundColor: 'var(--color-secondary-green)',
+                    backgroundColor: 'var(--color-primary-blue)',
                   }}
                 />
-                CREATIVE TECHNOLOGY &amp; SOFTWARE ENGINEERING
+                CREATIVE TECHNOLOGY &amp; DIGITAL ENGINEERING
               </span>
             </div>
 
-            {/* Headline */}
-            <h1
+            {/* Main Headline */}
+            <div style={{ overflow: 'hidden', marginBottom: '8px' }}>
+              <h1
+                className="sb-hero-headline-main"
+                style={{
+                  fontFamily: 'var(--font-family-heading)',
+                  fontWeight: 800,
+                  fontSize: 'clamp(2.75rem, 5.5vw, 4.75rem)',
+                  lineHeight: 1.05,
+                  letterSpacing: '-0.04em',
+                  color: '#000000',
+                  margin: 0,
+                  willChange: 'transform, opacity',
+                }}
+              >
+                Solve What&apos;s Next.
+              </h1>
+            </div>
+
+            {/* Supporting Headline */}
+            <h2
+              className="sb-hero-headline-sub"
               style={{
                 fontFamily: 'var(--font-family-heading)',
-                fontWeight: 800,
-                fontSize: 'clamp(2.5rem, 4.8vw, 4.25rem)',
-                lineHeight: 1.08,
-                letterSpacing: '-0.035em',
-                color: '#000000',
-                marginBottom: '12px',
+                fontWeight: 700,
+                fontSize: 'clamp(1.5rem, 2.5vw, 2.25rem)',
+                lineHeight: 1.2,
+                letterSpacing: '-0.02em',
+                color: 'var(--color-primary-blue)',
+                margin: '0 0 16px 0',
               }}
             >
-              <span
-                style={{
-                  display: 'block',
-                  overflow: 'hidden',
-                  paddingBottom: '0.06em',
-                }}
-              >
-                <span
-                  className="sb-hero-headline-line"
-                  style={{
-                    display: 'inline-block',
-                    willChange: 'transform, opacity',
-                  }}
-                >
-                  We turn bold ideas into
-                </span>
-              </span>
+              Big ideas deserve better technology.
+            </h2>
 
-              <span
-                style={{
-                  display: 'block',
-                  overflow: 'hidden',
-                  paddingBottom: '0.06em',
-                }}
-              >
-                <span
-                  className="sb-hero-headline-line"
-                  style={{
-                    display: 'inline-block',
-                    background: 'linear-gradient(135deg, #598BFF 0%, #2563EB 100%)',
-                    WebkitBackgroundClip: 'text',
-                    WebkitTextFillColor: 'transparent',
-                    willChange: 'transform, opacity',
-                  }}
-                >
-                  digital experiences.
-                </span>
-              </span>
-            </h1>
-
-            {/* Paragraph */}
+            {/* Supporting Copy */}
             <p
               className="sb-hero-paragraph"
               style={{
                 fontFamily: 'var(--font-family-body)',
-                fontSize: 'clamp(1rem, 1.2vw, 1.15rem)',
-                lineHeight: 1.55,
+                fontSize: 'clamp(1.05rem, 1.25vw, 1.2rem)',
+                lineHeight: 1.6,
                 color: '#4B5563',
-                marginBottom: '14px',
-                maxWidth: '600px',
+                marginBottom: '28px',
+                maxWidth: '560px',
               }}
             >
-              We design, engineer, and scale digital products that solve real business problems, from standout websites and ecommerce platforms to intelligent software and automation.
+              We design, engineer, and scale digital products and intelligent systems that help ambitious businesses move forward.
             </p>
 
             {/* CTAs */}
             <div
               style={{
                 display: 'flex',
-                gap: '12px',
+                gap: '14px',
                 flexWrap: 'wrap',
                 alignItems: 'center',
-                marginBottom: '12px',
+                marginBottom: '28px',
               }}
             >
               <Link
                 href="/start-a-project"
-                className="sb-btn sb-btn--md sb-btn--primary sb-hero-cta-item"
+                className="sb-btn sb-btn--lg sb-btn--primary sb-hero-cta-item"
                 style={{ textDecoration: 'none' }}
               >
                 <span>Start a Project</span>
-                <ArrowRight size={15} className="sb-btn__arrow" />
+                <ArrowRight size={16} className="sb-btn__arrow" />
               </Link>
               <Link
                 href="/work"
-                className="sb-btn sb-btn--md sb-btn--secondary sb-hero-cta-item"
+                className="sb-btn sb-btn--lg sb-btn--secondary sb-hero-cta-item"
                 style={{ textDecoration: 'none' }}
               >
                 Explore Our Work
               </Link>
             </div>
 
-            {/* Trust indicator */}
+            {/* Credibility & Senior Access Strip */}
             <div
               className="sb-hero-cta-item"
               style={{
                 display: 'flex',
                 alignItems: 'center',
-                gap: '10px',
-                fontSize: '0.8rem',
+                gap: '12px',
+                fontSize: '0.825rem',
                 color: '#6B7280',
                 flexWrap: 'wrap',
+                paddingTop: '16px',
+                borderTop: '1px solid #EFEFEF',
               }}
             >
-              <div style={{ display: 'flex', color: '#F59E0B', fontSize: '0.85rem' }}>
-                ★★★★★
-              </div>
-              <span>Enterprise-Grade Delivery</span>
+              <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', fontWeight: 600, color: '#111827' }}>
+                <span style={{ color: 'var(--color-secondary-green)' }}>✓</span> Full-Cycle Engineering
+              </span>
               <span>•</span>
-              <span>Direct Senior Partner Access</span>
+              <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', fontWeight: 600, color: '#111827' }}>
+                <span style={{ color: 'var(--color-primary-blue)' }}>✓</span> Direct Senior Partner Access
+              </span>
+              <span>•</span>
+              <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', fontWeight: 600, color: '#111827' }}>
+                <span style={{ color: '#000000' }}>✓</span> Zero Vendor Lock-in
+              </span>
             </div>
           </div>
 
-          {/* Right Column: Interactive 3D Agency Visual */}
-          <div className="sb-hero-visual-card" style={{ willChange: 'transform, opacity' }}>
-            <HeroCardTilt />
+          {/* Right Column: Signature 3D Constellation Sculpture */}
+          <div className="sb-hero-sculpture-col" style={{ willChange: 'transform, opacity' }}>
+            <HeroSculpture />
           </div>
         </div>
       </Container>

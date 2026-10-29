@@ -435,6 +435,43 @@ div[style*="#000000"] .sb-btn--on-dark:hover .sb-btn__arrow {
   box-shadow: var(--shadow-md);
 }
 
+/* ==========================================================================
+   4.5 GLASSMORPHISM & DEPTH SURFACES
+   ========================================================================== */
+.sb-glass {
+  background-color: var(--glass-bg-light);
+  backdrop-filter: blur(var(--glass-blur-md));
+  -webkit-backdrop-filter: blur(var(--glass-blur-md));
+  border: 1px solid var(--glass-border-light);
+}
+
+.sb-glass--dark {
+  background-color: var(--glass-bg-dark);
+  backdrop-filter: blur(var(--glass-blur-md));
+  -webkit-backdrop-filter: blur(var(--glass-blur-md));
+  border: 1px solid var(--glass-border-dark);
+}
+
+.sb-glass--accent {
+  background-color: rgba(89, 139, 255, 0.06);
+  backdrop-filter: blur(var(--glass-blur-sm));
+  -webkit-backdrop-filter: blur(var(--glass-blur-sm));
+  border: 1px solid var(--glass-border-accent);
+}
+
+/* Fallback for browsers without backdrop-filter support */
+@supports not ((-webkit-backdrop-filter: blur(1px)) or (backdrop-filter: blur(1px))) {
+  .sb-glass {
+    background-color: #FFFFFF;
+  }
+  .sb-glass--dark {
+    background-color: #0B0F19;
+  }
+  .sb-glass--accent {
+    background-color: #F0F5FF;
+  }
+}
+
 /* Service Card (Editorial Layout) */
 .sb-service-card {
   display: flex;
