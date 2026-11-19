@@ -7,6 +7,7 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
   size?: 'sm' | 'md' | 'lg';
   iconLeft?: React.ReactNode;
   iconRight?: React.ReactNode;
+  isLoading?: boolean;
   fullWidth?: boolean;
   className?: string;
 }
@@ -19,6 +20,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       size = 'md',
       iconLeft,
       iconRight,
+      isLoading = false,
       fullWidth = false,
       className,
       disabled,
@@ -29,20 +31,36 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     return (
       <button
         ref={ref}
-        disabled={disabled}
+        disabled={disabled || isLoading}
         className={cn(
           'sb-btn',
           `sb-btn--${variant}`,
           `sb-btn--${size}`,
+          isLoading && 'sb-btn--loading',
           fullWidth && 'sb-btn--full',
           className
         )}
         style={fullWidth ? { width: '100%' } : undefined}
         {...props}
       >
-        {iconLeft && <span className="sb-btn__icon-left">{iconLeft}</span>}
+        {isLoading && (
+          <span
+            aria-hidden="true"
+            style={{
+              display: 'inline-block',
+              width: '14px',
+              height: '14px',
+              border: '2px solid currentColor',
+              borderRightColor: 'transparent',
+              borderRadius: '50%',
+              marginRight: '8px',
+              animation: 'sb-spin 0.65s linear infinite',
+            }}
+          />
+        )}
+        {!isLoading && iconLeft && <span className="sb-btn__icon-left">{iconLeft}</span>}
         <span>{children}</span>
-        {iconRight && <span className="sb-btn__icon-right">{iconRight}</span>}
+        {!isLoading && iconRight && <span className="sb-btn__icon-right">{iconRight}</span>}
       </button>
     );
   }

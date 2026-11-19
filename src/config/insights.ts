@@ -2,6 +2,150 @@ import { Article } from '@/types/content';
 
 export const ARTICLES: Article[] = [
   {
+    slug: 'upwork-local-wallet-pakistan-pkr-withdrawals',
+    title: 'Upwork Local Wallet in Pakistan: Instant PKR Withdrawals Explained',
+    seoTitle: 'Upwork Local Wallet Pakistan: Direct PKR Withdrawals to JazzCash, Easypaisa, SadaPay & NayaPay | SOLVIXBIT',
+    seoDescription: 'Upwork now supports direct PKR withdrawals to Pakistani digital wallets including JazzCash, Easypaisa, SadaPay, NayaPay, and Finja for a flat $1.99 fee. Learn setup steps, activation timelines, and compliance rules.',
+    excerpt: 'Pakistani freelancers and digital agencies can now withdraw Upwork earnings directly in PKR to JazzCash, Easypaisa, SadaPay, NayaPay, and Finja—typically arriving within minutes for a flat $1.99 fee.',
+    category: 'Business & Technology Strategy',
+    publishedAt: '2026-11-19',
+    updatedAt: '2026-11-19',
+    readingTime: '5 min read',
+    status: 'published',
+    author: {
+      name: 'SOLVIXBIT Editorial & Fintech Desk',
+      role: 'Ecosystem & Payments Strategy',
+      avatar: '/images/avatar-editorial.png',
+    },
+    coverImage: '/images/insights/upwork-local-wallet-pakistan-pkr.jpg',
+    tags: ['Upwork Pakistan', 'PKR Withdrawals', 'Fintech', 'Digital Wallets', 'Freelance Economy'],
+    relatedSolutionSlug: 'connected-systems-api-integration',
+    relatedSolutionTitle: 'Connected Systems & API Integration',
+    tableOfContents: [
+      { id: 'what-changed-for-pakistan', title: '1. What Changed for Pakistani Freelancers' },
+      { id: 'supported-wallets-and-fees', title: '2. Supported Wallets, Fees, and Speed' },
+      { id: 'how-to-set-up-local-wallet', title: '3. How to Set Up Direct to Local Wallet' },
+      { id: 'verification-and-name-matching', title: '4. Critical Compliance & Name-Matching Rules' },
+      { id: 'local-wallet-vs-bank-transfer', title: '5. Local Wallet vs. Direct Bank & Payoneer' },
+    ],
+    sections: [
+      {
+        id: 'what-changed-for-pakistan',
+        heading: 'What Changed for Pakistani Freelancers',
+        content: `For years, receiving international freelance and software export earnings in Pakistan meant navigating multi-hop intermediary accounts, 3-to-5-day bank clearing windows, or opaque currency conversion spreads.
+
+Upwork has streamlined this workflow by rolling out **Direct to Local Wallet** payouts in Pakistani Rupees (PKR). Instead of routing funds through third-party USD intermediaries or waiting days for traditional commercial bank wires, eligible Pakistani freelancers and solo practitioners can now withdraw earnings straight into leading local mobile and digital wallets—often settling within minutes once active.`,
+      },
+      {
+        id: 'supported-wallets-and-fees',
+        heading: 'Supported Wallets, Fees, and Speed',
+        content: `Upwork's Direct to Local Wallet option integrates with Pakistan's five major digital financial platforms:
+
+* **Supported Providers:** JazzCash, Easypaisa, SadaPay, NayaPay, and Finja.
+* **Withdrawal Fee:** A flat **$1.99 USD** per withdrawal transaction.
+* **Settlement Speed:** Typically arrives **within minutes** once your payout method is verified and active.
+* **Activation Hold:** Newly added withdrawal methods require **up to 3 calendar days** to activate as part of Upwork's standard payout security cooldown.`,
+      },
+      {
+        id: 'how-to-set-up-local-wallet',
+        heading: 'How to Set Up Direct to Local Wallet',
+        content: `Configuring a local PKR wallet inside your Upwork account takes only a few minutes:
+
+1. Open **Settings > Get Paid** inside your Upwork account.
+2. Click **Add Method** and select **Direct to Local Wallet (PKR)**.
+3. Choose your wallet provider (JazzCash, Easypaisa, SadaPay, NayaPay, or Finja) and enter your registered mobile number or IBAN/wallet identifier as prompted.
+4. Confirm your details and wait for the **up to 3-day security activation window** to complete before initiating your first instant withdrawal.`,
+      },
+      {
+        id: 'verification-and-name-matching',
+        heading: 'Critical Compliance & Name-Matching Rules',
+        content: `The most common cause of delayed or rejected PKR wallet payouts is a mismatch between your Upwork profile and your local wallet registration.
+
+* **Exact Legal Name Match:** The full legal name on your Upwork verified profile **must strictly match** the CNIC-registered title on your JazzCash, Easypaisa, SadaPay, NayaPay, or Finja account.
+* **Wallet Tier Limits:** Verify your monthly and daily incoming remittance limits inside your mobile wallet app before initiating larger milestone withdrawals, especially on basic biometric tiers.
+* **Exchange Rate Awareness:** While the flat fee is $1.99, always review the effective USD-to-PKR conversion rate shown on the withdrawal confirmation screen.`,
+      },
+      {
+        id: 'local-wallet-vs-bank-transfer',
+        heading: 'Local Wallet vs. Direct Bank & Payoneer',
+        content: `Choosing the right payout rail depends on your cash-flow cadence and withdrawal size:
+
+* **Direct to Local Wallet ($1.99 flat):** Best for fast, day-to-day liquidity and smaller-to-mid-sized withdrawals where receiving PKR in minutes matters.
+* **Direct to Local Bank ($0.99 flat):** Ideal for larger scheduled payouts into traditional bank accounts (e.g., Meezan, HBL, UBL, Alfalah) when a 1-to-4 business day settlement window is acceptable.
+* **Payoneer / USD Accounts:** Still useful if you need to hold USD balances for international SaaS expenses, ad spend, or contractor payouts before converting to PKR.`,
+      },
+    ],
+  },
+  {
+    slug: 'upwork-mcp-server-guide-claude-chatgpt-cursor',
+    title: 'Upwork MCP Server Guide: Connect Upwork to Claude, ChatGPT & Cursor',
+    seoTitle: 'Upwork MCP Server Guide: Setup for Claude, ChatGPT & Cursor via OAuth 2.1 | SOLVIXBIT',
+    seoDescription: 'Learn how Upwork’s official Model Context Protocol (MCP) server connects your Upwork account to Claude, ChatGPT, and Cursor via OAuth 2.1 with human-in-the-loop safeguards.',
+    excerpt: 'Upwork’s official remote MCP server bridges your marketplace account directly into Claude, ChatGPT, and Cursor—enabling AI-assisted job discovery, proposal drafting, and contract management with OAuth 2.1 security.',
+    category: 'AI & Automation',
+    publishedAt: '2026-11-19',
+    updatedAt: '2026-11-19',
+    readingTime: '6 min read',
+    status: 'published',
+    author: {
+      name: 'SOLVIXBIT Applied AI Team',
+      role: 'Agentic Systems & MCP Architecture',
+      avatar: '/images/avatar-editorial.png',
+    },
+    coverImage: '/images/insights/upwork-mcp-server-guide.jpg',
+    tags: ['MCP Server', 'Upwork', 'Claude', 'ChatGPT', 'Cursor', 'AI Automation'],
+    relatedSolutionSlug: 'operational-automation',
+    relatedSolutionTitle: 'Intelligent Process & AI Automation',
+    tableOfContents: [
+      { id: 'what-is-upwork-mcp', title: '1. What Is the Upwork MCP Server?' },
+      { id: 'core-capabilities', title: '2. What Freelancers, Agencies & Clients Can Do' },
+      { id: 'security-and-hitl', title: '3. OAuth 2.1 & Human-in-the-Loop Safeguards' },
+      { id: 'setup-claude-chatgpt-cursor', title: '4. Connecting Claude, ChatGPT & Cursor' },
+      { id: 'engineering-takeaway', title: '5. Why Remote MCP Is Replacing Fragile Scrapers' },
+    ],
+    sections: [
+      {
+        id: 'what-is-upwork-mcp',
+        heading: 'What Is the Upwork MCP Server?',
+        content: `The **Model Context Protocol (MCP)** has quickly become the universal open standard for connecting AI assistants to live external tools and business data. Instead of relying on fragile browser extensions, screen scrapers, or manual copy-pasting, Upwork now hosts an **official remote MCP server** at \`https://mcp.upwork.com/mcp\`.
+
+By connecting a compatible AI client—such as **Claude**, **ChatGPT**, or **Cursor**—you can query live Upwork marketplace data, evaluate opportunities, and manage active workflows directly from your AI workspace.`,
+      },
+      {
+        id: 'core-capabilities',
+        heading: 'What Freelancers, Agencies & Clients Can Do',
+        content: `Once authorized, the Upwork MCP server exposes structured tools tailored to both sides of the marketplace:
+
+* **For Freelancers & Agencies:** Search and filter live job postings by skill, budget, and client history; inspect project briefs in full context; draft tailored proposals grounded in your portfolio; monitor incoming messages; and check your available Connects balance.
+* **For Clients & Hiring Teams:** Source and screen global engineering talent, compare applicant shortlists, review contract milestones, and coordinate hiring workflows without constantly switching browser tabs.`,
+      },
+      {
+        id: 'security-and-hitl',
+        heading: 'OAuth 2.1 & Human-in-the-Loop Safeguards',
+        content: `Enterprise-grade AI integrations require strict boundaries around credentials and state-changing actions. Upwork's MCP implementation enforces two critical safeguards:
+
+* **OAuth 2.1 Authentication:** You authenticate through Upwork's official browser sign-in flow—never by pasting raw passwords or static API keys into a chat prompt.
+* **Explicit Human Confirmation:** Read-only discovery runs smoothly, while actions that modify your account state or commit resources (such as submitting a proposal or sending a contract offer) require **explicit human-in-the-loop review and confirmation** before execution.`,
+      },
+      {
+        id: 'setup-claude-chatgpt-cursor',
+        heading: 'Connecting Claude, ChatGPT & Cursor',
+        content: `Because Upwork hosts the MCP endpoint remotely, no local server compilation or Docker setup is required:
+
+1. **Claude (Desktop / Claude Code):** Open your connector or MCP settings, locate **Upwork** in the connector directory (or add the remote URL \`https://mcp.upwork.com/mcp\`), and complete the browser OAuth prompt.
+2. **ChatGPT:** Open your workspace's connected apps or developer MCP configuration, add a custom connector named **Upwork** pointing to \`https://mcp.upwork.com/mcp\`, authorize via OAuth, and invoke it in chat with \`@Upwork\`.
+3. **Cursor:** Register the remote Upwork MCP endpoint in your Cursor MCP settings (\`mcp.json\`) and complete the browser-based OAuth login to access Upwork context right inside your IDE.`,
+      },
+      {
+        id: 'engineering-takeaway',
+        heading: 'Why Remote MCP Is Replacing Fragile Scrapers',
+        content: `From a systems architecture perspective, Upwork's hosted MCP server signals a broader industry shift: platforms are moving from closed web UIs toward **agent-ready, OAuth-authenticated protocol endpoints**.
+
+For engineering teams and product leaders, the pattern is clear—exposing clean, permission-scoped MCP tools with human-in-the-loop confirmation gates is rapidly becoming the standard way to make SaaS platforms safely operable by AI assistants.`,
+      },
+    ],
+  },
+  {
     slug: 'where-should-your-business-start-with-ai-automation',
     title: 'Where Should Your Business Start With AI Automation?',
     seoTitle: 'Where to Start With AI Automation: A Practical B2B Roadmap | SOLVIXBIT',

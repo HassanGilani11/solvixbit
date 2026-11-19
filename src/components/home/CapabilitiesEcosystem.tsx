@@ -86,7 +86,7 @@ const CLUSTERS: CapabilityCluster[] = [
         badge: 'ASYNC TRANSITIONS',
         iconSvg: (
           <svg width="22" height="22" viewBox="0 0 115.3 100" fill="#00D8FF">
-            <path d="M57.65 65.25a15.25 15.25 0 1 0 0-30.5 15.25 15.25 0 0 0 0 30.5zm0-24a8.75 8.75 0 1 1 0 17.5 8.75 8.75 0 0 1 0-17.5zM113.8 38.6C109.9 23.3 98.4 12 83.2 8.1 72.8 5.4 62.1 6.5 52.3 11 41.5 5.5 29.5 4.3 18.2 8.1 3 12-8.5 23.3-12.4 38.6c-4 15.6-1 31.9 8.2 44.4 9.8 13.3 24.6 20.3 40.5 19.3 15.9 1 30.7-6 40.5-19.3 9.2-12.5 12.2-28.8 8.2-44.4zm-14.8 28.5c-7.7 10.4-19.6 15.9-32.6 15.1-4.7-.3-9.4-1.6-13.7-3.9 6.2-7 12.9-15.6 18.5-24.6 9.8 4 19.8 9.3 27.8 13.4zM57.65 14.5c4.7.3 9.4 1.6 13.7 3.9-6.2 7-12.9 15.6-18.5 24.6-9.8-4-19.8-9.3-27.8-13.4 7.7-10.4 19.6-15.9 32.6-15.1zm-39.2 16c6.8 3.5 14.9 7.7 22.9 11.2-3.1 5.4-6.3 11.1-9.5 16.9-8.4-1.9-16.7-5.1-23.7-9.5 2.1-7.1 5.8-13.6 10.3-18.6zm-10.3 36.6c2.1 7.1 5.8 13.6 10.3 18.6 7.7 8.5 18 13.6 29.1 14.2-6.8-3.5-14.9-7.7-22.9-11.2 3.1-5.4 6.3-11.1 9.5-16.9-5.4-1.2-10.8-2.8-16-4.7zm68.3 32.8c-11.1-.6-21.4-5.7-29.1-14.2-4.5-5-8.2-11.5-10.3-18.6 6.8-3.5 14.9-7.7 22.9-11.2 3.1 5.4 6.3 11.1 9.5 16.9 2.5.6 4.9 1.2 7 2zm10.3-18.6c-4.5 5-8.2 11.5-10.3 18.6-6.8-3.5-14.9-7.7-22.9-11.2 3.1-5.4 6.3-11.1 9.5-16.9 8.4 1.9 16.7 5.1 23.7 9.5z" />
+            <path d="M57.65 65.25a15.25 15.25 0 1 0 0-30.5 15.25 15.25 0 0 0 0 30.5zm0-24a8.75 8.75 0 1 1 0 17.5 8.75 8.75 0 0 1 0-17.5zM113.8 38.6C109.9 23.3 98.4 12 83.2 8.1 72.8 5.4 62.1 6.5 52.3 11 41.5 5.5 29.5 4.3 18.2 8.1 3 12-8.5 23.3-12.4 38.6c-4 15.6-1 31.9 8.2 44.4 9.8 13.3 24.6 20.3 40.5 19.3 15.9 1 30.7-6 40.5-19.3 9.2-12.5 12.2-28.8 8.2-44.4zm-14.8 28.5c-7.7 10.4-19.6 15.9-32.6 15.1-4.7-.3-9.4-1.6-13.7-3.9 6.2-7 12.9-15.6 18.5-24.6 9.8 4 19.8 9.3 27.8 13.4zM57.65 14.5c4.7.3 9.4 1.6 13.7 3.9-6.2 7-12.9 15.6-18.5 24.6-9.8-4-19.8-9.3-27.8-13.4 7.7-10.4 19.6-15.9 32.6-15.1zm-39.2 16c6.8 3.5 14.9 7.7 22.9 11.2-3.1 5.4-6.3 11.1-9.5 16.9-8.4-1.9-16.7-5.1-23.7-9.5 2.1-7.1 5.8-13.6 10.3-18.6zm-10.3 36.6c2.1 7.1 5.8 13.6 10.3 18.6 7.7 8.5 18 13.6 29.1 14.2-6.8-3.5-14.9-7.7-22.9-11.2 3.1-5.4 6.3-11.1 9.5-16.9-5.4-1.2-10.8-2.8-16-4.7zm68.3 32.8c-11.1-.6-21.4-5.7-29.1-14.2-4.5-5-8.2-11.5-10.3-18.6 6.8-3.5 14.9-7.7 22.9-11.2 3.1-5.4 6.3-11.1 9.5-16.9 2.5.6 4.9 1.2 7 2zm10.3-18.6c-4.5 5-8.2 11.5-10.3 18.6-6.8-3.5-14.9-7.7-22.9-11.2 3.1-5.4 6.3-11.1 9.5-16.9 8.4 1.9 16.7 5.1 23.7 9.5z" />
           </svg>
         ),
       },
@@ -152,7 +152,7 @@ const CLUSTERS: CapabilityCluster[] = [
         brandColor: '#000000',
         badge: '<20MS COSINE SEARCH',
         iconSvg: (
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="#000000">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="#598BFF">
             <path d="M12 2L2 7v10l10 5 10-5V7L12 2zm0 2.2L19.8 7 12 9.8 4.2 7 12 4.2zM4 8.5l7 2.5v8.5l-7-3.5V8.5zm9 11v-8.5l7-2.5v7.5l-7 3.5z" />
           </svg>
         ),
@@ -176,7 +176,7 @@ const CLUSTERS: CapabilityCluster[] = [
         brandColor: '#1C3C3C',
         badge: 'AUTOMATIC RETRY',
         iconSvg: (
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="#1C3C3C">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="#02C415">
             <path d="M12 2a10 10 0 1 0 10 10A10.011 10.011 0 0 0 12 2zm0 18a8 8 0 1 1 8-8 8.009 8.009 0 0 1-8 8zm1-13h-2v6l5.25 3.15.75-1.23-4-2.37z" />
           </svg>
         ),
@@ -243,7 +243,7 @@ const CLUSTERS: CapabilityCluster[] = [
         badge: '<15MS RESPONSE',
         iconSvg: (
           <svg width="22" height="22" viewBox="0 0 24 24" fill="#003DFF">
-            <path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm1 14.93V17a1 1 0 0 1-2 0v-.07A6 6 0 0 1 6.07 12H6a1 1 0 0 1 0-2h.07A6 6 0 0 1 11 4.93V5a1 1 0 0 1 2 0v-.07A6 6 0 0 1 17.93 10H18a1 1 0 0 1 0 2h-.07A6 6 0 0 1 13 16.93z" />
+            <path d="M12 2a10 10 0 1 0 10 10A10.011 10.011 0 0 0 12 2zm1 14.93V17a1 1 0 0 1-2 0v-.07A6 6 0 0 1 6.07 12H6a1 1 0 0 1 0-2h.07A6 6 0 0 1 11 4.93V5a1 1 0 0 1 2 0v-.07A6 6 0 0 1 17.93 10H18a1 1 0 0 1 0 2h-.07A6 6 0 0 1 13 16.93z" />
           </svg>
         ),
       },
@@ -367,37 +367,118 @@ export const CapabilitiesEcosystem: React.FC = () => {
     { scope: sectionRef }
   );
 
+  // Smooth Interactive Tab Transition on Cluster Switch
+  useGSAP(
+    () => {
+      if (checkPrefersReducedMotion()) return;
+      const { gsap } = initGSAP();
+      const panel = panelRef.current;
+      if (!panel) return;
+
+      gsap.fromTo(
+        panel,
+        { opacity: 0.7, y: 8 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.28,
+          ease: ANIMATION_CONFIG.ease.smooth,
+          clearProps: 'opacity,transform',
+        }
+      );
+    },
+    { scope: sectionRef, dependencies: [activeCluster] }
+  );
+
   const selected = CLUSTERS.find((c) => c.id === activeCluster) || CLUSTERS[0];
+  const activeIndex = CLUSTERS.findIndex((c) => c.id === activeCluster);
+
+  // WAI-ARIA Keyboard Navigation for Tablist
+  const handleKeyDown = (e: React.KeyboardEvent, index: number) => {
+    if (e.key === 'ArrowRight') {
+      e.preventDefault();
+      const nextIdx = (index + 1) % CLUSTERS.length;
+      setActiveCluster(CLUSTERS[nextIdx].id);
+      document.getElementById(`tab-${CLUSTERS[nextIdx].id}`)?.focus();
+    } else if (e.key === 'ArrowLeft') {
+      e.preventDefault();
+      const prevIdx = (index - 1 + CLUSTERS.length) % CLUSTERS.length;
+      setActiveCluster(CLUSTERS[prevIdx].id);
+      document.getElementById(`tab-${CLUSTERS[prevIdx].id}`)?.focus();
+    } else if (e.key === 'Home') {
+      e.preventDefault();
+      setActiveCluster(CLUSTERS[0].id);
+      document.getElementById(`tab-${CLUSTERS[0].id}`)?.focus();
+    } else if (e.key === 'End') {
+      e.preventDefault();
+      setActiveCluster(CLUSTERS[CLUSTERS.length - 1].id);
+      document.getElementById(`tab-${CLUSTERS[CLUSTERS.length - 1].id}`)?.focus();
+    }
+  };
 
   return (
     <section
       ref={sectionRef}
       id="capabilities"
       style={{
-        backgroundColor: '#FAFAFA',
-        borderBottom: '1px solid #E5E7EB',
-        paddingTop: 'clamp(4rem, 6.5vw, 5.5rem)',
-        paddingBottom: 'clamp(4.5rem, 7vw, 6rem)',
+        backgroundColor: '#090D16',
+        color: '#FFFFFF',
+        borderBottom: '1px solid #1E293B',
+        paddingTop: 'clamp(4.5rem, 8vw, 7rem)',
+        paddingBottom: 'clamp(4.5rem, 8vw, 7rem)',
         position: 'relative',
+        overflow: 'hidden',
       }}
     >
-      <Container>
+      {/* Subtle Ambient Radial Lighting */}
+      <div
+        aria-hidden="true"
+        style={{
+          position: 'absolute',
+          top: 0,
+          right: '10%',
+          width: '500px',
+          height: '500px',
+          borderRadius: '50%',
+          background: 'radial-gradient(circle, rgba(89, 139, 255, 0.12) 0%, transparent 65%)',
+          filter: 'blur(60px)',
+          pointerEvents: 'none',
+          zIndex: 0,
+        }}
+      />
+      <div
+        aria-hidden="true"
+        style={{
+          position: 'absolute',
+          bottom: 0,
+          left: '5%',
+          width: '420px',
+          height: '420px',
+          borderRadius: '50%',
+          background: 'radial-gradient(circle, rgba(2, 196, 21, 0.08) 0%, transparent 65%)',
+          filter: 'blur(60px)',
+          pointerEvents: 'none',
+          zIndex: 0,
+        }}
+      />
+
+      <Container style={{ position: 'relative', zIndex: 1 }}>
         {/* Section Header */}
-        <div className="sb-cap-header" style={{ maxWidth: '780px', marginBottom: 'clamp(1.5rem, 2.5vw, 2.25rem)' }}>
-          <div style={{ display: 'inline-flex', marginBottom: '12px' }}>
+        <div className="sb-cap-header" style={{ maxWidth: '820px', marginBottom: 'clamp(2rem, 3.5vw, 3rem)' }}>
+          <div style={{ display: 'inline-flex', marginBottom: '14px' }}>
             <span
               style={{
                 display: 'inline-flex',
                 alignItems: 'center',
                 gap: '8px',
-                padding: '5px 12px',
-                backgroundColor: '#FFFFFF',
-                border: '1px solid #E5E7EB',
+                padding: '6px 14px',
+                backgroundColor: 'rgba(255, 255, 255, 0.08)',
+                border: '1px solid rgba(255, 255, 255, 0.15)',
                 borderRadius: '999px',
                 fontSize: '0.75rem',
                 fontWeight: 700,
-                color: '#111827',
-                letterSpacing: '0.06em',
+                color: '#FFFFFF',
+                letterSpacing: '0.07em',
                 textTransform: 'uppercase',
                 fontFamily: 'var(--font-family-mono)',
               }}
@@ -410,12 +491,12 @@ export const CapabilitiesEcosystem: React.FC = () => {
           <h2
             style={{
               fontFamily: 'var(--font-family-heading)',
-              fontSize: 'clamp(2rem, 3.5vw, 2.85rem)',
+              fontSize: 'clamp(2.15rem, 4vw, 3.25rem)',
               fontWeight: 800,
               letterSpacing: '-0.03em',
               lineHeight: 1.15,
-              color: '#000000',
-              margin: '0 0 12px 0',
+              color: '#FFFFFF',
+              margin: '0 0 16px 0',
             }}
           >
             Connected engineering choices. Measurable business outcomes.
@@ -424,9 +505,9 @@ export const CapabilitiesEcosystem: React.FC = () => {
           <p
             style={{
               fontFamily: 'var(--font-family-body)',
-              fontSize: 'clamp(1rem, 1.2vw, 1.15rem)',
-              lineHeight: 1.6,
-              color: '#4B5563',
+              fontSize: 'clamp(1.05rem, 1.3vw, 1.2rem)',
+              lineHeight: 1.62,
+              color: '#94A3B8',
               margin: 0,
             }}
           >
@@ -440,18 +521,20 @@ export const CapabilitiesEcosystem: React.FC = () => {
           role="tablist"
           aria-label="Engineering Capability Clusters"
           style={{
-            backgroundColor: '#FFFFFF',
+            backgroundColor: 'rgba(15, 23, 42, 0.75)',
+            backdropFilter: 'blur(16px)',
+            WebkitBackdropFilter: 'blur(16px)',
             borderRadius: '16px',
-            border: '1px solid #E5E7EB',
+            border: '1px solid rgba(255, 255, 255, 0.12)',
             padding: '8px',
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(230px, 1fr))',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
             gap: '8px',
-            boxShadow: '0 4px 18px rgba(0, 0, 0, 0.03)',
-            marginBottom: '20px',
+            boxShadow: '0 12px 32px -8px rgba(0, 0, 0, 0.5)',
+            marginBottom: '24px',
           }}
         >
-          {CLUSTERS.map((cluster) => {
+          {CLUSTERS.map((cluster, idx) => {
             const isActive = cluster.id === activeCluster;
             return (
               <button
@@ -460,21 +543,23 @@ export const CapabilitiesEcosystem: React.FC = () => {
                 id={`tab-${cluster.id}`}
                 aria-selected={isActive}
                 aria-controls={`panel-${cluster.id}`}
+                tabIndex={isActive ? 0 : -1}
                 type="button"
                 onClick={() => setActiveCluster(cluster.id)}
+                onKeyDown={(e) => handleKeyDown(e, idx)}
                 style={{
                   padding: '14px 18px',
                   borderRadius: '12px',
                   backgroundColor: isActive ? '#000000' : 'transparent',
-                  color: isActive ? '#FFFFFF' : '#374151',
-                  border: isActive ? '1px solid #000000' : '1px solid transparent',
+                  color: isActive ? '#FFFFFF' : '#94A3B8',
+                  border: isActive ? '1px solid var(--color-primary-blue)' : '1px solid transparent',
                   cursor: 'pointer',
                   textAlign: 'left',
                   transition: 'all 200ms ease',
                   display: 'flex',
                   flexDirection: 'column',
-                  gap: '5px',
-                  boxShadow: isActive ? '0 10px 24px -6px rgba(0, 0, 0, 0.25)' : 'none',
+                  gap: '6px',
+                  boxShadow: isActive ? '0 10px 24px -4px rgba(89, 139, 255, 0.25)' : 'none',
                 }}
               >
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -482,9 +567,9 @@ export const CapabilitiesEcosystem: React.FC = () => {
                     style={{
                       fontSize: '0.68rem',
                       fontFamily: 'var(--font-family-mono)',
-                      color: isActive ? 'var(--color-primary-blue)' : '#9CA3AF',
+                      color: isActive ? 'var(--color-primary-blue)' : '#64748B',
                       fontWeight: 700,
-                      letterSpacing: '0.05em',
+                      letterSpacing: '0.06em',
                     }}
                   >
                     CLUSTER {cluster.step}
@@ -509,10 +594,10 @@ export const CapabilitiesEcosystem: React.FC = () => {
                 <span
                   style={{
                     fontFamily: 'var(--font-family-heading)',
-                    fontSize: '0.975rem',
+                    fontSize: '0.98rem',
                     fontWeight: 700,
                     lineHeight: 1.25,
-                    color: isActive ? '#FFFFFF' : '#111827',
+                    color: isActive ? '#FFFFFF' : '#CBD5E1',
                   }}
                 >
                   {cluster.name}
@@ -522,25 +607,25 @@ export const CapabilitiesEcosystem: React.FC = () => {
           })}
         </div>
 
-        {/* Master Architectural Blueprint Console */}
+        {/* Master Architectural Blueprint Console Surface */}
         <div
           ref={panelRef}
           role="tabpanel"
           id={`panel-${selected.id}`}
           aria-labelledby={`tab-${selected.id}`}
           style={{
-            backgroundColor: '#FFFFFF',
+            backgroundColor: '#0F172A',
             borderRadius: '20px',
-            border: '1px solid #E5E7EB',
+            border: '1px solid #1E293B',
             overflow: 'hidden',
-            boxShadow: '0 20px 48px -12px rgba(0, 0, 0, 0.06)',
+            boxShadow: '0 24px 60px -15px rgba(0, 0, 0, 0.6), 0 0 1px 1px rgba(255, 255, 255, 0.08)',
           }}
         >
           {/* Production Telemetry Top Ribbon */}
           <div
             style={{
-              backgroundColor: '#0F131D',
-              padding: '12px 24px',
+              backgroundColor: '#0A0F1D',
+              padding: '14px 24px',
               borderBottom: '1px solid #1E293B',
               display: 'flex',
               justifyContent: 'space-between',
@@ -556,7 +641,7 @@ export const CapabilitiesEcosystem: React.FC = () => {
                   height: '8px',
                   borderRadius: '50%',
                   backgroundColor: 'var(--color-secondary-green)',
-                  boxShadow: '0 0 8px rgba(2, 196, 21, 0.8)',
+                  boxShadow: '0 0 10px rgba(2, 196, 21, 0.9)',
                   display: 'inline-block',
                 }}
               />
@@ -573,7 +658,7 @@ export const CapabilitiesEcosystem: React.FC = () => {
               </span>
             </div>
 
-            <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '16px', flexWrap: 'wrap' }}>
               <span
                 style={{
                   fontSize: '0.68rem',
@@ -581,7 +666,7 @@ export const CapabilitiesEcosystem: React.FC = () => {
                   color: '#64748B',
                 }}
               >
-                PROD RUNTIME: <span style={{ color: '#38BDF8' }}>ZERO LOCK-IN</span>
+                PROD RUNTIME: <span style={{ color: '#38BDF8' }}>ZERO VENDOR LOCK-IN</span>
               </span>
               <span
                 style={{
@@ -598,7 +683,7 @@ export const CapabilitiesEcosystem: React.FC = () => {
           {/* Main Console Interior Grid */}
           <div
             style={{
-              padding: 'clamp(2rem, 3.8vw, 3.25rem)',
+              padding: 'clamp(2rem, 4vw, 3.5rem)',
               display: 'grid',
               gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 420px), 1fr))',
               gap: 'clamp(2rem, 4vw, 3.5rem)',
@@ -624,11 +709,11 @@ export const CapabilitiesEcosystem: React.FC = () => {
               <h3
                 style={{
                   fontFamily: 'var(--font-family-heading)',
-                  fontSize: 'clamp(1.6rem, 2.5vw, 2.15rem)',
+                  fontSize: 'clamp(1.65rem, 2.5vw, 2.25rem)',
                   fontWeight: 800,
                   letterSpacing: '-0.025em',
                   lineHeight: 1.2,
-                  color: '#000000',
+                  color: '#FFFFFF',
                   marginBottom: '14px',
                 }}
               >
@@ -638,7 +723,7 @@ export const CapabilitiesEcosystem: React.FC = () => {
               <p
                 style={{
                   fontSize: '1rem',
-                  color: '#4B5563',
+                  color: '#94A3B8',
                   lineHeight: 1.65,
                   marginBottom: '26px',
                 }}
@@ -659,8 +744,8 @@ export const CapabilitiesEcosystem: React.FC = () => {
                   <div
                     key={metric.label}
                     style={{
-                      backgroundColor: '#F8FAFC',
-                      border: '1px solid #E2E8F0',
+                      backgroundColor: '#0A0F1D',
+                      border: '1px solid #1E293B',
                       borderRadius: '10px',
                       padding: '12px 14px',
                     }}
@@ -677,7 +762,7 @@ export const CapabilitiesEcosystem: React.FC = () => {
                     >
                       {metric.value}
                     </div>
-                    <div style={{ fontSize: '0.72rem', fontWeight: 600, color: '#0F172A', lineHeight: 1.3 }}>
+                    <div style={{ fontSize: '0.72rem', fontWeight: 600, color: '#F1F5F9', lineHeight: 1.3 }}>
                       {metric.label}
                     </div>
                     <div style={{ fontSize: '0.65rem', color: '#64748B', marginTop: '2px', fontFamily: 'var(--font-family-mono)' }}>
@@ -700,7 +785,7 @@ export const CapabilitiesEcosystem: React.FC = () => {
                 <span
                   style={{
                     fontSize: '0.75rem',
-                    color: '#6B7280',
+                    color: '#64748B',
                     fontFamily: 'var(--font-family-mono)',
                   }}
                 >
@@ -712,9 +797,9 @@ export const CapabilitiesEcosystem: React.FC = () => {
             {/* Right: Integrated Technology Mesh & Pipeline */}
             <div
               style={{
-                backgroundColor: '#F8FAFC',
+                backgroundColor: '#0A0F1D',
                 borderRadius: '16px',
-                border: '1px solid #E2E8F0',
+                border: '1px solid #1E293B',
                 padding: 'clamp(1.5rem, 2.5vw, 2rem)',
                 display: 'flex',
                 flexDirection: 'column',
@@ -726,7 +811,7 @@ export const CapabilitiesEcosystem: React.FC = () => {
                   style={{
                     fontSize: '0.72rem',
                     fontFamily: 'var(--font-family-mono)',
-                    color: '#64748B',
+                    color: '#94A3B8',
                     fontWeight: 700,
                     letterSpacing: '0.04em',
                   }}
@@ -757,15 +842,15 @@ export const CapabilitiesEcosystem: React.FC = () => {
                   <div
                     key={tech.name}
                     style={{
-                      backgroundColor: '#FFFFFF',
+                      backgroundColor: '#0F172A',
                       borderRadius: '12px',
-                      border: '1px solid #E2E8F0',
+                      border: '1px solid #1E293B',
                       padding: '16px',
                       display: 'flex',
                       flexDirection: 'column',
                       justifyContent: 'space-between',
-                      boxShadow: '0 2px 6px rgba(0, 0, 0, 0.02)',
-                      transition: 'all 200ms ease',
+                      boxShadow: '0 2px 8px rgba(0, 0, 0, 0.2)',
+                      transition: 'border-color 200ms ease, transform 200ms ease',
                       position: 'relative',
                       minHeight: '130px',
                     }}
@@ -778,7 +863,7 @@ export const CapabilitiesEcosystem: React.FC = () => {
                             width: '36px',
                             height: '36px',
                             borderRadius: '8px',
-                            backgroundColor: '#F1F5F9',
+                            backgroundColor: '#1E293B',
                             display: 'flex',
                             alignItems: 'center',
                             justifyContent: 'center',
@@ -790,7 +875,7 @@ export const CapabilitiesEcosystem: React.FC = () => {
                           style={{
                             fontSize: '0.62rem',
                             fontFamily: 'var(--font-family-mono)',
-                            color: '#64748B',
+                            color: '#94A3B8',
                             fontWeight: 700,
                             letterSpacing: '0.04em',
                             textTransform: 'uppercase',
@@ -805,7 +890,7 @@ export const CapabilitiesEcosystem: React.FC = () => {
                         style={{
                           fontSize: '0.975rem',
                           fontWeight: 800,
-                          color: '#0F172A',
+                          color: '#F8FAFC',
                           marginBottom: '4px',
                           letterSpacing: '-0.015em',
                         }}
@@ -817,7 +902,7 @@ export const CapabilitiesEcosystem: React.FC = () => {
                       <div
                         style={{
                           fontSize: '0.75rem',
-                          color: '#64748B',
+                          color: '#94A3B8',
                           lineHeight: 1.45,
                         }}
                       >
@@ -830,7 +915,7 @@ export const CapabilitiesEcosystem: React.FC = () => {
                       style={{
                         marginTop: '10px',
                         paddingTop: '8px',
-                        borderTop: '1px solid #F1F5F9',
+                        borderTop: '1px solid #1E293B',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'space-between',
@@ -854,8 +939,8 @@ export const CapabilitiesEcosystem: React.FC = () => {
               {/* Architecture Interconnection Pipeline */}
               <div
                 style={{
-                  backgroundColor: '#FFFFFF',
-                  border: '1px solid #E2E8F0',
+                  backgroundColor: '#0F172A',
+                  border: '1px solid #1E293B',
                   borderRadius: '10px',
                   padding: '12px 14px',
                 }}
@@ -864,7 +949,7 @@ export const CapabilitiesEcosystem: React.FC = () => {
                   style={{
                     fontSize: '0.65rem',
                     fontFamily: 'var(--font-family-mono)',
-                    color: '#64748B',
+                    color: '#94A3B8',
                     fontWeight: 700,
                     letterSpacing: '0.04em',
                     marginBottom: '8px',
@@ -881,19 +966,19 @@ export const CapabilitiesEcosystem: React.FC = () => {
                     flexWrap: 'wrap',
                     fontSize: '0.75rem',
                     fontWeight: 600,
-                    color: '#0F172A',
+                    color: '#F8FAFC',
                   }}
                 >
                   {selected.pipeline.map((step, idx) => (
                     <React.Fragment key={step}>
                       <span
                         style={{
-                          backgroundColor: '#F1F5F9',
+                          backgroundColor: '#1E293B',
                           padding: '4px 8px',
                           borderRadius: '6px',
                           fontSize: '0.72rem',
                           fontFamily: 'var(--font-family-mono)',
-                          color: '#334155',
+                          color: '#E2E8F0',
                         }}
                       >
                         {step}

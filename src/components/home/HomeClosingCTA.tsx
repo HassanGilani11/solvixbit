@@ -64,15 +64,16 @@ export const HomeClosingCTA: React.FC<HomeClosingCTAProps> = ({ onStartProjectCl
           className="sb-closing-card"
           style={{
             position: 'relative',
-            borderRadius: 'var(--radius-xl)',
-            backgroundColor: '#000000',
+            borderRadius: '24px',
+            backgroundColor: '#090D16',
             color: '#FFFFFF',
             padding: 'clamp(3rem, 7vw, 6rem) clamp(2rem, 5vw, 4.5rem)',
             textAlign: 'center',
             overflow: 'hidden',
-            boxShadow: '0 30px 70px -15px rgba(0, 0, 0, 0.4), 0 0 1px 1px rgba(255, 255, 255, 0.1)',
+            boxShadow: '0 30px 70px -15px rgba(0, 0, 0, 0.4), 0 0 1px 1px rgba(255, 255, 255, 0.08)',
             maxWidth: '1080px',
             margin: '0 auto',
+            border: '1px solid #1E283D',
           }}
         >
           {/* Subtle Ambient Brand Glows */}
@@ -85,7 +86,7 @@ export const HomeClosingCTA: React.FC<HomeClosingCTAProps> = ({ onStartProjectCl
               width: '380px',
               height: '380px',
               borderRadius: '50%',
-              background: 'radial-gradient(circle, rgba(89, 139, 255, 0.28) 0%, rgba(89, 139, 255, 0.05) 50%, transparent 70%)',
+              background: 'radial-gradient(circle, rgba(89, 139, 255, 0.25) 0%, rgba(89, 139, 255, 0.04) 50%, transparent 70%)',
               filter: 'blur(50px)',
               pointerEvents: 'none',
               zIndex: 0,
@@ -100,7 +101,7 @@ export const HomeClosingCTA: React.FC<HomeClosingCTAProps> = ({ onStartProjectCl
               width: '320px',
               height: '320px',
               borderRadius: '50%',
-              background: 'radial-gradient(circle, rgba(2, 196, 21, 0.18) 0%, rgba(2, 196, 21, 0.03) 50%, transparent 70%)',
+              background: 'radial-gradient(circle, rgba(2, 196, 21, 0.16) 0%, rgba(2, 196, 21, 0.02) 50%, transparent 70%)',
               filter: 'blur(45px)',
               pointerEvents: 'none',
               zIndex: 0,
@@ -116,8 +117,8 @@ export const HomeClosingCTA: React.FC<HomeClosingCTAProps> = ({ onStartProjectCl
                   alignItems: 'center',
                   gap: '8px',
                   padding: '6px 14px',
-                  backgroundColor: 'rgba(255, 255, 255, 0.08)',
-                  border: '1px solid rgba(255, 255, 255, 0.15)',
+                  backgroundColor: 'rgba(89, 139, 255, 0.12)',
+                  border: '1px solid rgba(89, 139, 255, 0.25)',
                   borderRadius: '999px',
                   fontSize: '0.75rem',
                   fontWeight: 700,
@@ -127,7 +128,7 @@ export const HomeClosingCTA: React.FC<HomeClosingCTAProps> = ({ onStartProjectCl
                   fontFamily: 'var(--font-family-mono)',
                 }}
               >
-                START A CONVERSATION
+                09 // INITIATE COLLABORATION
               </span>
             </div>
 
@@ -167,23 +168,36 @@ export const HomeClosingCTA: React.FC<HomeClosingCTAProps> = ({ onStartProjectCl
                 alignItems: 'center',
               }}
             >
-              <Link
-                href="/start-a-project"
-                className="sb-btn sb-btn--lg sb-btn--primary"
-                style={{ minWidth: '220px', textDecoration: 'none' }}
-              >
-                <span>Start a Project</span>
-                <ArrowRight size={16} className="sb-btn__arrow" />
-              </Link>
+              {onStartProjectClick ? (
+                <button
+                  type="button"
+                  onClick={onStartProjectClick}
+                  className="sb-btn sb-btn--lg sb-btn--primary"
+                  style={{ minWidth: '220px', cursor: 'pointer' }}
+                >
+                  <span>Start a Project</span>
+                  <ArrowRight size={16} className="sb-btn__arrow" />
+                </button>
+              ) : (
+                <Link
+                  href="/start-a-project"
+                  className="sb-btn sb-btn--lg sb-btn--primary"
+                  style={{ minWidth: '220px', textDecoration: 'none' }}
+                >
+                  <span>Start a Project</span>
+                  <ArrowRight size={16} className="sb-btn__arrow" />
+                </Link>
+              )}
+
               <Link
                 href="/contact"
                 className="sb-btn sb-btn--lg"
                 style={{
                   minWidth: '180px',
                   textDecoration: 'none',
-                  backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                  backgroundColor: 'rgba(255, 255, 255, 0.08)',
                   color: '#FFFFFF',
-                  border: '1px solid rgba(255, 255, 255, 0.2)',
+                  border: '1px solid rgba(255, 255, 255, 0.18)',
                 }}
               >
                 <span>Direct Contact</span>
@@ -192,14 +206,14 @@ export const HomeClosingCTA: React.FC<HomeClosingCTAProps> = ({ onStartProjectCl
 
             <div
               style={{
-                marginTop: '32px',
+                marginTop: '36px',
                 paddingTop: '20px',
                 borderTop: '1px solid rgba(255, 255, 255, 0.1)',
                 display: 'flex',
                 justifyContent: 'center',
                 gap: '24px',
-                fontSize: '0.8rem',
-                color: '#9E9E9E',
+                fontSize: '0.8125rem',
+                color: '#9CA3AF',
                 fontFamily: 'var(--font-family-mono)',
                 flexWrap: 'wrap',
               }}

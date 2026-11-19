@@ -93,12 +93,12 @@ export const Navbar: React.FC<NavbarProps> = ({
 
               {activeDropdown === 'services' && (
                 <div
+                  className="sb-dropdown-menu"
                   style={{
                     position: 'absolute',
                     top: '100%',
                     left: '-20px',
                     width: '560px',
-                    backgroundColor: '#FFFFFF',
                     borderRadius: '12px',
                     border: '1px solid #E5E7EB',
                     boxShadow: '0 20px 40px -15px rgba(0, 0, 0, 0.12), 0 0 1px 1px rgba(0, 0, 0, 0.05)',
@@ -173,12 +173,12 @@ export const Navbar: React.FC<NavbarProps> = ({
 
               {activeDropdown === 'solutions' && (
                 <div
+                  className="sb-dropdown-menu"
                   style={{
                     position: 'absolute',
                     top: '100%',
                     left: '-20px',
                     width: '480px',
-                    backgroundColor: '#FFFFFF',
                     borderRadius: '12px',
                     border: '1px solid #E5E7EB',
                     boxShadow: '0 20px 40px -15px rgba(0, 0, 0, 0.12), 0 0 1px 1px rgba(0, 0, 0, 0.05)',
@@ -349,9 +349,9 @@ export const Navbar: React.FC<NavbarProps> = ({
       {/* Mobile Drawer Menu */}
       {mobileOpen && (
         <div
+          className="sb-mobile-menu"
           style={{
             borderTop: '1px solid #E5E7EB',
-            backgroundColor: '#FFFFFF',
             padding: '24px 16px',
             display: 'flex',
             flexDirection: 'column',
@@ -454,6 +454,11 @@ const defaultFooterColumns: FooterColumn[] = [
       { label: 'Headless Global Commerce', href: '/solutions/high-conversion-commerce' },
       { label: 'Connected Systems & APIs', href: '/solutions/connected-systems-api-integration' },
       { label: 'Data Intelligence Systems', href: '/solutions/data-intelligence-decision-systems' },
+      { label: 'Cloud Engineering & Reliability', href: '/solutions/cloud-engineering-reliability' },
+      { label: 'Application Security & Quality', href: '/solutions/application-security-quality' },
+      { label: 'B2B Portals & Platforms', href: '/solutions/b2b-portals-workflow-platforms' },
+      { label: 'Digital Experience Platforms', href: '/solutions/digital-experience-conversion' },
+      { label: 'Explore All 10 Solutions →', href: '/solutions' },
     ],
   },
   {
