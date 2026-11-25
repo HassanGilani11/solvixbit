@@ -32,72 +32,53 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onStartProjectClick })
         },
       });
 
-      // 1. Eyebrow badge entrance
       tl.fromTo(
         '.sb-hero-eyebrow',
-        { y: -16, opacity: 0 },
+        { y: -14, opacity: 0 },
         { y: 0, opacity: 1, duration: 0.5, clearProps: 'opacity,transform' }
-      );
-
-      // 2. Primary Tagline reveal
-      tl.fromTo(
-        '.sb-hero-headline-main',
-        { y: 28, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.75, clearProps: 'opacity,transform' },
-        '-=0.25'
-      );
-
-      // 3. Supporting headline reveal
-      tl.fromTo(
-        '.sb-hero-headline-sub',
-        { y: 22, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.65, clearProps: 'opacity,transform' },
-        '-=0.45'
-      );
-
-      // 4. Narrative paragraph
-      tl.fromTo(
-        '.sb-hero-paragraph',
-        { y: 18, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.6, clearProps: 'opacity,transform' },
-        '-=0.4'
-      );
-
-      // 5. Action CTAs
-      tl.fromTo(
-        '.sb-hero-cta-item',
-        { y: 16, opacity: 0 },
-        {
-          y: 0,
-          opacity: 1,
-          duration: 0.55,
-          stagger: 0.08,
-          clearProps: 'opacity,transform',
-        },
-        '-=0.35'
-      );
-
-      // 6. Senior Credibility Strip
-      tl.fromTo(
-        '.sb-hero-credibility-strip',
-        { y: 14, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.5, clearProps: 'opacity,transform' },
-        '-=0.3'
-      );
-
-      // 7. Interactive 3D Sculpture Reveal
-      tl.fromTo(
-        '.sb-hero-sculpture-col',
-        { scale: 0.94, y: 28, opacity: 0 },
-        {
-          scale: 1,
-          y: 0,
-          opacity: 1,
-          duration: 0.85,
-          clearProps: 'opacity,transform,scale',
-        },
-        '-=0.65'
-      );
+      )
+        .fromTo(
+          '.sb-hero-headline-line',
+          { y: 28, opacity: 0 },
+          {
+            y: 0,
+            opacity: 1,
+            duration: 0.65,
+            stagger: 0.08,
+            clearProps: 'opacity,transform',
+          },
+          '-=0.25'
+        )
+        .fromTo(
+          '.sb-hero-paragraph',
+          { y: 18, opacity: 0 },
+          { y: 0, opacity: 1, duration: 0.6, clearProps: 'opacity,transform' },
+          '-=0.35'
+        )
+        .fromTo(
+          '.sb-hero-cta-item',
+          { y: 14, opacity: 0 },
+          {
+            y: 0,
+            opacity: 1,
+            duration: 0.5,
+            stagger: 0.08,
+            clearProps: 'opacity,transform',
+          },
+          '-=0.3'
+        )
+        .fromTo(
+          '.sb-hero-sculpture-col',
+          { scale: 0.92, y: 24, opacity: 0 },
+          {
+            scale: 1,
+            y: 0,
+            opacity: 1,
+            duration: 0.85,
+            clearProps: 'opacity,transform,scale',
+          },
+          '-=0.65'
+        );
 
       return () => {
         tl.kill();
@@ -109,149 +90,153 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onStartProjectClick })
   return (
     <section
       ref={heroRef}
-      className="sb-hero-backdrop"
       style={{
         position: 'relative',
         overflow: 'hidden',
-        paddingTop: 'clamp(2.5rem, 5vw, 4.75rem)',
-        paddingBottom: 'clamp(3rem, 6vw, 5.25rem)',
-        borderBottom: '1px solid #E5E7EB',
+        backgroundColor: '#040C1E',
+        minHeight: 'clamp(560px, 82vh, 760px)',
+        display: 'flex',
+        alignItems: 'center',
+        paddingTop: 'clamp(3.25rem, 6vw, 5.5rem)',
+        paddingBottom: 'clamp(3.5rem, 6.5vw, 5.75rem)',
+        borderBottom: '1px solid rgba(89, 139, 255, 0.16)',
       }}
     >
-      <Container>
+      {/* Atmospheric Twilight Landscape Backdrop with Lightweight Ambient Drift */}
+      <div
+        aria-hidden="true"
+        className="sb-hero-bg-drift"
+        style={{
+          position: 'absolute',
+          inset: '-3%',
+          backgroundImage: "url('/images/hero-twilight-bg.jpg')",
+          backgroundSize: 'cover',
+          backgroundPosition: 'center bottom',
+          backgroundRepeat: 'no-repeat',
+          pointerEvents: 'none',
+          willChange: 'transform',
+        }}
+      />
+
+      {/* Lightweight Ambient Aurora & Mist Shimmer */}
+      <div
+        aria-hidden="true"
+        className="sb-hero-aurora"
+        style={{
+          position: 'absolute',
+          inset: 0,
+          background:
+            'radial-gradient(ellipse 65% 45% at 72% 35%, rgba(89, 139, 255, 0.16) 0%, transparent 70%), radial-gradient(ellipse 50% 40% at 30% 75%, rgba(2, 196, 21, 0.08) 0%, transparent 70%)',
+          pointerEvents: 'none',
+          willChange: 'opacity, transform',
+        }}
+      />
+
+      {/* Contrast & Depth Gradient Scrim */}
+      <div
+        aria-hidden="true"
+        style={{
+          position: 'absolute',
+          inset: 0,
+          background:
+            'linear-gradient(95deg, rgba(3, 9, 24, 0.86) 0%, rgba(3, 9, 24, 0.56) 46%, rgba(3, 9, 24, 0.2) 100%), linear-gradient(180deg, rgba(3, 9, 24, 0.38) 0%, transparent 28%, transparent 78%, rgba(3, 9, 24, 0.6) 100%)',
+          pointerEvents: 'none',
+        }}
+      />
+
+      <Container style={{ position: 'relative', zIndex: 2 }}>
         <div
           style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 460px), 1fr))',
-            gap: 'clamp(2.25rem, 4.5vw, 4.25rem)',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 440px), 1fr))',
+            gap: 'clamp(2rem, 4vw, 3.5rem)',
             alignItems: 'center',
           }}
         >
-          {/* Left Column: Authoritative Editorial Typography & Actions */}
-          <div style={{ maxWidth: '640px' }}>
-            {/* 1. Primary Eyebrow with Active Signal Beacon */}
-            <div className="sb-hero-eyebrow" style={{ display: 'inline-flex', marginBottom: '18px' }}>
-              <span
-                style={{
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: '8px',
-                  padding: '6px 14px',
-                  backgroundColor: '#FFFFFF',
-                  border: '1px solid #E5E7EB',
-                  boxShadow: '0 2px 8px rgba(0, 0, 0, 0.04)',
-                  borderRadius: 'var(--radius-full)',
-                  fontSize: 'var(--font-size-xs)',
-                  fontWeight: 700,
-                  color: '#111827',
-                  letterSpacing: '0.07em',
-                  textTransform: 'uppercase',
-                  fontFamily: 'var(--font-family-mono)',
-                }}
-              >
-                <span
-                  style={{
-                    position: 'relative',
-                    display: 'inline-flex',
-                    width: '8px',
-                    height: '8px',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                  }}
-                >
-                  <span
-                    className="sb-radar-ping"
-                    style={{
-                      position: 'absolute',
-                      width: '100%',
-                      height: '100%',
-                      borderRadius: '50%',
-                      backgroundColor: 'var(--color-primary-blue)',
-                    }}
-                  />
-                  <span
-                    style={{
-                      width: '6px',
-                      height: '6px',
-                      borderRadius: '50%',
-                      backgroundColor: 'var(--color-primary-blue)',
-                    }}
-                  />
-                </span>
-                CREATIVE TECHNOLOGY &amp; DIGITAL ENGINEERING
-              </span>
-            </div>
-
-            {/* 2. Main Tagline: Solve What's Next. */}
-            <div style={{ overflow: 'hidden', marginBottom: '8px' }}>
-              <h1
-                className="sb-hero-headline-main"
-                style={{
-                  fontFamily: 'var(--font-family-heading)',
-                  fontWeight: 800,
-                  fontSize: 'clamp(2.85rem, 5.8vw, 4.85rem)',
-                  lineHeight: 1.04,
-                  letterSpacing: '-0.04em',
-                  color: '#000000',
-                  margin: 0,
-                  willChange: 'transform, opacity',
-                }}
-              >
-                Solve What&apos;s Next.
-              </h1>
-            </div>
-
-            {/* 3. Supporting Headline: Big ideas deserve better technology. */}
-            <h2
-              className="sb-hero-headline-sub"
+          {/* Left Column: Futuristic Display Typography & Actions */}
+          <div style={{ maxWidth: '610px' }}>
+            {/* Eyebrow */}
+            <p
+              className="sb-hero-eyebrow"
               style={{
-                fontFamily: 'var(--font-family-heading)',
-                fontWeight: 700,
-                fontSize: 'clamp(1.45rem, 2.5vw, 2.2rem)',
-                lineHeight: 1.22,
-                letterSpacing: '-0.025em',
-                color: 'var(--color-primary-blue)',
-                margin: '0 0 18px 0',
+                fontFamily: 'var(--font-family-body)',
+                fontSize: 'clamp(0.68rem, 0.85vw, 0.78rem)',
+                fontWeight: 600,
+                letterSpacing: '0.14em',
+                textTransform: 'uppercase',
+                color: 'rgba(220, 234, 255, 0.88)',
+                margin: '0 0 16px 0',
               }}
             >
-              Big ideas deserve better technology.
-            </h2>
+              CREATIVE TECHNOLOGY &amp; SOFTWARE ENGINEERING
+            </p>
 
-            {/* 4. Supporting Narrative */}
+            {/* Main Display Headline */}
+            <h1
+              style={{
+                fontFamily: "'Orbitron', var(--font-family-heading)",
+                fontWeight: 800,
+                fontSize: 'clamp(2.25rem, 4.4vw, 3.85rem)',
+                lineHeight: 1.06,
+                letterSpacing: '0.015em',
+                textTransform: 'uppercase',
+                color: '#FFFFFF',
+                margin: '0 0 22px 0',
+              }}
+            >
+              <span className="sb-hero-headline-line" style={{ display: 'block', willChange: 'transform, opacity' }}>
+                WE TURN
+              </span>
+              <span className="sb-hero-headline-line" style={{ display: 'block', willChange: 'transform, opacity' }}>
+                BOLD
+              </span>
+              <span className="sb-hero-headline-line" style={{ display: 'block', willChange: 'transform, opacity' }}>
+                <span style={{ color: '#598BFF' }}>IDEAS</span>{' '}
+                <span style={{ color: '#02C415' }}>INTO</span>
+              </span>
+              <span className="sb-hero-headline-line" style={{ display: 'block', willChange: 'transform, opacity' }}>
+                DIGITAL
+              </span>
+              <span className="sb-hero-headline-line" style={{ display: 'block', willChange: 'transform, opacity' }}>
+                EXPERIENCES.
+              </span>
+            </h1>
+
+            {/* Supporting Narrative */}
             <p
               className="sb-hero-paragraph"
               style={{
                 fontFamily: 'var(--font-family-body)',
-                fontSize: 'clamp(1.05rem, 1.25vw, 1.2rem)',
-                lineHeight: 1.62,
-                color: '#4B5563',
-                marginBottom: '30px',
-                maxWidth: '560px',
+                fontSize: 'clamp(0.98rem, 1.15vw, 1.12rem)',
+                lineHeight: 1.65,
+                color: 'rgba(226, 235, 248, 0.88)',
+                margin: '0 0 30px 0',
+                maxWidth: '520px',
               }}
             >
-              We design, engineer, and scale digital products and intelligent systems that help ambitious businesses move forward.
+              We design, engineer, and scale digital products that solve real business problems, from standout
+              websites and ecommerce platforms to intelligent software and automation.
             </p>
 
-            {/* 5. CTAs with Dual Quick-Consultation Modal + Full Project Scoping Support */}
+            {/* Primary & Secondary CTAs */}
             <div
               style={{
                 display: 'flex',
                 gap: '14px',
                 flexWrap: 'wrap',
                 alignItems: 'center',
-                marginBottom: '30px',
               }}
             >
               <Link
                 href="/start-a-project"
-                onClick={(e) => {
-                  if (onStartProjectClick) {
-                    e.preventDefault();
-                    onStartProjectClick();
-                  }
+                className="sb-btn sb-btn--lg sb-hero-cta-item"
+                style={{
+                  textDecoration: 'none',
+                  backgroundColor: '#598BFF',
+                  color: '#FFFFFF',
+                  border: '1px solid rgba(130, 170, 255, 0.5)',
+                  boxShadow: '0 8px 28px rgba(89, 139, 255, 0.35)',
                 }}
-                className="sb-btn sb-btn--lg sb-btn--primary sb-hero-cta-item"
-                style={{ textDecoration: 'none' }}
               >
                 <span>Start a Project</span>
                 <ArrowRight size={16} className="sb-btn__arrow" />
@@ -259,44 +244,25 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onStartProjectClick })
 
               <Link
                 href="/work"
-                className="sb-btn sb-btn--lg sb-btn--secondary sb-hero-cta-item"
-                style={{ textDecoration: 'none' }}
+                className="sb-btn sb-btn--lg sb-hero-cta-item"
+                style={{
+                  textDecoration: 'none',
+                  backgroundColor: 'rgba(255, 255, 255, 0.08)',
+                  color: '#FFFFFF',
+                  border: '1px solid rgba(255, 255, 255, 0.24)',
+                  backdropFilter: 'blur(8px)',
+                }}
               >
                 Explore Our Work
               </Link>
             </div>
-
-            {/* 6. Senior Engineering Access & Credibility Strip */}
-            <div
-              className="sb-hero-credibility-strip"
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '12px',
-                fontSize: '0.825rem',
-                color: '#6B7280',
-                flexWrap: 'wrap',
-                paddingTop: '18px',
-                borderTop: '1px solid #EFEFEF',
-                fontFamily: 'var(--font-family-body)',
-              }}
-            >
-              <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', fontWeight: 600, color: '#111827' }}>
-                <span style={{ color: 'var(--color-secondary-green)' }}>✓</span> Full-Cycle Engineering
-              </span>
-              <span style={{ color: '#D1D5DB' }}>•</span>
-              <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', fontWeight: 600, color: '#111827' }}>
-                <span style={{ color: 'var(--color-primary-blue)' }}>✓</span> Direct Senior Partner Access
-              </span>
-              <span style={{ color: '#D1D5DB' }}>•</span>
-              <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', fontWeight: 600, color: '#111827' }}>
-                <span style={{ color: '#000000' }}>✓</span> Zero Vendor Lock-in
-              </span>
-            </div>
           </div>
 
-          {/* Right Column: Signature 3D Architecture Sculpture (Seamlessly Integrated) */}
-          <div className="sb-hero-sculpture-col" style={{ position: 'relative', willChange: 'transform, opacity' }}>
+          {/* Right Column: Interactive 3D Glossy </> Code Emblem */}
+          <div
+            className="sb-hero-sculpture-col"
+            style={{ position: 'relative', willChange: 'transform, opacity' }}
+          >
             <HeroSculpture />
           </div>
         </div>

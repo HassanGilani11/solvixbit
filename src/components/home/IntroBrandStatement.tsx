@@ -100,6 +100,19 @@ export const IntroBrandStatement: React.FC = () => {
           },
         }
       );
+
+      // Highlight the active pillar as the right column scrolls up past the sticky left column
+      cards.forEach((card, idx) => {
+        gsap.to(card, {
+          scrollTrigger: {
+            trigger: card,
+            start: 'top 55%',
+            end: 'bottom 45%',
+            onEnter: () => setActivePillar(idx),
+            onEnterBack: () => setActivePillar(idx),
+          },
+        });
+      });
     },
     { scope: sectionRef }
   );
@@ -173,8 +186,8 @@ export const IntroBrandStatement: React.FC = () => {
             alignItems: 'start',
           }}
         >
-          {/* Left Column: Expressive Statement & Studio Manifesto */}
-          <div ref={textRef} style={{ maxWidth: '640px' }}>
+          {/* Left Column: Sticky Expressive Statement & Studio Manifesto */}
+          <div ref={textRef} className="sb-intro-sticky-col" style={{ maxWidth: '640px' }}>
             <h2
               className="sb-intro-line"
               style={{

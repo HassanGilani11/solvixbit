@@ -168,26 +168,21 @@ export const HomeClosingCTA: React.FC<HomeClosingCTAProps> = ({ onStartProjectCl
                 alignItems: 'center',
               }}
             >
-              {onStartProjectClick ? (
-                <button
-                  type="button"
-                  onClick={onStartProjectClick}
-                  className="sb-btn sb-btn--lg sb-btn--primary"
-                  style={{ minWidth: '220px', cursor: 'pointer' }}
-                >
-                  <span>Start a Project</span>
-                  <ArrowRight size={16} className="sb-btn__arrow" />
-                </button>
-              ) : (
-                <Link
-                  href="/start-a-project"
-                  className="sb-btn sb-btn--lg sb-btn--primary"
-                  style={{ minWidth: '220px', textDecoration: 'none' }}
-                >
-                  <span>Start a Project</span>
-                  <ArrowRight size={16} className="sb-btn__arrow" />
-                </Link>
-              )}
+              <Link
+                href="/start-a-project"
+                className="sb-btn sb-btn--lg"
+                style={{
+                  minWidth: '220px',
+                  textDecoration: 'none',
+                  backgroundColor: '#598BFF',
+                  color: '#FFFFFF',
+                  border: '1px solid rgba(147, 197, 253, 0.45)',
+                  boxShadow: '0 10px 28px -6px rgba(89, 139, 255, 0.5)',
+                }}
+              >
+                <span>Start a Project</span>
+                <ArrowRight size={16} className="sb-btn__arrow" />
+              </Link>
 
               <Link
                 href="/contact"

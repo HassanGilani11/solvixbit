@@ -2,46 +2,82 @@
 
 import React, { useRef, useEffect, useState } from 'react';
 import * as THREE from 'three';
+import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment.js';
 import { checkPrefersReducedMotion } from '../../lib/animation/gsap';
 
-interface CapabilityBeacon {
-  id: string;
-  name: string;
-  category: string;
-  position: [number, number, number];
-  color: number;
+/**
+ * Creates a smooth rounded-corner THREE.Shape from a list of 2D vertices.
+ */
+function createRoundedPolygonShape(points: [number, number][], radius: number): THREE.Shape {
+  const shape = new THREE.Shape();
+  const len = points.length;
+
+  for (let i = 0; i < len; i++) {
+    const prev = points[(i - 1 + len) % len];
+    const curr = points[i];
+    const next = points[(i + 1) % len];
+
+    const v1x = prev[0] - curr[0];
+    const v1y = prev[1] - curr[1];
+    const v2x = next[0] - curr[0];
+    const v2y = next[1] - curr[1];
+
+    const len1 = Math.hypot(v1x, v1y) || 1;
+    const len2 = Math.hypot(v2x, v2y) || 1;
+
+    const r = Math.min(radius, len1 * 0.42, len2 * 0.42);
+
+    const p1x = curr[0] + (v1x / len1) * r;
+    const p1y = curr[1] + (v1y / len1) * r;
+    const p2x = curr[0] + (v2x / len2) * r;
+    const p2y = curr[1] + (v2y / len2) * r;
+
+    if (i === 0) {
+      shape.moveTo(p1x, p1y);
+    } else {
+      shape.lineTo(p1x, p1y);
+    }
+    shape.quadraticCurveTo(curr[0], curr[1], p2x, p2y);
+  }
+
+  shape.closePath();
+  return shape;
 }
 
-const CAPABILITY_BEACONS: CapabilityBeacon[] = [
-  { id: 'cloud', name: 'Distributed Cloud Mesh', category: 'INFRASTRUCTURE', position: [2.9, 1.4, 1.2], color: 0x598bff },
-  { id: 'ai', name: 'Agentic AI & Neural Logic', category: 'INTELLIGENCE', position: [-2.8, 1.6, -1.0], color: 0x02c415 },
-  { id: 'commerce', name: 'Headless Global Scale', category: 'COMMERCE', position: [1.2, 2.8, -1.6], color: 0x598bff },
-  { id: 'saas', name: 'Scalable SaaS Core', category: 'PLATFORMS', position: [-1.4, -2.8, 1.4], color: 0x02c415 },
-  { id: 'security', name: 'Zero-Trust Architecture', category: 'RESILIENCE', position: [2.5, -1.8, -1.6], color: 0x598bff },
-];
+function createRadialGlowTexture(innerColor: string, midColor: string): THREE.CanvasTexture {
+  const canvas = document.createElement('canvas');
+  canvas.width = 128;
+  canvas.height = 128;
+  const ctx = canvas.getContext('2d');
+  if (ctx) {
+    const grad = ctx.createRadialGradient(64, 64, 4, 64, 64, 64);
+    grad.addColorStop(0, innerColor);
+    grad.addColorStop(0.35, midColor);
+    grad.addColorStop(1, 'rgba(0, 0, 0, 0)');
+    ctx.fillStyle = grad;
+    ctx.fillRect(0, 0, 128, 128);
+  }
+  const tex = new THREE.CanvasTexture(canvas);
+  tex.needsUpdate = true;
+  return tex;
+}
 
 export const HeroSculpture: React.FC = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const [hoveredBeacon, setHoveredBeacon] = useState<CapabilityBeacon | null>(null);
   const [isDragging, setIsDragging] = useState(false);
   const [webGLSupported, setWebGLSupported] = useState(true);
 
-  // Interaction Physics State
-  const mouseRef = useRef({
-    x: 0,
-    y: 0,
+  const interactionRef = useRef({
     targetX: 0,
     targetY: 0,
     isDragging: false,
     dragStartX: 0,
     dragStartY: 0,
-    rotX: 0.25,
-    rotY: 0.45,
-    targetRotX: 0.25,
-    targetRotY: 0.45,
-    velX: 0,
-    velY: 0,
+    rotX: 0.08,
+    rotY: -0.22,
+    targetRotX: 0.08,
+    targetRotY: -0.22,
   });
 
   useEffect(() => {
@@ -49,7 +85,6 @@ export const HeroSculpture: React.FC = () => {
     const canvas = canvasRef.current;
     if (!container || !canvas) return;
 
-    // Check WebGL availability
     try {
       const gl = canvas.getContext('webgl2') || canvas.getContext('webgl');
       if (!gl) {
@@ -62,14 +97,12 @@ export const HeroSculpture: React.FC = () => {
     }
 
     const prefersReduced = checkPrefersReducedMotion();
+    let width = container.clientWidth || 520;
+    let height = container.clientHeight || 460;
 
-    let width = container.clientWidth;
-    let height = container.clientHeight;
-
-    // 1. Scene & Perspective Camera
     const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(38, width / height, 0.1, 100);
-    camera.position.set(0, 0, 10.5);
+    const camera = new THREE.PerspectiveCamera(36, width / height, 0.1, 100);
+    camera.position.set(0, 0, 9.2);
 
     let renderer: THREE.WebGLRenderer;
     try {
@@ -80,477 +113,298 @@ export const HeroSculpture: React.FC = () => {
         powerPreference: 'high-performance',
       });
       renderer.setSize(width, height);
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.75));
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
       renderer.outputColorSpace = THREE.SRGBColorSpace;
       renderer.toneMapping = THREE.ACESFilmicToneMapping;
-      renderer.toneMappingExposure = 1.15;
+      renderer.toneMappingExposure = 1.25;
     } catch {
       setWebGLSupported(false);
       return;
     }
 
-    // 2. Sophisticated Studio Lighting for Crisp Light Background
-    const ambientLight = new THREE.AmbientLight(0xffffff, 1.8);
+    // Studio environment map for crisp glass/acrylic specular reflections
+    const pmremGenerator = new THREE.PMREMGenerator(renderer);
+    const roomEnv = new RoomEnvironment();
+    const envTarget = pmremGenerator.fromScene(roomEnv, 0.04);
+    scene.environment = envTarget.texture;
+    roomEnv.dispose();
+
+    // Lighting setup
+    const ambientLight = new THREE.AmbientLight(0xdbeafe, 0.35);
     scene.add(ambientLight);
 
-    // Primary Brand Blue Key Light
-    const keyLightBlue = new THREE.DirectionalLight(0x598bff, 4.2);
-    keyLightBlue.position.set(7, 10, 8);
-    scene.add(keyLightBlue);
+    const topRimLight = new THREE.DirectionalLight(0xffffff, 3.2);
+    topRimLight.position.set(2, 8, 6);
+    scene.add(topRimLight);
 
-    // Secondary Emerald Green Fill Light
-    const fillLightGreen = new THREE.DirectionalLight(0x02c415, 3.2);
-    fillLightGreen.position.set(-8, -6, 6);
-    scene.add(fillLightGreen);
+    const blueKeyLight = new THREE.DirectionalLight(0x598bff, 3.6);
+    blueKeyLight.position.set(-7, 4, 5);
+    scene.add(blueKeyLight);
 
-    // Warm Crisp Top Rim Light
-    const rimLightWhite = new THREE.DirectionalLight(0xffffff, 2.5);
-    rimLightWhite.position.set(0, 12, -4);
-    scene.add(rimLightWhite);
+    const greenFillLight = new THREE.DirectionalLight(0x02c415, 3.0);
+    greenFillLight.position.set(7, -3, 5);
+    scene.add(greenFillLight);
 
-    // Interactive Dynamic Specular Point Light that tracks the cursor
-    const cursorLight = new THREE.PointLight(0x598bff, 3.5, 18);
-    cursorLight.position.set(0, 0, 6);
+    const cursorLight = new THREE.PointLight(0xffffff, 4.5, 16);
+    cursorLight.position.set(0, 0, 5.5);
     scene.add(cursorLight);
 
-    // 3. Main Rotating Kinetic Sculpture Group
     const sculptureGroup = new THREE.Group();
     scene.add(sculptureGroup);
 
-    // Helper: Dynamic Luminous Glow Particle Texture
-    const createGlowTexture = () => {
-      const gCanvas = document.createElement('canvas');
-      gCanvas.width = 64;
-      gCanvas.height = 64;
-      const ctx = gCanvas.getContext('2d');
-      if (ctx) {
-        const rad = ctx.createRadialGradient(32, 32, 0, 32, 32, 32);
-        rad.addColorStop(0, 'rgba(255, 255, 255, 1)');
-        rad.addColorStop(0.3, 'rgba(89, 139, 255, 0.85)');
-        rad.addColorStop(0.7, 'rgba(2, 196, 21, 0.2)');
-        rad.addColorStop(1, 'rgba(0, 0, 0, 0)');
-        ctx.fillStyle = rad;
-        ctx.fillRect(0, 0, 64, 64);
-      }
-      const tex = new THREE.CanvasTexture(gCanvas);
-      tex.needsUpdate = true;
-      return tex;
+    const extrudeSettings: THREE.ExtrudeGeometryOptions = {
+      depth: 0.34,
+      bevelEnabled: true,
+      bevelSegments: 8,
+      steps: 2,
+      bevelSize: 0.11,
+      bevelThickness: 0.13,
+      curveSegments: 16,
     };
-    const glowTexture = createGlowTexture();
 
-    // --- A. Masterpiece Kinetic Torus Knot Core (Midnight Titanium & Chrome) ---
-    // Smooth geometric curvature that creates hypnotic light glints
-    const knotGeo = new THREE.TorusKnotGeometry(1.75, 0.42, 180, 32, 2, 3);
-    const knotMat = new THREE.MeshStandardMaterial({
-      color: 0x141e36, // Deep midnight titanium
-      emissive: 0x091224,
-      roughness: 0.16,
-      metalness: 0.92,
-    });
-    const knotMesh = new THREE.Mesh(knotGeo, knotMat);
-    sculptureGroup.add(knotMesh);
-
-    // Fine Blueprint Wireframe Cage overlaying the Torus Knot
-    const knotWireGeo = new THREE.WireframeGeometry(knotGeo);
-    const knotWireMat = new THREE.LineBasicMaterial({
-      color: 0x598bff,
-      transparent: true,
-      opacity: 0.35,
-    });
-    const knotWireframe = new THREE.LineSegments(knotWireGeo, knotWireMat);
-    sculptureGroup.add(knotWireframe);
-
-    // --- B. Central Floating Radiant Nucleus (Emerald & Blue Core) ---
-    const nucleusGroup = new THREE.Group();
-    sculptureGroup.add(nucleusGroup);
-
-    const nucleusGeo = new THREE.IcosahedronGeometry(0.85, 0);
-    const nucleusMat = new THREE.MeshStandardMaterial({
-      color: 0x02c415,
-      emissive: 0x02c415,
-      emissiveIntensity: 0.75,
-      roughness: 0.2,
-      metalness: 0.6,
-      wireframe: true,
-    });
-    const nucleusMesh = new THREE.Mesh(nucleusGeo, nucleusMat);
-    nucleusGroup.add(nucleusMesh);
-
-    // Inner glowing sphere
-    const innerSphereGeo = new THREE.SphereGeometry(0.55, 24, 24);
-    const innerSphereMat = new THREE.MeshBasicMaterial({
-      color: 0x598bff,
-      transparent: true,
-      opacity: 0.85,
-    });
-    const innerSphereMesh = new THREE.Mesh(innerSphereGeo, innerSphereMat);
-    nucleusGroup.add(innerSphereMesh);
-
-    // --- C. Interlocking Precision Gyro Gimbal Rings ---
-    const ringsGroup = new THREE.Group();
-    sculptureGroup.add(ringsGroup);
-
-    interface GyroRing {
-      mesh: THREE.Line;
-      speedX: number;
-      speedY: number;
-      speedZ: number;
-    }
-
-    const ringDefs = [
-      { radius: 2.7, tiltX: 0.4, tiltY: 0.2, color: 0x598bff, sx: 0.002, sy: 0.003, sz: 0.001 },
-      { radius: 3.1, tiltX: -0.5, tiltY: 0.6, color: 0x02c415, sx: -0.002, sy: -0.002, sz: 0.003 },
-      { radius: 3.5, tiltX: 0.7, tiltY: -0.3, color: 0x598bff, sx: 0.001, sy: 0.002, sz: -0.002 },
+    // 1. Left Chevron "<" — Electric Blue Glossy Glass
+    const leftChevronPoints: [number, number][] = [
+      [0.62, 1.15],
+      [-0.78, 0.22],
+      [-0.78, -0.22],
+      [0.62, -1.15],
+      [0.92, -0.74],
+      [-0.14, 0.0],
+      [0.92, 0.74],
     ];
+    const leftShape = createRoundedPolygonShape(leftChevronPoints, 0.14);
+    const leftGeo = new THREE.ExtrudeGeometry(leftShape, extrudeSettings);
+    leftGeo.center();
 
-    const gyroRings: GyroRing[] = ringDefs.map((def) => {
-      const curve = new THREE.EllipseCurve(0, 0, def.radius, def.radius, 0, 2 * Math.PI, false, 0);
-      const points = curve.getPoints(120);
-      const rGeo = new THREE.BufferGeometry().setFromPoints(points);
-      const rMat = new THREE.LineBasicMaterial({
-        color: def.color,
-        transparent: true,
-        opacity: 0.4,
-      });
-      const rLine = new THREE.Line(rGeo, rMat);
-      rLine.rotation.set(def.tiltX, def.tiltY, 0);
-      ringsGroup.add(rLine);
-      return { mesh: rLine, speedX: def.sx, speedY: def.sy, speedZ: def.sz };
+    const blueGlassMat = new THREE.MeshPhysicalMaterial({
+      color: 0x0b57ff,
+      emissive: 0x041e66,
+      emissiveIntensity: 0.32,
+      roughness: 0.07,
+      metalness: 0.25,
+      clearcoat: 1.0,
+      clearcoatRoughness: 0.04,
+      ior: 1.54,
+      reflectivity: 0.95,
+      envMapIntensity: 0.95,
     });
+    const leftMesh = new THREE.Mesh(leftGeo, blueGlassMat);
+    leftMesh.position.set(-1.38, 0.08, 0.1);
+    leftMesh.rotation.y = 0.12;
+    sculptureGroup.add(leftMesh);
 
-    // --- D. 5 Floating Satellite Beacons ---
-    const beaconsGroup = new THREE.Group();
-    sculptureGroup.add(beaconsGroup);
+    // 2. Center Slash "/" — Frosted Pearl White / Ice
+    const slashPoints: [number, number][] = [
+      [0.24, 1.38],
+      [-0.58, -1.32],
+      [-0.16, -1.42],
+      [0.66, 1.28],
+    ];
+    const slashShape = createRoundedPolygonShape(slashPoints, 0.12);
+    const slashGeo = new THREE.ExtrudeGeometry(slashShape, extrudeSettings);
+    slashGeo.center();
 
-    interface BeaconRuntime {
-      mesh: THREE.Mesh;
-      halo: THREE.Line;
-      conduit: THREE.Line;
-      data: CapabilityBeacon;
-      initialPos: THREE.Vector3;
-    }
+    const whiteGlassMat = new THREE.MeshPhysicalMaterial({
+      color: 0xeef4ff,
+      emissive: 0x94b8ff,
+      emissiveIntensity: 0.2,
+      roughness: 0.12,
+      metalness: 0.1,
+      clearcoat: 1.0,
+      clearcoatRoughness: 0.06,
+      ior: 1.48,
+      reflectivity: 0.9,
+      envMapIntensity: 1.35,
+    });
+    const slashMesh = new THREE.Mesh(slashGeo, whiteGlassMat);
+    slashMesh.position.set(0.02, -0.02, 0.22);
+    sculptureGroup.add(slashMesh);
 
-    const beaconRuntimes: BeaconRuntime[] = [];
-    const bSphereGeo = new THREE.SphereGeometry(0.18, 24, 24);
-    const bHaloGeo = new THREE.BufferGeometry().setFromPoints(
-      new THREE.EllipseCurve(0, 0, 0.34, 0.34, 0, 2 * Math.PI, false, 0).getPoints(48)
+    // 3. Right Chevron ">" — Emerald Green Glossy Glass
+    const rightChevronPoints: [number, number][] = [
+      [-0.62, 1.15],
+      [-0.92, 0.74],
+      [0.14, 0.0],
+      [-0.92, -0.74],
+      [-0.62, -1.15],
+      [0.78, -0.22],
+      [0.78, 0.22],
+    ];
+    const rightShape = createRoundedPolygonShape(rightChevronPoints, 0.14);
+    const rightGeo = new THREE.ExtrudeGeometry(rightShape, extrudeSettings);
+    rightGeo.center();
+
+    const greenGlassMat = new THREE.MeshPhysicalMaterial({
+      color: 0x00b814,
+      emissive: 0x004d0a,
+      emissiveIntensity: 0.3,
+      roughness: 0.07,
+      metalness: 0.24,
+      clearcoat: 1.0,
+      clearcoatRoughness: 0.04,
+      ior: 1.54,
+      reflectivity: 0.95,
+      envMapIntensity: 0.95,
+    });
+    const rightMesh = new THREE.Mesh(rightGeo, greenGlassMat);
+    rightMesh.position.set(1.42, -0.08, -0.05);
+    rightMesh.rotation.y = -0.14;
+    sculptureGroup.add(rightMesh);
+
+    // 4. Floating Orbs (Bottom-Left Green & Top-Right Blue)
+    const greenGlowTex = createRadialGlowTexture('rgba(2, 224, 32, 0.65)', 'rgba(2, 196, 21, 0.18)');
+    const blueGlowTex = createRadialGlowTexture('rgba(89, 139, 255, 0.65)', 'rgba(22, 104, 255, 0.18)');
+
+    const greenOrbGeo = new THREE.SphereGeometry(0.45, 48, 48);
+    const greenOrbGroup = new THREE.Group();
+    greenOrbGroup.position.set(-1.12, -1.45, 0.38);
+    const greenOrbMesh = new THREE.Mesh(greenOrbGeo, greenGlassMat);
+    greenOrbGroup.add(greenOrbMesh);
+
+    const greenHalo = new THREE.Sprite(
+      new THREE.SpriteMaterial({
+        map: greenGlowTex,
+        transparent: true,
+        blending: THREE.AdditiveBlending,
+        depthWrite: false,
+      })
     );
+    greenHalo.scale.set(2.1, 2.1, 1);
+    greenOrbGroup.add(greenHalo);
+    sculptureGroup.add(greenOrbGroup);
 
-    CAPABILITY_BEACONS.forEach((beacon) => {
-      const bMat = new THREE.MeshStandardMaterial({
-        color: beacon.color,
-        emissive: beacon.color,
-        emissiveIntensity: 0.8,
-        roughness: 0.2,
-        metalness: 0.5,
-      });
-      const bMesh = new THREE.Mesh(bSphereGeo, bMat);
-      bMesh.position.set(...beacon.position);
+    const blueOrbGeo = new THREE.SphereGeometry(0.43, 48, 48);
+    const blueOrbGroup = new THREE.Group();
+    blueOrbGroup.position.set(1.92, 1.55, 0.2);
+    const blueOrbMesh = new THREE.Mesh(blueOrbGeo, blueGlassMat);
+    blueOrbGroup.add(blueOrbMesh);
 
-      const hMat = new THREE.LineBasicMaterial({
-        color: beacon.color,
+    const blueHalo = new THREE.Sprite(
+      new THREE.SpriteMaterial({
+        map: blueGlowTex,
         transparent: true,
-        opacity: 0.5,
-      });
-      const hLine = new THREE.Line(bHaloGeo, hMat);
-      hLine.position.copy(bMesh.position);
-      hLine.rotation.x = Math.PI / 2;
+        blending: THREE.AdditiveBlending,
+        depthWrite: false,
+      })
+    );
+    blueHalo.scale.set(2.1, 2.1, 1);
+    blueOrbGroup.add(blueHalo);
+    sculptureGroup.add(blueOrbGroup);
 
-      // Subtle laser thread connecting to center
-      const conduitPoints = [bMesh.position, new THREE.Vector3(0, 0, 0)];
-      const conduitGeo = new THREE.BufferGeometry().setFromPoints(conduitPoints);
-      const conduitMat = new THREE.LineBasicMaterial({
-        color: beacon.color,
-        transparent: true,
-        opacity: 0.2,
-      });
-      const conduitLine = new THREE.Line(conduitGeo, conduitMat);
+    // Pointer Interactions
+    const handlePointerMove = (e: PointerEvent) => {
+      const rect = canvas.getBoundingClientRect();
+      const nx = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+      const ny = -((e.clientY - rect.top) / rect.height) * 2 + 1;
 
-      beaconsGroup.add(bMesh);
-      beaconsGroup.add(hLine);
-      sculptureGroup.add(conduitLine);
+      interactionRef.current.targetX = nx;
+      interactionRef.current.targetY = ny;
 
-      beaconRuntimes.push({
-        mesh: bMesh,
-        halo: hLine,
-        conduit: conduitLine,
-        data: beacon,
-        initialPos: new THREE.Vector3(...beacon.position),
-      });
-    });
-
-    // --- E. Floating Luminous Stardust Photons (120 Particles) ---
-    const particleCount = 120;
-    const particlePositions = new Float32Array(particleCount * 3);
-    const particleSpeeds: { radius: number; angle: number; speed: number; y: number; ySpeed: number }[] = [];
-
-    for (let i = 0; i < particleCount; i++) {
-      const radius = 1.8 + Math.random() * 2.5;
-      const angle = Math.random() * Math.PI * 2;
-      const y = (Math.random() - 0.5) * 3.5;
-      const speed = 0.003 + Math.random() * 0.006;
-      const ySpeed = (Math.random() - 0.5) * 0.004;
-
-      particlePositions[i * 3] = Math.cos(angle) * radius;
-      particlePositions[i * 3 + 1] = y;
-      particlePositions[i * 3 + 2] = Math.sin(angle) * radius;
-
-      particleSpeeds.push({ radius, angle, speed, y, ySpeed });
-    }
-
-    const particleGeo = new THREE.BufferGeometry();
-    particleGeo.setAttribute('position', new THREE.BufferAttribute(particlePositions, 3));
-    const particleMat = new THREE.PointsMaterial({
-      size: 0.14,
-      map: glowTexture,
-      color: 0x598bff,
-      transparent: true,
-      opacity: 0.85,
-      depthWrite: false,
-    });
-    const particlePoints = new THREE.Points(particleGeo, particleMat);
-    sculptureGroup.add(particlePoints);
-
-    // 4. Raycasting & Interaction Physics
-    const raycaster = new THREE.Raycaster();
-    const mouseVector = new THREE.Vector2(-1000, -1000);
-
-    const handleMouseMove = (e: MouseEvent) => {
-      const rect = container.getBoundingClientRect();
-      const clientX = e.clientX - rect.left;
-      const clientY = e.clientY - rect.top;
-
-      mouseVector.x = (clientX / rect.width) * 2 - 1;
-      mouseVector.y = -(clientY / rect.height) * 2 + 1;
-
-      // Fluid magnetic tilt
-      mouseRef.current.targetX = (clientX / rect.width - 0.5) * 0.55;
-      mouseRef.current.targetY = (clientY / rect.height - 0.5) * 0.45;
-
-      // Update interactive light position
-      cursorLight.position.x = mouseRef.current.targetX * 12;
-      cursorLight.position.y = -mouseRef.current.targetY * 12;
-
-      if (mouseRef.current.isDragging) {
-        const deltaX = e.clientX - mouseRef.current.dragStartX;
-        const deltaY = e.clientY - mouseRef.current.dragStartY;
-        mouseRef.current.velY = deltaX * 0.007;
-        mouseRef.current.velX = deltaY * 0.007;
-        mouseRef.current.targetRotY += mouseRef.current.velY;
-        mouseRef.current.targetRotX += mouseRef.current.velX;
-        mouseRef.current.dragStartX = e.clientX;
-        mouseRef.current.dragStartY = e.clientY;
+      if (interactionRef.current.isDragging) {
+        const dx = e.clientX - interactionRef.current.dragStartX;
+        const dy = e.clientY - interactionRef.current.dragStartY;
+        interactionRef.current.targetRotY += dx * 0.0065;
+        interactionRef.current.targetRotX += dy * 0.0065;
+        interactionRef.current.dragStartX = e.clientX;
+        interactionRef.current.dragStartY = e.clientY;
       }
     };
 
-    const handleMouseDown = (e: MouseEvent) => {
-      mouseRef.current.isDragging = true;
-      mouseRef.current.dragStartX = e.clientX;
-      mouseRef.current.dragStartY = e.clientY;
+    const handlePointerDown = (e: PointerEvent) => {
+      interactionRef.current.isDragging = true;
+      interactionRef.current.dragStartX = e.clientX;
+      interactionRef.current.dragStartY = e.clientY;
       setIsDragging(true);
     };
 
-    const handleMouseUp = () => {
-      mouseRef.current.isDragging = false;
+    const handlePointerUp = () => {
+      interactionRef.current.isDragging = false;
       setIsDragging(false);
     };
 
-    const handleMouseLeave = () => {
-      mouseRef.current.isDragging = false;
-      mouseRef.current.targetX = 0;
-      mouseRef.current.targetY = 0;
-      mouseVector.set(-1000, -1000);
-      setIsDragging(false);
-      setHoveredBeacon(null);
-    };
-
-    // Mobile Touch Gestures
-    const handleTouchStart = (e: TouchEvent) => {
-      if (e.touches.length === 1) {
-        mouseRef.current.isDragging = true;
-        mouseRef.current.dragStartX = e.touches[0].clientX;
-        mouseRef.current.dragStartY = e.touches[0].clientY;
-        setIsDragging(true);
-      }
-    };
-
-    const handleTouchMove = (e: TouchEvent) => {
-      if (mouseRef.current.isDragging && e.touches.length === 1) {
-        const deltaX = e.touches[0].clientX - mouseRef.current.dragStartX;
-        const deltaY = e.touches[0].clientY - mouseRef.current.dragStartY;
-        mouseRef.current.targetRotY += deltaX * 0.008;
-        mouseRef.current.targetRotX += deltaY * 0.008;
-        mouseRef.current.dragStartX = e.touches[0].clientX;
-        mouseRef.current.dragStartY = e.touches[0].clientY;
-      }
-    };
-
-    const handleTouchEnd = () => {
-      mouseRef.current.isDragging = false;
+    const handlePointerLeave = () => {
+      interactionRef.current.isDragging = false;
+      interactionRef.current.targetX = 0;
+      interactionRef.current.targetY = 0;
       setIsDragging(false);
     };
 
-    container.addEventListener('mousemove', handleMouseMove);
-    container.addEventListener('mousedown', handleMouseDown);
-    window.addEventListener('mouseup', handleMouseUp);
-    container.addEventListener('mouseleave', handleMouseLeave);
-    container.addEventListener('touchstart', handleTouchStart, { passive: true });
-    container.addEventListener('touchmove', handleTouchMove, { passive: true });
-    container.addEventListener('touchend', handleTouchEnd);
+    canvas.addEventListener('pointermove', handlePointerMove);
+    canvas.addEventListener('pointerdown', handlePointerDown);
+    window.addEventListener('pointerup', handlePointerUp);
+    canvas.addEventListener('pointerleave', handlePointerLeave);
 
-    // 5. Resize Handling
     const handleResize = () => {
-      if (!container || !renderer) return;
-      width = container.clientWidth;
-      height = container.clientHeight;
+      if (!container) return;
+      width = container.clientWidth || 520;
+      height = container.clientHeight || 460;
       camera.aspect = width / height;
       camera.updateProjectionMatrix();
       renderer.setSize(width, height);
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.75));
     };
     window.addEventListener('resize', handleResize);
 
-    // 6. Intersection & Visibility Observers
-    let isVisibleOnScreen = true;
-    let isTabVisible = !document.hidden;
+    // Animation Loop
+    let animId: number;
+    const clock = new THREE.Clock();
 
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        isVisibleOnScreen = entry.isIntersecting;
-      },
-      { threshold: 0.1 }
-    );
-    observer.observe(container);
+    const animate = () => {
+      animId = requestAnimationFrame(animate);
+      const t = clock.getElapsedTime();
+      const state = interactionRef.current;
 
-    const handleVisibilityChange = () => {
-      isTabVisible = !document.hidden;
-    };
-    document.addEventListener('visibilitychange', handleVisibilityChange);
-
-    // 7. 60 FPS Render Loop
-    let animationFrameId: number;
-    let clock = new THREE.Clock();
-
-    const render = () => {
-      animationFrameId = requestAnimationFrame(render);
-
-      if (!isVisibleOnScreen || !isTabVisible) return;
-
-      const elapsedTime = clock.getElapsedTime();
-
-      // Continuous ambient rotation when not dragging
-      if (!prefersReduced) {
-        if (!mouseRef.current.isDragging) {
-          mouseRef.current.targetRotY += 0.004;
-          mouseRef.current.targetRotX += 0.0012;
-        }
+      // Gently spring back to hero pose when not dragging
+      if (!state.isDragging) {
+        const baseRotY = -0.22 + state.targetX * 0.24;
+        const baseRotX = 0.08 - state.targetY * 0.16;
+        state.targetRotY += (baseRotY - state.targetRotY) * 0.04;
+        state.targetRotX += (baseRotX - state.targetRotX) * 0.04;
       }
 
-      // Smooth inertia damping
-      mouseRef.current.rotX +=
-        (mouseRef.current.targetRotX + mouseRef.current.targetY - mouseRef.current.rotX) * 0.07;
-      mouseRef.current.rotY +=
-        (mouseRef.current.targetRotY + mouseRef.current.targetX - mouseRef.current.rotY) * 0.07;
+      state.rotY += (state.targetRotY - state.rotY) * 0.08;
+      state.rotX += (state.targetRotX - state.rotX) * 0.08;
 
-      sculptureGroup.rotation.x = mouseRef.current.rotX;
-      sculptureGroup.rotation.y = mouseRef.current.rotY;
+      sculptureGroup.rotation.y = state.rotY;
+      sculptureGroup.rotation.x = state.rotX;
 
       if (!prefersReduced) {
-        // Subtle breathing scale pulse
-        const pulse = 1.0 + Math.sin(elapsedTime * 1.5) * 0.03;
-        knotMesh.scale.set(pulse, pulse, pulse);
-        knotWireframe.scale.set(pulse, pulse, pulse);
+        sculptureGroup.position.y = Math.sin(t * 1.15) * 0.1;
+        leftMesh.position.y = 0.08 + Math.sin(t * 1.4 + 0.4) * 0.05;
+        slashMesh.position.y = -0.02 + Math.sin(t * 1.4 + 1.2) * 0.04;
+        rightMesh.position.y = -0.08 + Math.sin(t * 1.4 + 2.0) * 0.05;
 
-        // Counter-rotating inner crystal
-        nucleusMesh.rotation.y -= 0.015;
-        nucleusMesh.rotation.x += 0.01;
-
-        // Gyro rings orbital precession
-        gyroRings.forEach((r) => {
-          r.mesh.rotation.x += r.speedX;
-          r.mesh.rotation.y += r.speedY;
-          r.mesh.rotation.z += r.speedZ;
-        });
-
-        // Floating floating motion for satellites
-        beaconRuntimes.forEach((b, i) => {
-          const offset = Math.sin(elapsedTime * 1.6 + i * 1.2) * 0.12;
-          b.mesh.position.y = b.initialPos.y + offset;
-          b.halo.position.y = b.initialPos.y + offset;
-          b.halo.rotation.z += 0.012;
-        });
-
-        // Floating stardust particles update
-        const positions = particleGeo.attributes.position.array as Float32Array;
-        for (let i = 0; i < particleCount; i++) {
-          const p = particleSpeeds[i];
-          p.angle += p.speed;
-          p.y += p.ySpeed;
-          if (p.y > 2.0 || p.y < -2.0) p.ySpeed *= -1;
-
-          positions[i * 3] = Math.cos(p.angle) * p.radius;
-          positions[i * 3 + 1] = p.y;
-          positions[i * 3 + 2] = Math.sin(p.angle) * p.radius;
-        }
-        particleGeo.attributes.position.needsUpdate = true;
+        greenOrbGroup.position.y = -1.45 + Math.sin(t * 1.6 + 0.6) * 0.12;
+        blueOrbGroup.position.y = 1.55 + Math.cos(t * 1.5 + 0.3) * 0.12;
       }
 
-      // Raycasting for Beacon Hover
-      raycaster.setFromCamera(mouseVector, camera);
-      const meshesToTest = beaconRuntimes.map((b) => b.mesh);
-      const intersects = raycaster.intersectObjects(meshesToTest, false);
-
-      if (intersects.length > 0) {
-        const hitMesh = intersects[0].object as THREE.Mesh;
-        const found = beaconRuntimes.find((b) => b.mesh === hitMesh);
-        if (found) {
-          setHoveredBeacon(found.data);
-          found.mesh.scale.set(1.4, 1.4, 1.4);
-          found.halo.scale.set(1.5, 1.5, 1.5);
-          (found.conduit.material as THREE.LineBasicMaterial).opacity = 0.85;
-        }
-      } else {
-        setHoveredBeacon(null);
-        beaconRuntimes.forEach((b) => {
-          b.mesh.scale.set(1, 1, 1);
-          b.halo.scale.set(1, 1, 1);
-          (b.conduit.material as THREE.LineBasicMaterial).opacity = 0.2;
-        });
-      }
+      cursorLight.position.x = state.targetX * 4.5;
+      cursorLight.position.y = state.targetY * 3.5;
 
       renderer.render(scene, camera);
     };
 
-    render();
+    animate();
 
-    // 8. Resource Teardown & Disposal
     return () => {
-      cancelAnimationFrame(animationFrameId);
-      observer.disconnect();
-      document.removeEventListener('visibilitychange', handleVisibilityChange);
+      cancelAnimationFrame(animId);
+      canvas.removeEventListener('pointermove', handlePointerMove);
+      canvas.removeEventListener('pointerdown', handlePointerDown);
+      window.removeEventListener('pointerup', handlePointerUp);
+      canvas.removeEventListener('pointerleave', handlePointerLeave);
       window.removeEventListener('resize', handleResize);
-      container.removeEventListener('mousemove', handleMouseMove);
-      container.removeEventListener('mousedown', handleMouseDown);
-      window.removeEventListener('mouseup', handleMouseUp);
-      container.removeEventListener('mouseleave', handleMouseLeave);
-      container.removeEventListener('touchstart', handleTouchStart);
-      container.removeEventListener('touchmove', handleTouchMove);
-      container.removeEventListener('touchend', handleTouchEnd);
 
-      knotGeo.dispose();
-      knotMat.dispose();
-      knotWireGeo.dispose();
-      knotWireMat.dispose();
-      nucleusGeo.dispose();
-      nucleusMat.dispose();
-      innerSphereGeo.dispose();
-      innerSphereMat.dispose();
-      bSphereGeo.dispose();
-      bHaloGeo.dispose();
-      particleGeo.dispose();
-      particleMat.dispose();
-      glowTexture.dispose();
-
+      leftGeo.dispose();
+      slashGeo.dispose();
+      rightGeo.dispose();
+      greenOrbGeo.dispose();
+      blueOrbGeo.dispose();
+      blueGlassMat.dispose();
+      whiteGlassMat.dispose();
+      greenGlassMat.dispose();
+      greenGlowTex.dispose();
+      blueGlowTex.dispose();
+      envTarget.dispose();
+      pmremGenerator.dispose();
       renderer.dispose();
     };
   }, []);
@@ -561,207 +415,74 @@ export const HeroSculpture: React.FC = () => {
       style={{
         position: 'relative',
         width: '100%',
-        height: 'clamp(460px, 48vw, 600px)',
+        height: 'clamp(360px, 46vw, 520px)',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
         userSelect: 'none',
-        touchAction: 'none',
       }}
     >
-      {/* Seamless Ambient Light Aura that dissolves smoothly into the hero background */}
+      {/* Subtle ambient radial glow behind the 3D emblem */}
       <div
         aria-hidden="true"
         style={{
           position: 'absolute',
-          top: '50%',
-          left: '50%',
-          transform: 'translate(-50%, -50%)',
-          width: '90%',
-          height: '90%',
-          background: 'radial-gradient(circle, rgba(89, 139, 255, 0.16) 0%, rgba(2, 196, 21, 0.07) 42%, transparent 70%)',
-          filter: 'blur(50px)',
+          inset: '8%',
+          borderRadius: '50%',
+          background:
+            'radial-gradient(circle at 38% 55%, rgba(22, 104, 255, 0.24) 0%, rgba(2, 196, 21, 0.14) 55%, transparent 75%)',
+          filter: 'blur(42px)',
           pointerEvents: 'none',
-          zIndex: 0,
         }}
       />
 
-      {/* Hardware-Accelerated WebGL Three.js Canvas */}
       {webGLSupported ? (
         <canvas
           ref={canvasRef}
+          aria-label="Interactive 3D glossy code emblem"
           style={{
-            position: 'relative',
-            zIndex: 1,
-            display: 'block',
             width: '100%',
             height: '100%',
+            display: 'block',
             cursor: isDragging ? 'grabbing' : 'grab',
+            touchAction: 'pan-y',
           }}
-          aria-label="Interactive 3D Kinetic Sculpture representing SOLVIXBIT Connected Architecture"
-          role="img"
         />
       ) : (
-        /* Accessible Fallback */
-        <div
-          style={{
-            position: 'relative',
-            zIndex: 1,
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'center',
-            textAlign: 'center',
-            padding: '24px',
-          }}
+        /* Crisp SVG Fallback if WebGL is unavailable */
+        <svg
+          viewBox="0 0 420 340"
+          role="img"
+          aria-label="3D code emblem"
+          style={{ width: '88%', maxWidth: '420px', height: 'auto' }}
         >
-          <div
-            style={{
-              width: '180px',
-              height: '180px',
-              borderRadius: '50%',
-              border: '2px dashed #598BFF',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              marginBottom: '16px',
-            }}
-          >
-            <span style={{ fontSize: '2.5rem', color: '#598BFF' }}>✦</span>
-          </div>
-          <h3 style={{ fontSize: '1.25rem', fontWeight: 800, color: '#111827', marginBottom: '8px' }}>
-            SOLVIXBIT Kinetic Architecture
-          </h3>
-          <p style={{ fontSize: '0.875rem', color: '#6B7280', maxWidth: '360px' }}>
-            Distributed Cloud • Agentic AI • Headless Scale • Connected APIs • Zero-Trust
-          </p>
-        </div>
+          <defs>
+            <linearGradient id="sbFallbackBlue" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor="#60A5FA" />
+              <stop offset="100%" stopColor="#1668FF" />
+            </linearGradient>
+            <linearGradient id="sbFallbackGreen" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor="#4ADE80" />
+              <stop offset="100%" stopColor="#02C415" />
+            </linearGradient>
+            <linearGradient id="sbFallbackWhite" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor="#FFFFFF" />
+              <stop offset="100%" stopColor="#CBD5E1" />
+            </linearGradient>
+          </defs>
+          <path
+            d="M150 90 L65 160 L150 230 L172 204 L118 160 L172 116 Z"
+            fill="url(#sbFallbackBlue)"
+          />
+          <path d="M225 65 L175 255 L205 262 L255 72 Z" fill="url(#sbFallbackWhite)" />
+          <path
+            d="M270 90 L355 160 L270 230 L248 204 L302 160 L248 116 Z"
+            fill="url(#sbFallbackGreen)"
+          />
+          <circle cx="120" cy="275" r="26" fill="url(#sbFallbackGreen)" />
+          <circle cx="330" cy="70" r="25" fill="url(#sbFallbackBlue)" />
+        </svg>
       )}
-
-      {/* Interactive Beacon Hover Card (Appears gracefully when beacon hovered) */}
-      {hoveredBeacon && (
-        <div
-          style={{
-            position: 'absolute',
-            top: '24px',
-            right: '24px',
-            zIndex: 10,
-            padding: '10px 16px',
-            borderRadius: 'var(--radius-full)',
-            backgroundColor: 'rgba(255, 255, 255, 0.92)',
-            backdropFilter: 'blur(16px)',
-            WebkitBackdropFilter: 'blur(16px)',
-            border: '1px solid rgba(89, 139, 255, 0.25)',
-            boxShadow: '0 12px 32px rgba(89, 139, 255, 0.12), 0 2px 8px rgba(0, 0, 0, 0.04)',
-            pointerEvents: 'none',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '8px',
-            animation: 'sbFadeIn 0.2s cubic-bezier(0.16, 1, 0.3, 1)',
-          }}
-        >
-          <span
-            style={{
-              width: '8px',
-              height: '8px',
-              borderRadius: '50%',
-              backgroundColor: hoveredBeacon.color === 0x02c415 ? '#02C415' : '#598BFF',
-            }}
-          />
-          <span style={{ fontSize: '0.78rem', fontWeight: 700, color: '#111827' }}>
-            {hoveredBeacon.name}
-          </span>
-          <span style={{ fontSize: '0.66rem', fontFamily: 'var(--font-family-mono)', color: '#6B7280' }}>
-            [{hoveredBeacon.category}]
-          </span>
-        </div>
-      )}
-
-      {/* Minimalist Apple-Style Interactive Telemetry Pill (Bottom Center) */}
-      <div
-        style={{
-          position: 'absolute',
-          bottom: '16px',
-          left: '50%',
-          transform: 'translateX(-50%)',
-          zIndex: 10,
-          display: 'flex',
-          alignItems: 'center',
-          gap: '10px',
-          padding: '8px 18px',
-          borderRadius: 'var(--radius-full)',
-          backgroundColor: 'rgba(255, 255, 255, 0.88)',
-          backdropFilter: 'blur(16px)',
-          WebkitBackdropFilter: 'blur(16px)',
-          border: '1px solid rgba(229, 231, 235, 0.9)',
-          boxShadow: '0 8px 24px rgba(0, 0, 0, 0.06), 0 1px 3px rgba(0, 0, 0, 0.03)',
-          pointerEvents: 'none',
-        }}
-      >
-        <span
-          style={{
-            position: 'relative',
-            display: 'inline-flex',
-            width: '8px',
-            height: '8px',
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}
-        >
-          <span
-            className="sb-radar-ping"
-            style={{
-              position: 'absolute',
-              width: '100%',
-              height: '100%',
-              borderRadius: '50%',
-              backgroundColor: 'var(--color-secondary-green)',
-            }}
-          />
-          <span
-            style={{
-              width: '6px',
-              height: '6px',
-              borderRadius: '50%',
-              backgroundColor: 'var(--color-secondary-green)',
-            }}
-          />
-        </span>
-        <span
-          style={{
-            fontSize: '0.74rem',
-            fontFamily: 'var(--font-family-mono)',
-            fontWeight: 700,
-            color: '#111827',
-            letterSpacing: '0.04em',
-          }}
-        >
-          SOLVIXBIT // 3D KINETIC ARCHITECTURE
-        </span>
-        <span style={{ color: '#D1D5DB' }}>•</span>
-        <span
-          style={{
-            fontSize: '0.74rem',
-            color: '#6B7280',
-            fontWeight: 500,
-          }}
-        >
-          {isDragging ? 'Rotating...' : 'Drag to explore'}
-        </span>
-      </div>
-
-      <style jsx>{`
-        @keyframes sbFadeIn {
-          from {
-            opacity: 0;
-            transform: translateY(4px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-      `}</style>
     </div>
   );
 };

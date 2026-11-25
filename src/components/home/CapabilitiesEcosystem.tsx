@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import { useGSAP } from '@gsap/react';
 import { Container } from '../layout';
@@ -25,10 +25,11 @@ interface CapabilityCluster {
   name: string;
   shortTag: string;
   badge: string;
+  accentColor: string;
   outcome: string;
   description: string;
-  telemetryMetrics: { label: string; value: string; spec: string }[];
-  pipeline: string[];
+  telemetryMetrics: { label: string; value: string; spec: string; accent: string }[];
+  pipeline: { label: string; detail: string }[];
   technologies: TechItem[];
 }
 
@@ -39,21 +40,27 @@ const CLUSTERS: CapabilityCluster[] = [
     name: 'Frontend & Interactive Web',
     shortTag: 'USER EXPERIENCE',
     badge: 'USER EXPERIENCE & PERFORMANCE',
+    accentColor: '#598BFF',
     outcome: 'Sub-second, accessible digital interfaces that convert visitors.',
     description:
       'We engineer reactive, type-safe web applications and headless storefronts delivering fluid 60fps micro-animations, strict WCAG 2.2 AA accessibility, and perfect Core Web Vitals across every viewport.',
     telemetryMetrics: [
-      { label: 'First Contentful Paint', value: '<780ms', spec: 'p95 mobile global' },
-      { label: 'Type Safety Guarantees', value: '100%', spec: 'Strict compiler rules' },
-      { label: 'Accessibility Standard', value: 'WCAG 2.2 AA', spec: 'Audit-verified compliance' },
+      { label: 'First Contentful Paint', value: '<780ms', spec: 'p95 mobile global', accent: '#598BFF' },
+      { label: 'Type Safety Guarantees', value: '100%', spec: 'Strict compiler rules', accent: '#02C415' },
+      { label: 'Accessibility Standard', value: 'WCAG 2.2', spec: 'AA audit-verified', accent: '#38BDF8' },
     ],
-    pipeline: ['Edge CDN / Vercel', 'Next.js 15 SSR', 'Hydration & Micro-Motion', 'Core Web Vitals'],
+    pipeline: [
+      { label: 'Edge CDN', detail: 'Global Anycast Routing' },
+      { label: 'Next.js 15 SSR', detail: 'Streaming Server HTML' },
+      { label: '60fps Hydration', detail: 'GPU-Accelerated Motion' },
+      { label: 'Core Web Vitals', detail: '99+ Lighthouse Score' },
+    ],
     technologies: [
       {
         name: 'Next.js 15',
         role: 'Server Components & Streaming SSR',
         tag: 'CORE FRAMEWORK',
-        brandColor: '#000000',
+        brandColor: '#FFFFFF',
         badge: 'ACTIVE // v15.5',
         iconSvg: (
           <svg width="22" height="22" viewBox="0 0 180 180" fill="none">
@@ -95,7 +102,7 @@ const CLUSTERS: CapabilityCluster[] = [
         role: 'Static Type Contracts & Verification',
         tag: 'LANGUAGE',
         brandColor: '#3178C6',
-        badge: 'ZERO RUNTIME REGRESSIONS',
+        badge: 'ZERO REGRESSIONS',
         iconSvg: (
           <svg width="22" height="22" viewBox="0 0 128 128" fill="#3178C6">
             <path d="M1.5 0h125c.8 0 1.5.7 1.5 1.5v125c0 .8-.7 1.5-1.5 1.5H1.5c-.8 0-1.5-.7-1.5-1.5V1.5C0 .7.7 0 1.5 0z" />
@@ -106,7 +113,7 @@ const CLUSTERS: CapabilityCluster[] = [
       {
         name: 'Design Tokens',
         role: 'Deterministic Zero-Bloat CSS Architecture',
-        tag: 'DESIGN TOKENS',
+        tag: 'SYSTEMS',
         brandColor: '#598BFF',
         badge: 'FLUID 60FPS',
         iconSvg: (
@@ -121,17 +128,23 @@ const CLUSTERS: CapabilityCluster[] = [
     id: 'ai',
     step: '02',
     name: 'Intelligent Workflows & AI',
-    shortTag: 'OPERATIONAL EFFICIENCY',
+    shortTag: 'AI & AUTOMATION',
     badge: 'OPERATIONAL EFFICIENCY & AGENTS',
+    accentColor: '#02C415',
     outcome: 'Automate repetitive workflows and unlock actionable decision intelligence.',
     description:
       'We architect private, zero-data-retention AI retrieval and document processing systems. Pairing optical character recognition with deterministic validation pipelines that eradicate administrative drag.',
     telemetryMetrics: [
-      { label: 'Grounding Verification', value: '100%', spec: 'Zero-hallucination guardrails' },
-      { label: 'Turnaround Reduction', value: '92%', spec: 'From hours to sub-4 minutes' },
-      { label: 'Data Isolation', value: 'HIPAA & SOC 2', spec: 'Private VPC endpoints' },
+      { label: 'Grounding Verification', value: '100%', spec: 'Zero-hallucination guardrails', accent: '#02C415' },
+      { label: 'Turnaround Reduction', value: '92%', spec: 'Hours to sub-4 minutes', accent: '#598BFF' },
+      { label: 'Data Isolation', value: 'SOC 2', spec: 'Private VPC endpoints', accent: '#38BDF8' },
     ],
-    pipeline: ['Document OCR Ingestion', 'Vector Embedding (RAG)', 'LLM Agentic Execution', 'Human-in-Loop Audit'],
+    pipeline: [
+      { label: 'OCR Ingestion', detail: 'Structured Extraction' },
+      { label: 'Vector RAG', detail: '<20ms Cosine Search' },
+      { label: 'Agentic Logic', detail: 'Deterministic Guardrails' },
+      { label: 'Audit Trail', detail: 'Human-in-Loop Signoff' },
+    ],
     technologies: [
       {
         name: 'LLM Orchestration',
@@ -146,10 +159,10 @@ const CLUSTERS: CapabilityCluster[] = [
         ),
       },
       {
-        name: 'Pinecone / Vector DB',
+        name: 'Pinecone Vector DB',
         role: 'High-Dimensional Semantic RAG Indexing',
         tag: 'VECTOR SEARCH',
-        brandColor: '#000000',
+        brandColor: '#598BFF',
         badge: '<20MS COSINE SEARCH',
         iconSvg: (
           <svg width="22" height="22" viewBox="0 0 24 24" fill="#598BFF">
@@ -158,7 +171,7 @@ const CLUSTERS: CapabilityCluster[] = [
         ),
       },
       {
-        name: 'Python (FastAPI)',
+        name: 'Python FastAPI',
         role: 'High-Throughput Async Inference Endpoints',
         tag: 'BACKEND RUNTIME',
         brandColor: '#3776AB',
@@ -170,10 +183,10 @@ const CLUSTERS: CapabilityCluster[] = [
         ),
       },
       {
-        name: 'LangChain & Temporal',
+        name: 'Temporal Workflows',
         role: 'Fault-Tolerant State Machine Execution',
         tag: 'ORCHESTRATION',
-        brandColor: '#1C3C3C',
+        brandColor: '#02C415',
         badge: 'AUTOMATIC RETRY',
         iconSvg: (
           <svg width="22" height="22" viewBox="0 0 24 24" fill="#02C415">
@@ -189,15 +202,21 @@ const CLUSTERS: CapabilityCluster[] = [
     name: 'Headless Commerce & Conversion',
     shortTag: 'GLOBAL COMMERCE',
     badge: 'REVENUE & CONVERSION AT SCALE',
+    accentColor: '#38BDF8',
     outcome: 'High-velocity storefronts engineered for maximum average order value.',
     description:
       'We decouple legacy monolithic stores into lightning-fast headless frontends featuring custom cart transform functions, localized currency routing, and bespoke 3D WebGL configurators.',
     telemetryMetrics: [
-      { label: 'Conversion Rate Lift', value: '+34%', spec: 'Verified international average' },
-      { label: 'Checkout Availability', value: '99.99%', spec: 'Zero peak settlement drop-off' },
-      { label: 'Global Edge Latency', value: '350ms', spec: '18 APAC and EMEA regions' },
+      { label: 'Conversion Rate Lift', value: '+34%', spec: 'Verified international avg', accent: '#02C415' },
+      { label: 'Checkout Availability', value: '99.99%', spec: 'Zero peak drop-off', accent: '#598BFF' },
+      { label: 'Global Edge Latency', value: '350ms', spec: '18 APAC & EMEA regions', accent: '#38BDF8' },
     ],
-    pipeline: ['Next.js Edge Storefront', 'Shopify Storefront API', 'Cart Transform Functions', 'Global Payment Routing'],
+    pipeline: [
+      { label: 'Edge Storefront', detail: 'Instant Geo-Localization' },
+      { label: 'Storefront API', detail: 'Sub-50ms GraphQL' },
+      { label: 'Cart Transforms', detail: 'Dynamic Bundle Rules' },
+      { label: 'Global Checkout', detail: 'Multi-Currency Routing' },
+    ],
     technologies: [
       {
         name: 'Shopify Plus',
@@ -239,10 +258,10 @@ const CLUSTERS: CapabilityCluster[] = [
         name: 'Algolia',
         role: 'Instant Predictive Catalog Search & Filtering',
         tag: 'SEARCH ENGINE',
-        brandColor: '#003DFF',
+        brandColor: '#598BFF',
         badge: '<15MS RESPONSE',
         iconSvg: (
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="#003DFF">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="#598BFF">
             <path d="M12 2a10 10 0 1 0 10 10A10.011 10.011 0 0 0 12 2zm1 14.93V17a1 1 0 0 1-2 0v-.07A6 6 0 0 1 6.07 12H6a1 1 0 0 1 0-2h.07A6 6 0 0 1 11 4.93V5a1 1 0 0 1 2 0v-.07A6 6 0 0 1 17.93 10H18a1 1 0 0 1 0 2h-.07A6 6 0 0 1 13 16.93z" />
           </svg>
         ),
@@ -255,15 +274,21 @@ const CLUSTERS: CapabilityCluster[] = [
     name: 'Cloud Engineering & Reliability',
     shortTag: 'SYSTEM RESILIENCE',
     badge: 'SYSTEM STABILITY & SCALE',
+    accentColor: '#A78BFA',
     outcome: 'Resilient infrastructure that scales seamlessly without downtime or cost bloat.',
     description:
       'We architect multi-region cloud clusters on AWS and edge infrastructure with automated CI/CD canary rollouts, containerization, and proactive telemetry observability.',
     telemetryMetrics: [
-      { label: 'Production Uptime SLA', value: '99.99%', spec: 'Multi-AZ failover target' },
-      { label: 'Infrastructure as Code', value: '100%', spec: 'Version-controlled Terraform' },
-      { label: 'Cloud Cost Optimization', value: '-45%', spec: 'Reserved auto-scaling clusters' },
+      { label: 'Production Uptime SLA', value: '99.99%', spec: 'Multi-AZ failover target', accent: '#02C415' },
+      { label: 'Infrastructure as Code', value: '100%', spec: 'Versioned Terraform', accent: '#598BFF' },
+      { label: 'Cloud Cost Reduction', value: '-45%', spec: 'Auto-scaling clusters', accent: '#A78BFA' },
     ],
-    pipeline: ['Cloudflare Edge WAF', 'AWS ECS / K8s Cluster', 'Distributed Redis Caching', 'Telemetry Observability'],
+    pipeline: [
+      { label: 'Edge WAF', detail: 'Zero-Trust Filtering' },
+      { label: 'AWS ECS / K8s', detail: 'Multi-AZ Auto-Scale' },
+      { label: 'Redis Mesh', detail: 'Sub-ms Cache Layer' },
+      { label: 'Observability', detail: 'Real-Time Telemetry' },
+    ],
     technologies: [
       {
         name: 'Amazon Web Services',
@@ -305,10 +330,10 @@ const CLUSTERS: CapabilityCluster[] = [
         name: 'Terraform (IaC)',
         role: 'Declarative Cloud Infrastructure as Code',
         tag: 'DEVOPS / IAC',
-        brandColor: '#7B42BC',
+        brandColor: '#A78BFA',
         badge: 'IMMUTABLE AUDITED',
         iconSvg: (
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="#7B42BC">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="#A78BFA">
             <path d="M1.5 0v7.6l6.6 3.8V3.8L1.5 0zm7.6 11.4v7.6l6.6 3.8v-7.6l-6.6-3.8zm0-7.6v7.6l6.6-3.8V0L9.1 3.8zm7.6 3.8v7.6l6.6-3.8V3.8l-6.6 3.8z" />
           </svg>
         ),
@@ -319,8 +344,22 @@ const CLUSTERS: CapabilityCluster[] = [
 
 export const CapabilitiesEcosystem: React.FC = () => {
   const [activeCluster, setActiveCluster] = useState<string>('frontend');
+  const [hoveredTech, setHoveredTech] = useState<string | null>(null);
+  const [activePipeStep, setActivePipeStep] = useState<number>(0);
   const sectionRef = useRef<HTMLElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
+
+  const selected = CLUSTERS.find((c) => c.id === activeCluster) || CLUSTERS[0];
+
+  // Auto-advance the live pipeline signal every 2.2s so the architecture feels alive
+  useEffect(() => {
+    if (checkPrefersReducedMotion()) return;
+    setActivePipeStep(0);
+    const interval = setInterval(() => {
+      setActivePipeStep((prev) => (prev + 1) % 4);
+    }, 2200);
+    return () => clearInterval(interval);
+  }, [activeCluster]);
 
   useGSAP(
     () => {
@@ -377,11 +416,11 @@ export const CapabilitiesEcosystem: React.FC = () => {
 
       gsap.fromTo(
         panel,
-        { opacity: 0.7, y: 8 },
+        { opacity: 0.55, y: 10 },
         {
           opacity: 1,
           y: 0,
-          duration: 0.28,
+          duration: 0.34,
           ease: ANIMATION_CONFIG.ease.smooth,
           clearProps: 'opacity,transform',
         }
@@ -390,10 +429,6 @@ export const CapabilitiesEcosystem: React.FC = () => {
     { scope: sectionRef, dependencies: [activeCluster] }
   );
 
-  const selected = CLUSTERS.find((c) => c.id === activeCluster) || CLUSTERS[0];
-  const activeIndex = CLUSTERS.findIndex((c) => c.id === activeCluster);
-
-  // WAI-ARIA Keyboard Navigation for Tablist
   const handleKeyDown = (e: React.KeyboardEvent, index: number) => {
     if (e.key === 'ArrowRight') {
       e.preventDefault();
@@ -421,27 +456,43 @@ export const CapabilitiesEcosystem: React.FC = () => {
       ref={sectionRef}
       id="capabilities"
       style={{
-        backgroundColor: '#090D16',
+        backgroundColor: '#050A14',
         color: '#FFFFFF',
-        borderBottom: '1px solid #1E293B',
+        borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
         paddingTop: 'clamp(4.5rem, 8vw, 7rem)',
         paddingBottom: 'clamp(4.5rem, 8vw, 7rem)',
         position: 'relative',
         overflow: 'hidden',
       }}
     >
-      {/* Subtle Ambient Radial Lighting */}
+      {/* Subtle Engineering Dot-Matrix Grid */}
       <div
         aria-hidden="true"
         style={{
           position: 'absolute',
-          top: 0,
-          right: '10%',
-          width: '500px',
-          height: '500px',
+          inset: 0,
+          backgroundImage: 'radial-gradient(rgba(148, 163, 184, 0.14) 1px, transparent 1px)',
+          backgroundSize: '28px 28px',
+          maskImage: 'radial-gradient(ellipse 80% 70% at 50% 45%, black 35%, transparent 100%)',
+          WebkitMaskImage: 'radial-gradient(ellipse 80% 70% at 50% 45%, black 35%, transparent 100%)',
+          pointerEvents: 'none',
+          zIndex: 0,
+        }}
+      />
+
+      {/* Dynamic Accent Ambient Glow that shifts with selected cluster */}
+      <div
+        aria-hidden="true"
+        style={{
+          position: 'absolute',
+          top: '-60px',
+          right: '8%',
+          width: '520px',
+          height: '520px',
           borderRadius: '50%',
-          background: 'radial-gradient(circle, rgba(89, 139, 255, 0.12) 0%, transparent 65%)',
-          filter: 'blur(60px)',
+          background: `radial-gradient(circle, ${selected.accentColor}26 0%, transparent 65%)`,
+          filter: 'blur(72px)',
+          transition: 'background 500ms ease',
           pointerEvents: 'none',
           zIndex: 0,
         }}
@@ -450,13 +501,13 @@ export const CapabilitiesEcosystem: React.FC = () => {
         aria-hidden="true"
         style={{
           position: 'absolute',
-          bottom: 0,
-          left: '5%',
-          width: '420px',
-          height: '420px',
+          bottom: '-80px',
+          left: '4%',
+          width: '440px',
+          height: '440px',
           borderRadius: '50%',
-          background: 'radial-gradient(circle, rgba(2, 196, 21, 0.08) 0%, transparent 65%)',
-          filter: 'blur(60px)',
+          background: 'radial-gradient(circle, rgba(2, 196, 21, 0.12) 0%, transparent 65%)',
+          filter: 'blur(72px)',
           pointerEvents: 'none',
           zIndex: 0,
         }}
@@ -464,74 +515,97 @@ export const CapabilitiesEcosystem: React.FC = () => {
 
       <Container style={{ position: 'relative', zIndex: 1 }}>
         {/* Section Header */}
-        <div className="sb-cap-header" style={{ maxWidth: '820px', marginBottom: 'clamp(2rem, 3.5vw, 3rem)' }}>
-          <div style={{ display: 'inline-flex', marginBottom: '14px' }}>
-            <span
+        <div
+          className="sb-cap-header"
+          style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'flex-end',
+            flexWrap: 'wrap',
+            gap: '24px',
+            marginBottom: 'clamp(2rem, 3.5vw, 3rem)',
+          }}
+        >
+          <div style={{ maxWidth: '760px' }}>
+            <div style={{ display: 'inline-flex', marginBottom: '14px' }}>
+              <span
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                  padding: '6px 14px',
+                  backgroundColor: 'rgba(89, 139, 255, 0.1)',
+                  border: '1px solid rgba(89, 139, 255, 0.28)',
+                  borderRadius: '999px',
+                  fontSize: '0.72rem',
+                  fontWeight: 700,
+                  color: '#BFDBFE',
+                  letterSpacing: '0.08em',
+                  textTransform: 'uppercase',
+                  fontFamily: 'var(--font-family-mono)',
+                }}
+              >
+                <span
+                  style={{
+                    width: '7px',
+                    height: '7px',
+                    borderRadius: '50%',
+                    backgroundColor: '#598BFF',
+                    boxShadow: '0 0 8px #598BFF',
+                  }}
+                />
+                02 // CAPABILITIES &amp; ARCHITECTURE
+              </span>
+            </div>
+
+            <h2
               style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '8px',
-                padding: '6px 14px',
-                backgroundColor: 'rgba(255, 255, 255, 0.08)',
-                border: '1px solid rgba(255, 255, 255, 0.15)',
-                borderRadius: '999px',
-                fontSize: '0.75rem',
-                fontWeight: 700,
+                fontFamily: 'var(--font-family-heading)',
+                fontSize: 'clamp(2.15rem, 4vw, 3.25rem)',
+                fontWeight: 800,
+                letterSpacing: '-0.03em',
+                lineHeight: 1.12,
                 color: '#FFFFFF',
-                letterSpacing: '0.07em',
-                textTransform: 'uppercase',
-                fontFamily: 'var(--font-family-mono)',
+                margin: '0 0 14px 0',
               }}
             >
-              <span style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: 'var(--color-primary-blue)' }} />
-              02 // CAPABILITIES &amp; ARCHITECTURE
-            </span>
+              Connected engineering choices.{' '}
+              <span
+                style={{
+                  background: 'linear-gradient(120deg, #598BFF 0%, #38BDF8 50%, #02C415 100%)',
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
+                }}
+              >
+                Measurable outcomes.
+              </span>
+            </h2>
+
+            <p
+              style={{
+                fontFamily: 'var(--font-family-body)',
+                fontSize: 'clamp(1rem, 1.25vw, 1.15rem)',
+                lineHeight: 1.65,
+                color: '#94A3B8',
+                margin: 0,
+              }}
+            >
+              Explore our four core engineering layers—each architected for zero vendor lock-in, sub-second speed, and
+              commercial impact.
+            </p>
           </div>
-
-          <h2
-            style={{
-              fontFamily: 'var(--font-family-heading)',
-              fontSize: 'clamp(2.15rem, 4vw, 3.25rem)',
-              fontWeight: 800,
-              letterSpacing: '-0.03em',
-              lineHeight: 1.15,
-              color: '#FFFFFF',
-              margin: '0 0 16px 0',
-            }}
-          >
-            Connected engineering choices. Measurable business outcomes.
-          </h2>
-
-          <p
-            style={{
-              fontFamily: 'var(--font-family-body)',
-              fontSize: 'clamp(1.05rem, 1.3vw, 1.2rem)',
-              lineHeight: 1.62,
-              color: '#94A3B8',
-              margin: 0,
-            }}
-          >
-            We don&apos;t assemble technologies at random. Every architectural layer is chosen to guarantee stability, security, velocity, and commercial impact.
-          </p>
         </div>
 
-        {/* Elevated Segmented Control Dock */}
+        {/* Sleek Interactive Cluster Selector Tabs */}
         <div
           className="sb-cap-dock"
           role="tablist"
           aria-label="Engineering Capability Clusters"
           style={{
-            backgroundColor: 'rgba(15, 23, 42, 0.75)',
-            backdropFilter: 'blur(16px)',
-            WebkitBackdropFilter: 'blur(16px)',
-            borderRadius: '16px',
-            border: '1px solid rgba(255, 255, 255, 0.12)',
-            padding: '8px',
             display: 'grid',
             gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
-            gap: '8px',
-            boxShadow: '0 12px 32px -8px rgba(0, 0, 0, 0.5)',
-            marginBottom: '24px',
+            gap: '12px',
+            marginBottom: '28px',
           }}
         >
           {CLUSTERS.map((cluster, idx) => {
@@ -548,18 +622,27 @@ export const CapabilitiesEcosystem: React.FC = () => {
                 onClick={() => setActiveCluster(cluster.id)}
                 onKeyDown={(e) => handleKeyDown(e, idx)}
                 style={{
-                  padding: '14px 18px',
-                  borderRadius: '12px',
-                  backgroundColor: isActive ? '#000000' : 'transparent',
+                  position: 'relative',
+                  padding: '16px 20px',
+                  borderRadius: '14px',
+                  background: isActive
+                    ? `linear-gradient(135deg, rgba(15, 23, 42, 0.95) 0%, rgba(15, 23, 42, 0.78) 100%)`
+                    : 'rgba(15, 23, 42, 0.45)',
+                  backdropFilter: 'blur(12px)',
+                  WebkitBackdropFilter: 'blur(12px)',
                   color: isActive ? '#FFFFFF' : '#94A3B8',
-                  border: isActive ? '1px solid var(--color-primary-blue)' : '1px solid transparent',
+                  border: isActive
+                    ? `1px solid ${cluster.accentColor}`
+                    : '1px solid rgba(255, 255, 255, 0.08)',
                   cursor: 'pointer',
                   textAlign: 'left',
-                  transition: 'all 200ms ease',
+                  transition: 'all 220ms cubic-bezier(0.16, 1, 0.3, 1)',
                   display: 'flex',
                   flexDirection: 'column',
                   gap: '6px',
-                  boxShadow: isActive ? '0 10px 24px -4px rgba(89, 139, 255, 0.25)' : 'none',
+                  boxShadow: isActive
+                    ? `0 12px 30px -10px ${cluster.accentColor}55, inset 0 1px 0 rgba(255, 255, 255, 0.12)`
+                    : 'none',
                 }}
               >
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -567,34 +650,29 @@ export const CapabilitiesEcosystem: React.FC = () => {
                     style={{
                       fontSize: '0.68rem',
                       fontFamily: 'var(--font-family-mono)',
-                      color: isActive ? 'var(--color-primary-blue)' : '#64748B',
+                      color: isActive ? cluster.accentColor : '#64748B',
                       fontWeight: 700,
-                      letterSpacing: '0.06em',
+                      letterSpacing: '0.08em',
                     }}
                   >
-                    CLUSTER {cluster.step}
+                    {cluster.step} // {cluster.shortTag}
                   </span>
                   {isActive && (
                     <span
                       style={{
-                        display: 'inline-flex',
-                        alignItems: 'center',
-                        gap: '5px',
-                        fontSize: '0.65rem',
-                        fontFamily: 'var(--font-family-mono)',
-                        color: 'var(--color-secondary-green)',
-                        fontWeight: 700,
+                        width: 7,
+                        height: 7,
+                        borderRadius: '50%',
+                        backgroundColor: '#02C415',
+                        boxShadow: '0 0 8px #02C415',
                       }}
-                    >
-                      <span style={{ width: 6, height: 6, borderRadius: '50%', backgroundColor: 'var(--color-secondary-green)' }} />
-                      ACTIVE
-                    </span>
+                    />
                   )}
                 </div>
                 <span
                   style={{
                     fontFamily: 'var(--font-family-heading)',
-                    fontSize: '0.98rem',
+                    fontSize: '1rem',
                     fontWeight: 700,
                     lineHeight: 1.25,
                     color: isActive ? '#FFFFFF' : '#CBD5E1',
@@ -607,103 +685,55 @@ export const CapabilitiesEcosystem: React.FC = () => {
           })}
         </div>
 
-        {/* Master Architectural Blueprint Console Surface */}
+        {/* Open Glassmorphic Architectural Showcase (No heavy nested boxes) */}
         <div
           ref={panelRef}
           role="tabpanel"
           id={`panel-${selected.id}`}
           aria-labelledby={`tab-${selected.id}`}
           style={{
-            backgroundColor: '#0F172A',
-            borderRadius: '20px',
-            border: '1px solid #1E293B',
-            overflow: 'hidden',
-            boxShadow: '0 24px 60px -15px rgba(0, 0, 0, 0.6), 0 0 1px 1px rgba(255, 255, 255, 0.08)',
+            background: 'linear-gradient(160deg, rgba(15, 23, 42, 0.72) 0%, rgba(7, 12, 24, 0.88) 100%)',
+            backdropFilter: 'blur(20px)',
+            WebkitBackdropFilter: 'blur(20px)',
+            borderRadius: '22px',
+            border: '1px solid rgba(255, 255, 255, 0.1)',
+            boxShadow: '0 28px 64px -18px rgba(0, 0, 0, 0.7)',
+            padding: 'clamp(1.75rem, 3.8vw, 3.25rem)',
           }}
         >
-          {/* Production Telemetry Top Ribbon */}
           <div
             style={{
-              backgroundColor: '#0A0F1D',
-              padding: '14px 24px',
-              borderBottom: '1px solid #1E293B',
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              flexWrap: 'wrap',
-              gap: '12px',
-            }}
-          >
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <span
-                style={{
-                  width: '8px',
-                  height: '8px',
-                  borderRadius: '50%',
-                  backgroundColor: 'var(--color-secondary-green)',
-                  boxShadow: '0 0 10px rgba(2, 196, 21, 0.9)',
-                  display: 'inline-block',
-                }}
-              />
-              <span
-                style={{
-                  fontSize: '0.72rem',
-                  fontFamily: 'var(--font-family-mono)',
-                  color: '#94A3B8',
-                  letterSpacing: '0.06em',
-                  fontWeight: 600,
-                }}
-              >
-                ARCHITECTURAL SPEC // <strong style={{ color: '#F8FAFC' }}>{selected.badge}</strong>
-              </span>
-            </div>
-
-            <div style={{ display: 'flex', alignItems: 'center', gap: '16px', flexWrap: 'wrap' }}>
-              <span
-                style={{
-                  fontSize: '0.68rem',
-                  fontFamily: 'var(--font-family-mono)',
-                  color: '#64748B',
-                }}
-              >
-                PROD RUNTIME: <span style={{ color: '#38BDF8' }}>ZERO VENDOR LOCK-IN</span>
-              </span>
-              <span
-                style={{
-                  fontSize: '0.68rem',
-                  fontFamily: 'var(--font-family-mono)',
-                  color: '#64748B',
-                }}
-              >
-                SLA STATUS: <span style={{ color: 'var(--color-secondary-green)' }}>99.99% VERIFIED</span>
-              </span>
-            </div>
-          </div>
-
-          {/* Main Console Interior Grid */}
-          <div
-            style={{
-              padding: 'clamp(2rem, 4vw, 3.5rem)',
               display: 'grid',
               gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 420px), 1fr))',
-              gap: 'clamp(2rem, 4vw, 3.5rem)',
+              gap: 'clamp(2.25rem, 4.5vw, 4rem)',
               alignItems: 'center',
             }}
           >
-            {/* Left: Strategic Commercial Blueprint */}
+            {/* Left Column: Narrative + High-Contrast Metrics + Action */}
             <div>
               <div
                 style={{
-                  fontSize: '0.75rem',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                  fontSize: '0.72rem',
                   fontFamily: 'var(--font-family-mono)',
-                  color: 'var(--color-primary-blue)',
+                  color: selected.accentColor,
                   fontWeight: 700,
-                  letterSpacing: '0.06em',
+                  letterSpacing: '0.08em',
                   textTransform: 'uppercase',
-                  marginBottom: '10px',
+                  marginBottom: '12px',
                 }}
               >
-                // STRATEGIC CAPABILITY
+                <span
+                  style={{
+                    width: '18px',
+                    height: '2px',
+                    backgroundColor: selected.accentColor,
+                    display: 'inline-block',
+                  }}
+                />
+                {selected.badge}
               </div>
 
               <h3
@@ -712,9 +742,9 @@ export const CapabilitiesEcosystem: React.FC = () => {
                   fontSize: 'clamp(1.65rem, 2.5vw, 2.25rem)',
                   fontWeight: 800,
                   letterSpacing: '-0.025em',
-                  lineHeight: 1.2,
+                  lineHeight: 1.18,
                   color: '#FFFFFF',
-                  marginBottom: '14px',
+                  margin: '0 0 14px 0',
                 }}
               >
                 {selected.outcome}
@@ -724,270 +754,339 @@ export const CapabilitiesEcosystem: React.FC = () => {
                 style={{
                   fontSize: '1rem',
                   color: '#94A3B8',
-                  lineHeight: 1.65,
-                  marginBottom: '26px',
+                  lineHeight: 1.68,
+                  margin: '0 0 28px 0',
                 }}
               >
                 {selected.description}
               </p>
 
-              {/* High-Impact Telemetry Proof Chips */}
+              {/* Clean Metric Highlights with Left Accent Bars */}
               <div
                 style={{
                   display: 'grid',
-                  gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))',
-                  gap: '12px',
-                  marginBottom: '28px',
+                  gridTemplateColumns: 'repeat(auto-fit, minmax(135px, 1fr))',
+                  gap: '16px',
+                  marginBottom: '30px',
+                  paddingTop: '20px',
+                  paddingBottom: '20px',
+                  borderTop: '1px solid rgba(255, 255, 255, 0.08)',
+                  borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
                 }}
               >
                 {selected.telemetryMetrics.map((metric) => (
                   <div
                     key={metric.label}
                     style={{
-                      backgroundColor: '#0A0F1D',
-                      border: '1px solid #1E293B',
-                      borderRadius: '10px',
-                      padding: '12px 14px',
+                      paddingLeft: '14px',
+                      borderLeft: `2px solid ${metric.accent}`,
                     }}
                   >
                     <div
                       style={{
                         fontFamily: 'var(--font-family-heading)',
-                        fontSize: '1.25rem',
+                        fontSize: 'clamp(1.35rem, 2vw, 1.65rem)',
                         fontWeight: 800,
-                        color: 'var(--color-primary-blue)',
+                        color: '#FFFFFF',
                         lineHeight: 1.1,
                         marginBottom: '4px',
                       }}
                     >
                       {metric.value}
                     </div>
-                    <div style={{ fontSize: '0.72rem', fontWeight: 600, color: '#F1F5F9', lineHeight: 1.3 }}>
+                    <div style={{ fontSize: '0.78rem', fontWeight: 600, color: '#E2E8F0', lineHeight: 1.3 }}>
                       {metric.label}
                     </div>
-                    <div style={{ fontSize: '0.65rem', color: '#64748B', marginTop: '2px', fontFamily: 'var(--font-family-mono)' }}>
+                    <div
+                      style={{
+                        fontSize: '0.68rem',
+                        color: '#64748B',
+                        marginTop: '3px',
+                        fontFamily: 'var(--font-family-mono)',
+                      }}
+                    >
                       {metric.spec}
                     </div>
                   </div>
                 ))}
               </div>
 
-              {/* Action Trigger */}
-              <div style={{ display: 'flex', alignItems: 'center', gap: '16px', flexWrap: 'wrap' }}>
+              {/* High-Contrast CTA Row */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: '18px', flexWrap: 'wrap' }}>
                 <Link
                   href="/start-a-project"
-                  className="sb-btn sb-btn--md sb-btn--primary"
-                  style={{ textDecoration: 'none' }}
+                  className="sb-btn sb-btn--md"
+                  style={{
+                    textDecoration: 'none',
+                    backgroundColor: '#598BFF',
+                    color: '#FFFFFF',
+                    border: '1px solid rgba(147, 197, 253, 0.45)',
+                    boxShadow: '0 10px 28px -6px rgba(89, 139, 255, 0.55)',
+                  }}
                 >
                   <span>Discuss Your Architecture</span>
                   <ArrowRight size={14} className="sb-btn__arrow" />
                 </Link>
                 <span
                   style={{
-                    fontSize: '0.75rem',
-                    color: '#64748B',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '6px',
+                    fontSize: '0.78rem',
+                    color: '#CBD5E1',
                     fontFamily: 'var(--font-family-mono)',
                   }}
                 >
-                  ✓ Direct Senior Architect Access
+                  <span style={{ color: '#02C415', fontWeight: 700 }}>✓</span> Direct Senior Architect Access
                 </span>
               </div>
             </div>
 
-            {/* Right: Integrated Technology Mesh & Pipeline */}
-            <div
-              style={{
-                backgroundColor: '#0A0F1D',
-                borderRadius: '16px',
-                border: '1px solid #1E293B',
-                padding: 'clamp(1.5rem, 2.5vw, 2rem)',
-                display: 'flex',
-                flexDirection: 'column',
-                gap: '16px',
-              }}
-            >
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <span
-                  style={{
-                    fontSize: '0.72rem',
-                    fontFamily: 'var(--font-family-mono)',
-                    color: '#94A3B8',
-                    fontWeight: 700,
-                    letterSpacing: '0.04em',
-                  }}
-                >
-                  CORE ARCHITECTURAL STACK
-                </span>
-                <span
-                  style={{
-                    fontSize: '0.68rem',
-                    fontFamily: 'var(--font-family-mono)',
-                    color: '#02C415',
-                    fontWeight: 700,
-                  }}
-                >
-                  ● 4 VERIFIED TIERS
-                </span>
-              </div>
-
-              {/* 4 Rich Technology Cards with Authentic SVGs */}
+            {/* Right Column: Interactive Bento Stack + Live Animated Data Flow */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '18px' }}>
+              {/* 2x2 Interactive Tech Cards with Brand Spotlight */}
               <div
                 style={{
                   display: 'grid',
-                  gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
-                  gap: '12px',
+                  gridTemplateColumns: 'repeat(auto-fit, minmax(190px, 1fr))',
+                  gap: '14px',
                 }}
               >
-                {selected.technologies.map((tech) => (
-                  <div
-                    key={tech.name}
-                    style={{
-                      backgroundColor: '#0F172A',
-                      borderRadius: '12px',
-                      border: '1px solid #1E293B',
-                      padding: '16px',
-                      display: 'flex',
-                      flexDirection: 'column',
-                      justifyContent: 'space-between',
-                      boxShadow: '0 2px 8px rgba(0, 0, 0, 0.2)',
-                      transition: 'border-color 200ms ease, transform 200ms ease',
-                      position: 'relative',
-                      minHeight: '130px',
-                    }}
-                  >
-                    <div>
-                      {/* Top Bar: Icon + Category Tag */}
-                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '10px' }}>
-                        <div
-                          style={{
-                            width: '36px',
-                            height: '36px',
-                            borderRadius: '8px',
-                            backgroundColor: '#1E293B',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                          }}
-                        >
-                          {tech.iconSvg}
-                        </div>
-                        <span
-                          style={{
-                            fontSize: '0.62rem',
-                            fontFamily: 'var(--font-family-mono)',
-                            color: '#94A3B8',
-                            fontWeight: 700,
-                            letterSpacing: '0.04em',
-                            textTransform: 'uppercase',
-                          }}
-                        >
-                          {tech.tag}
-                        </span>
-                      </div>
-
-                      {/* Tech Name */}
-                      <div
-                        style={{
-                          fontSize: '0.975rem',
-                          fontWeight: 800,
-                          color: '#F8FAFC',
-                          marginBottom: '4px',
-                          letterSpacing: '-0.015em',
-                        }}
-                      >
-                        {tech.name}
-                      </div>
-
-                      {/* Role */}
-                      <div
-                        style={{
-                          fontSize: '0.75rem',
-                          color: '#94A3B8',
-                          lineHeight: 1.45,
-                        }}
-                      >
-                        {tech.role}
-                      </div>
-                    </div>
-
-                    {/* Telemetry Badge */}
+                {selected.technologies.map((tech) => {
+                  const isHovered = hoveredTech === tech.name;
+                  return (
                     <div
+                      key={tech.name}
+                      onMouseEnter={() => setHoveredTech(tech.name)}
+                      onMouseLeave={() => setHoveredTech(null)}
                       style={{
-                        marginTop: '10px',
-                        paddingTop: '8px',
-                        borderTop: '1px solid #1E293B',
+                        background: isHovered
+                          ? `linear-gradient(145deg, rgba(30, 41, 59, 0.85) 0%, rgba(15, 23, 42, 0.95) 100%)`
+                          : 'rgba(15, 23, 42, 0.55)',
+                        borderRadius: '16px',
+                        border: isHovered
+                          ? `1px solid ${tech.brandColor === '#FFFFFF' ? '#598BFF' : tech.brandColor}`
+                          : '1px solid rgba(255, 255, 255, 0.08)',
+                        padding: '18px',
                         display: 'flex',
-                        alignItems: 'center',
+                        flexDirection: 'column',
                         justifyContent: 'space-between',
+                        minHeight: '142px',
+                        transform: isHovered ? 'translateY(-4px)' : 'translateY(0)',
+                        boxShadow: isHovered
+                          ? `0 16px 32px -12px ${tech.brandColor === '#FFFFFF' ? 'rgba(89, 139, 255, 0.35)' : `${tech.brandColor}44`}`
+                          : '0 4px 16px rgba(0, 0, 0, 0.25)',
+                        transition: 'all 240ms cubic-bezier(0.16, 1, 0.3, 1)',
+                        cursor: 'default',
                       }}
                     >
-                      <span
+                      <div>
+                        <div
+                          style={{
+                            display: 'flex',
+                            justifyContent: 'space-between',
+                            alignItems: 'center',
+                            marginBottom: '12px',
+                          }}
+                        >
+                          <div
+                            style={{
+                              width: '40px',
+                              height: '40px',
+                              borderRadius: '10px',
+                              backgroundColor: 'rgba(255, 255, 255, 0.06)',
+                              border: '1px solid rgba(255, 255, 255, 0.1)',
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                            }}
+                          >
+                            {tech.iconSvg}
+                          </div>
+                          <span
+                            style={{
+                              fontSize: '0.62rem',
+                              fontFamily: 'var(--font-family-mono)',
+                              color: '#94A3B8',
+                              fontWeight: 700,
+                              letterSpacing: '0.05em',
+                            }}
+                          >
+                            {tech.tag}
+                          </span>
+                        </div>
+
+                        <div
+                          style={{
+                            fontSize: '1.02rem',
+                            fontWeight: 800,
+                            color: '#FFFFFF',
+                            marginBottom: '4px',
+                            letterSpacing: '-0.015em',
+                          }}
+                        >
+                          {tech.name}
+                        </div>
+
+                        <div
+                          style={{
+                            fontSize: '0.78rem',
+                            color: '#94A3B8',
+                            lineHeight: 1.45,
+                          }}
+                        >
+                          {tech.role}
+                        </div>
+                      </div>
+
+                      <div
                         style={{
-                          fontSize: '0.62rem',
-                          fontFamily: 'var(--font-family-mono)',
-                          color: 'var(--color-primary-blue)',
-                          fontWeight: 700,
+                          marginTop: '12px',
+                          paddingTop: '10px',
+                          borderTop: '1px solid rgba(255, 255, 255, 0.06)',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'space-between',
                         }}
                       >
-                        {tech.badge}
-                      </span>
+                        <span
+                          style={{
+                            fontSize: '0.64rem',
+                            fontFamily: 'var(--font-family-mono)',
+                            color: selected.accentColor,
+                            fontWeight: 700,
+                          }}
+                        >
+                          {tech.badge}
+                        </span>
+                        <span
+                          style={{
+                            width: '6px',
+                            height: '6px',
+                            borderRadius: '50%',
+                            backgroundColor: isHovered ? '#02C415' : 'rgba(148, 163, 184, 0.35)',
+                            boxShadow: isHovered ? '0 0 8px #02C415' : 'none',
+                            transition: 'all 200ms ease',
+                          }}
+                        />
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
 
-              {/* Architecture Interconnection Pipeline */}
+              {/* Live Interactive Data Flow Visualizer */}
               <div
                 style={{
-                  backgroundColor: '#0F172A',
-                  border: '1px solid #1E293B',
-                  borderRadius: '10px',
-                  padding: '12px 14px',
+                  backgroundColor: 'rgba(10, 15, 29, 0.72)',
+                  border: '1px solid rgba(255, 255, 255, 0.08)',
+                  borderRadius: '16px',
+                  padding: '16px 18px',
                 }}
               >
-                <div
-                  style={{
-                    fontSize: '0.65rem',
-                    fontFamily: 'var(--font-family-mono)',
-                    color: '#94A3B8',
-                    fontWeight: 700,
-                    letterSpacing: '0.04em',
-                    marginBottom: '8px',
-                    textTransform: 'uppercase',
-                  }}
-                >
-                  DATA FLOW // INTEGRATION PIPELINE:
-                </div>
                 <div
                   style={{
                     display: 'flex',
+                    justifyContent: 'space-between',
                     alignItems: 'center',
-                    gap: '6px',
-                    flexWrap: 'wrap',
-                    fontSize: '0.75rem',
-                    fontWeight: 600,
-                    color: '#F8FAFC',
+                    marginBottom: '12px',
                   }}
                 >
-                  {selected.pipeline.map((step, idx) => (
-                    <React.Fragment key={step}>
-                      <span
+                  <span
+                    style={{
+                      fontSize: '0.68rem',
+                      fontFamily: 'var(--font-family-mono)',
+                      color: '#94A3B8',
+                      fontWeight: 700,
+                      letterSpacing: '0.06em',
+                    }}
+                  >
+                    LIVE EXECUTION PIPELINE
+                  </span>
+                  <span
+                    style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '6px',
+                      fontSize: '0.65rem',
+                      fontFamily: 'var(--font-family-mono)',
+                      color: '#02C415',
+                      fontWeight: 700,
+                    }}
+                  >
+                    <span
+                      style={{
+                        width: '6px',
+                        height: '6px',
+                        borderRadius: '50%',
+                        backgroundColor: '#02C415',
+                        boxShadow: '0 0 8px #02C415',
+                      }}
+                    />
+                    STAGE 0{activePipeStep + 1} ACTIVE
+                  </span>
+                </div>
+
+                <div
+                  style={{
+                    display: 'grid',
+                    gridTemplateColumns: 'repeat(auto-fit, minmax(110px, 1fr))',
+                    gap: '10px',
+                  }}
+                >
+                  {selected.pipeline.map((step, idx) => {
+                    const isStepActive = idx === activePipeStep;
+                    return (
+                      <button
+                        key={step.label}
+                        type="button"
+                        onClick={() => setActivePipeStep(idx)}
                         style={{
-                          backgroundColor: '#1E293B',
-                          padding: '4px 8px',
-                          borderRadius: '6px',
-                          fontSize: '0.72rem',
-                          fontFamily: 'var(--font-family-mono)',
-                          color: '#E2E8F0',
+                          textAlign: 'left',
+                          padding: '10px 12px',
+                          borderRadius: '10px',
+                          cursor: 'pointer',
+                          backgroundColor: isStepActive ? 'rgba(89, 139, 255, 0.14)' : 'rgba(255, 255, 255, 0.03)',
+                          border: isStepActive
+                            ? `1px solid ${selected.accentColor}`
+                            : '1px solid rgba(255, 255, 255, 0.06)',
+                          transition: 'all 250ms ease',
                         }}
                       >
-                        {step}
-                      </span>
-                      {idx < selected.pipeline.length - 1 && (
-                        <span style={{ color: 'var(--color-primary-blue)', fontWeight: 800 }}>→</span>
-                      )}
-                    </React.Fragment>
-                  ))}
+                        <div
+                          style={{
+                            fontSize: '0.62rem',
+                            fontFamily: 'var(--font-family-mono)',
+                            color: isStepActive ? selected.accentColor : '#64748B',
+                            fontWeight: 700,
+                            marginBottom: '3px',
+                          }}
+                        >
+                          0{idx + 1}
+                        </div>
+                        <div
+                          style={{
+                            fontSize: '0.78rem',
+                            fontWeight: 700,
+                            color: isStepActive ? '#FFFFFF' : '#CBD5E1',
+                            lineHeight: 1.25,
+                          }}
+                        >
+                          {step.label}
+                        </div>
+                        <div
+                          style={{
+                            fontSize: '0.66rem',
+                            color: isStepActive ? '#BFDBFE' : '#64748B',
+                            marginTop: '2px',
+                            lineHeight: 1.3,
+                          }}
+                        >
+                          {step.detail}
+                        </div>
+                      </button>
+                    );
+                  })}
                 </div>
               </div>
             </div>
