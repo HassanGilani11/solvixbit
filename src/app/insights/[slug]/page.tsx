@@ -287,7 +287,7 @@ export default async function ArticleDetailPage({ params }: ArticlePageProps) {
       />
 
       {/* Header & Breadcrumbs */}
-      <header style={{ padding: '60px 24px 40px', backgroundColor: '#FAFAFA', borderBottom: '1px solid #EFEFEF' }}>
+      <header className="sb-hero-backdrop" style={{ padding: '60px 24px 40px', borderBottom: '1px solid #E5E7EB' }}>
         <div style={{ maxWidth: '860px', margin: '0 auto' }}>
           {/* Breadcrumbs */}
           <nav aria-label="Breadcrumbs" style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '14px', color: '#6B7280', marginBottom: '24px' }}>

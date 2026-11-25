@@ -72,7 +72,7 @@ export default async function SolutionDetailPage({ params }: SolutionPageProps) 
   return (
     <main style={{ minHeight: '100vh', backgroundColor: '#FFFFFF' }}>
       {/* 1. HERO SECTION */}
-      <section style={{ padding: 'clamp(3.5rem, 6vw, 5.5rem) 0 60px', backgroundColor: '#FAFAFA', borderBottom: '1px solid #EFEFEF' }}>
+      <section className="sb-hero-backdrop" style={{ padding: 'clamp(3.5rem, 6vw, 5.5rem) 0 60px', borderBottom: '1px solid #E5E7EB' }}>
         <Container>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '14px', color: '#6B7280', marginBottom: '24px' }}>
             <Link href="/" style={{ color: '#6B7280', textDecoration: 'none' }}>Home</Link>

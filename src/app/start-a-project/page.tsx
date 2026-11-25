@@ -354,17 +354,27 @@ function DiscoveryForm() {
   }
 
   return (
-    <div style={{ maxWidth: '840px', margin: '0 auto', padding: '40px 24px 100px' }} suppressHydrationWarning>
-      {/* Header */}
-      <div style={{ textAlign: 'center', marginBottom: '40px' }} suppressHydrationWarning>
-        <span className="sb-badge" style={{ marginBottom: '16px' }}>LET&apos;S BUILD SOMETHING MEANINGFUL</span>
-        <h1 style={{ fontSize: 'clamp(32px, 4.5vw, 48px)', fontWeight: 800, letterSpacing: '-0.03em', color: '#000000', marginBottom: '16px' }}>
-          What can we help you solve?
-        </h1>
-        <p style={{ fontSize: '18px', color: '#4B5563', lineHeight: 1.6, maxWidth: '640px', margin: '0 auto' }}>
-          Tell us about your business, your challenge, and what you want to achieve. We&apos;ll use your answers to understand the project and identify a suitable next step.
-        </p>
-      </div>
+    <div style={{ minHeight: '100vh', backgroundColor: '#FFFFFF' }} suppressHydrationWarning>
+      {/* Hero Header */}
+      <section
+        className="sb-hero-backdrop"
+        style={{
+          padding: 'clamp(3rem, 5vw, 4.75rem) 24px 48px',
+          borderBottom: '1px solid #E5E7EB',
+        }}
+      >
+        <div style={{ maxWidth: '840px', margin: '0 auto', textAlign: 'center' }} suppressHydrationWarning>
+          <span className="sb-badge" style={{ marginBottom: '16px' }}>LET&apos;S BUILD SOMETHING MEANINGFUL</span>
+          <h1 style={{ fontSize: 'clamp(32px, 4.5vw, 48px)', fontWeight: 800, letterSpacing: '-0.03em', color: '#000000', marginBottom: '16px' }}>
+            What can we help you solve?
+          </h1>
+          <p style={{ fontSize: '18px', color: '#4B5563', lineHeight: 1.6, maxWidth: '640px', margin: '0 auto' }}>
+            Tell us about your business, your challenge, and what you want to achieve. We&apos;ll use your answers to understand the project and identify a suitable next step.
+          </p>
+        </div>
+      </section>
+
+      <div style={{ maxWidth: '840px', margin: '0 auto', padding: '40px 24px 100px' }} suppressHydrationWarning>
 
       {/* Progress & Time Estimate */}
       <div style={{ marginBottom: '36px' }}>
@@ -972,13 +982,14 @@ function DiscoveryForm() {
           </button>
         )}
       </div>
+      </div>
     </div>
   );
 }
 
 export default function StartAProjectPage() {
   return (
-    <main style={{ minHeight: '80vh', backgroundColor: '#FFFFFF', paddingTop: '40px' }}>
+    <main style={{ minHeight: '80vh', backgroundColor: '#FFFFFF' }}>
       <Suspense fallback={<div style={{ textAlign: 'center', padding: '100px 20px', color: '#6B7280' }}>Loading discovery questionnaire...</div>}>
         <DiscoveryForm />
       </Suspense>

@@ -34,10 +34,10 @@ export default function ServicesPage() {
     <main style={{ minHeight: '100vh', backgroundColor: '#FFFFFF' }}>
       {/* 1. SERVICES HERO */}
       <section
+        className="sb-hero-backdrop"
         style={{
           padding: '80px 24px 64px',
-          backgroundColor: '#FAFAFA',
-          borderBottom: '1px solid #EFEFEF',
+          borderBottom: '1px solid #E5E7EB',
         }}
       >
         <div style={{ maxWidth: '1200px', margin: '0 auto', textAlign: 'center' }}>

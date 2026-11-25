@@ -34,7 +34,7 @@ export default function InsightsPage() {
   return (
     <main style={{ minHeight: '100vh', backgroundColor: '#FFFFFF' }}>
       {/* Editorial Hero Header */}
-      <section style={{ padding: '80px 24px 60px', backgroundColor: '#FAFAFA', borderBottom: '1px solid #EFEFEF' }}>
+      <section className="sb-hero-backdrop" style={{ padding: '80px 24px 60px', borderBottom: '1px solid #E5E7EB' }}>
         <div style={{ maxWidth: '1200px', margin: '0 auto', textAlign: 'center' }}>
           <span className="sb-badge" style={{ marginBottom: '20px' }}>
             INSIGHTS &amp; IDEAS

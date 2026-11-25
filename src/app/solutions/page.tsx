@@ -34,7 +34,7 @@ export default function SolutionsOverviewPage() {
   return (
     <main style={{ minHeight: '100vh', backgroundColor: '#FFFFFF' }}>
       {/* Hero Section */}
-      <section style={{ padding: 'clamp(3.5rem, 6vw, 5.5rem) 0 60px', borderBottom: '1px solid #EFEFEF', backgroundColor: '#FAFAFA' }}>
+      <section className="sb-hero-backdrop" style={{ padding: 'clamp(3.5rem, 6vw, 5.5rem) 0 60px', borderBottom: '1px solid #E5E7EB' }}>
         <Container>
           <div style={{ textAlign: 'center' }}>
           <span className="sb-badge" style={{ marginBottom: '20px' }}>
