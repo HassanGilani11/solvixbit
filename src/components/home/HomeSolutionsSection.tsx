@@ -491,24 +491,16 @@ export const HomeSolutionsSection: React.FC = () => {
                   key={sol.slug}
                   onMouseEnter={() => setHoveredSlug(sol.slug)}
                   onMouseLeave={() => setHoveredSlug(null)}
+                  className={isHovered ? 'sb-glass-solution sb-glass-solution--active' : 'sb-glass-solution'}
                   style={{
                     flex: '0 0 auto',
                     width: 'clamp(330px, 40vw, 490px)',
                     scrollSnapAlign: 'start',
-                    background: isHovered
-                      ? 'linear-gradient(155deg, rgba(22, 33, 58, 0.92) 0%, rgba(10, 15, 29, 0.98) 100%)'
-                      : 'linear-gradient(155deg, rgba(15, 23, 42, 0.8) 0%, rgba(8, 13, 25, 0.95) 100%)',
-                    backdropFilter: 'blur(16px)',
-                    WebkitBackdropFilter: 'blur(16px)',
                     borderRadius: '18px',
-                    border: isHovered ? '1px solid #598BFF' : '1px solid rgba(255, 255, 255, 0.1)',
                     padding: 'clamp(1.15rem, 1.8vw, 1.5rem)',
                     display: 'flex',
                     flexDirection: 'column',
                     justifyContent: 'space-between',
-                    boxShadow: isHovered
-                      ? '0 22px 48px -14px rgba(89, 139, 255, 0.28)'
-                      : '0 16px 36px -14px rgba(0, 0, 0, 0.55)',
                     transform: isHovered ? 'translateY(-4px)' : 'translateY(0)',
                     transition: 'all 240ms cubic-bezier(0.16, 1, 0.3, 1)',
                   }}

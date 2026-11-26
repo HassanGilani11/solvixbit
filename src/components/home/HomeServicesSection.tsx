@@ -350,21 +350,24 @@ export const HomeServicesSection: React.FC = () => {
               {/* Right Column: Architectural Deliverables Matrix */}
               <div
                 style={{
-                  backgroundColor: '#0A0F1D',
+                  backgroundColor: 'rgba(10, 15, 29, 0.72)',
+                  backdropFilter: 'blur(12px)',
+                  WebkitBackdropFilter: 'blur(12px)',
                   borderRadius: '16px',
-                  border: '1px solid #1E293B',
+                  border: '1px solid rgba(89, 139, 255, 0.22)',
                   padding: '24px',
                   display: 'flex',
                   flexDirection: 'column',
                   gap: '14px',
+                  boxShadow: 'inset 0 1px 0 rgba(255, 255, 255, 0.08)',
                 }}
               >
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '4px' }}>
                   <span style={{ fontSize: '0.72rem', fontFamily: 'var(--font-family-mono)', color: 'var(--color-primary-blue)', fontWeight: 700 }}>
-                    // VERIFIED DELIVERABLES
+                    // CORE DELIVERABLES
                   </span>
                   <span style={{ fontSize: '0.7rem', color: 'var(--color-secondary-green)', fontFamily: 'var(--font-family-mono)', fontWeight: 600 }}>
-                    100% AUDITED
+                    PRODUCTION READY
                   </span>
                 </div>
 
@@ -401,13 +404,16 @@ export const HomeServicesSection: React.FC = () => {
           >
             {regularServices.map((service, index) => {
               const globalIndex = servicesData.indexOf(service) + 1;
+              const useSubtleGlass = index % 3 === 0 || index % 3 === 2;
+              const accentColor = index % 2 === 0 ? '#598BFF' : '#02C415';
+
               return (
                 <div
                   key={service.slug}
-                  className="sb-service-card-item"
+                  className={`sb-service-card-item ${useSubtleGlass ? 'sb-glass-service' : ''}`}
                   style={{
-                    backgroundColor: '#FAFAFA',
-                    border: '1px solid #E5E7EB',
+                    backgroundColor: useSubtleGlass ? undefined : '#FAFAFA',
+                    border: useSubtleGlass ? undefined : '1px solid #E5E7EB',
                     borderRadius: 'var(--radius-lg)',
                     padding: 'clamp(1.75rem, 2.5vw, 2.25rem)',
                     display: 'flex',
@@ -417,15 +423,24 @@ export const HomeServicesSection: React.FC = () => {
                     transition: 'all 240ms cubic-bezier(0.16, 1, 0.3, 1)',
                   }}
                   onMouseEnter={(e) => {
-                    e.currentTarget.style.borderColor = '#598BFF';
-                    e.currentTarget.style.backgroundColor = '#FFFFFF';
-                    e.currentTarget.style.boxShadow = '0 16px 36px -10px rgba(0, 0, 0, 0.08)';
-                    e.currentTarget.style.transform = 'translateY(-2px)';
+                    e.currentTarget.style.borderColor = accentColor;
+                    if (!useSubtleGlass) {
+                      e.currentTarget.style.backgroundColor = '#FFFFFF';
+                    }
+                    e.currentTarget.style.boxShadow =
+                      accentColor === '#02C415'
+                        ? '0 16px 36px -10px rgba(2, 196, 21, 0.14)'
+                        : '0 16px 36px -10px rgba(89, 139, 255, 0.16)';
+                    e.currentTarget.style.transform = 'translateY(-3px)';
                   }}
                   onMouseLeave={(e) => {
-                    e.currentTarget.style.borderColor = '#E5E7EB';
-                    e.currentTarget.style.backgroundColor = '#FAFAFA';
-                    e.currentTarget.style.boxShadow = 'none';
+                    e.currentTarget.style.borderColor = useSubtleGlass ? 'rgba(15, 23, 42, 0.08)' : '#E5E7EB';
+                    if (!useSubtleGlass) {
+                      e.currentTarget.style.backgroundColor = '#FAFAFA';
+                    }
+                    e.currentTarget.style.boxShadow = useSubtleGlass
+                      ? '0 8px 24px -10px rgba(0, 0, 0, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.85)'
+                      : 'none';
                     e.currentTarget.style.transform = 'none';
                   }}
                 >
@@ -444,19 +459,18 @@ export const HomeServicesSection: React.FC = () => {
                           fontFamily: 'var(--font-family-mono)',
                           fontSize: '0.85rem',
                           fontWeight: 800,
-                          color: 'var(--color-primary-blue)',
+                          color: accentColor === '#02C415' ? '#048A10' : 'var(--color-primary-blue)',
                         }}
                       >
                         0{globalIndex}
                       </span>
                       <span
+                        className="sb-glass-meta--light"
                         style={{
-                          fontSize: '0.72rem',
+                          fontSize: '0.7rem',
                           fontFamily: 'var(--font-family-mono)',
                           fontWeight: 600,
-                          color: '#4B5563',
-                          backgroundColor: '#FFFFFF',
-                          border: '1px solid #E5E7EB',
+                          color: '#374151',
                           padding: '3px 10px',
                           borderRadius: '999px',
                         }}

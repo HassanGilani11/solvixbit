@@ -1508,8 +1508,152 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /* ==========================================================================
-   PHASE 08 REUSABLE DESIGN SYSTEM EXTENSIONS
+   PHASE 08 REUSABLE GLASSMORPHISM DESIGN SYSTEM
+   Selective surfaces with contrast safety, inner highlights, and fallbacks.
    ========================================================================== */
+
+/* 1. Glass Navigation */
+.sb-glass-nav {
+  background-color: rgba(255, 255, 255, 0.84);
+  backdrop-filter: blur(14px) saturate(160%);
+  -webkit-backdrop-filter: blur(14px) saturate(160%);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: 0 4px 24px -8px rgba(0, 0, 0, 0.06), var(--glass-highlight-light);
+}
+
+/* 2. Strong Hero Glass Panel */
+.sb-glass-hero {
+  background: linear-gradient(155deg, rgba(12, 20, 40, 0.74) 0%, rgba(5, 10, 24, 0.86) 100%);
+  backdrop-filter: blur(var(--glass-blur-lg)) saturate(140%);
+  -webkit-backdrop-filter: blur(var(--glass-blur-lg)) saturate(140%);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  box-shadow:
+    0 32px 72px -18px rgba(0, 0, 0, 0.65),
+    0 0 40px -12px rgba(89, 139, 255, 0.18),
+    var(--glass-highlight-dark);
+}
+
+/* 3. Capability Glass Panel */
+.sb-glass-capability {
+  background: linear-gradient(160deg, rgba(15, 23, 42, 0.72) 0%, rgba(7, 12, 24, 0.88) 100%);
+  backdrop-filter: blur(var(--glass-blur-md)) saturate(135%);
+  -webkit-backdrop-filter: blur(var(--glass-blur-md)) saturate(135%);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow:
+    0 28px 64px -18px rgba(0, 0, 0, 0.7),
+    var(--glass-highlight-dark);
+}
+
+/* 4. Subtle Service Surface (Light Theme) */
+.sb-glass-service {
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.9) 0%, rgba(248, 250, 252, 0.78) 100%);
+  backdrop-filter: blur(var(--glass-blur-sm));
+  -webkit-backdrop-filter: blur(var(--glass-blur-sm));
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  box-shadow: 0 8px 24px -10px rgba(0, 0, 0, 0.05), var(--glass-highlight-light);
+  transition: transform 240ms cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 240ms ease,
+              box-shadow 240ms ease,
+              background-color 240ms ease;
+}
+
+.sb-glass-service:hover {
+  border-color: var(--color-primary-blue);
+  box-shadow: 0 18px 38px -12px rgba(89, 139, 255, 0.16), var(--glass-highlight-light);
+  transform: translateY(-3px);
+}
+
+/* 5. Solution Interaction Panel */
+.sb-glass-solution {
+  background: linear-gradient(155deg, rgba(15, 23, 42, 0.8) 0%, rgba(8, 13, 25, 0.94) 100%);
+  backdrop-filter: blur(var(--glass-blur-md));
+  -webkit-backdrop-filter: blur(var(--glass-blur-md));
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 16px 36px -14px rgba(0, 0, 0, 0.55), var(--glass-highlight-dark);
+}
+
+.sb-glass-solution--active {
+  background: linear-gradient(155deg, rgba(22, 33, 58, 0.92) 0%, rgba(10, 15, 29, 0.98) 100%);
+  border-color: var(--color-primary-blue);
+  box-shadow: 0 22px 48px -14px rgba(89, 139, 255, 0.28), var(--glass-highlight-dark);
+}
+
+/* 6. Portfolio Information Overlay */
+.sb-glass-overlay {
+  background-color: rgba(10, 15, 28, 0.82);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  color: #FFFFFF;
+}
+
+/* 7. Floating Metadata Pill / Badge */
+.sb-glass-meta {
+  background-color: rgba(10, 16, 32, 0.72);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.24), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  color: #F8FAFC;
+}
+
+.sb-glass-meta--light {
+  background-color: rgba(255, 255, 255, 0.84);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06), var(--glass-highlight-light);
+  color: #0F172A;
+}
+
+/* 8. Final CTA Surface */
+.sb-glass-cta {
+  background: linear-gradient(155deg, rgba(9, 13, 24, 0.94) 0%, rgba(4, 8, 18, 0.98) 100%);
+  backdrop-filter: blur(var(--glass-blur-md));
+  -webkit-backdrop-filter: blur(var(--glass-blur-md));
+  border: 1px solid rgba(89, 139, 255, 0.24);
+  box-shadow:
+    0 32px 72px -16px rgba(0, 0, 0, 0.42),
+    0 0 48px -16px rgba(89, 139, 255, 0.22),
+    var(--glass-highlight-dark);
+}
+
+/* Non-blurred Fallbacks for Browsers Without backdrop-filter */
+@supports not ((-webkit-backdrop-filter: blur(1px)) or (backdrop-filter: blur(1px))) {
+  .sb-glass-nav,
+  .sb-glass-meta--light {
+    background-color: #FFFFFF;
+  }
+  .sb-glass-service {
+    background: #FFFFFF;
+  }
+  .sb-glass-hero,
+  .sb-glass-capability,
+  .sb-glass-solution,
+  .sb-glass-overlay,
+  .sb-glass-meta,
+  .sb-glass-cta {
+    background: #0A0F1E;
+  }
+}
+
+/* Mobile Performance Simplification: lighter blur & GPU budget on small viewports */
+@media (max-width: 767px) {
+  .sb-glass-hero,
+  .sb-glass-capability,
+  .sb-glass-solution,
+  .sb-glass-cta {
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+  .sb-glass-service {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    background: #FFFFFF;
+  }
+}
+
 .sb-glass--light {
   background-color: var(--glass-bg-light);
   backdrop-filter: blur(var(--glass-blur-md));
@@ -1589,6 +1733,21 @@ h1, h2, h3, h4, h5, h6 {
   }
 }
 
+@keyframes sb-hero-light-sweep {
+  0% {
+    transform: translate3d(-15%, 0, 0);
+    opacity: 0.35;
+  }
+  50% {
+    transform: translate3d(55%, 0, 0);
+    opacity: 0.85;
+  }
+  100% {
+    transform: translate3d(-15%, 0, 0);
+    opacity: 0.35;
+  }
+}
+
 .sb-hero-bg-drift {
   animation: sb-hero-kenburns 22s ease-in-out infinite;
 }
@@ -1597,9 +1756,14 @@ h1, h2, h3, h4, h5, h6 {
   animation: sb-hero-aurora-pulse 12s ease-in-out infinite;
 }
 
+.sb-hero-light-beam {
+  animation: sb-hero-light-sweep 14s ease-in-out infinite;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .sb-hero-bg-drift,
-  .sb-hero-aurora {
+  .sb-hero-aurora,
+  .sb-hero-light-beam {
     animation: none !important;
   }
 }

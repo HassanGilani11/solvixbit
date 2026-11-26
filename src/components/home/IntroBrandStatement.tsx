@@ -235,11 +235,11 @@ export const IntroBrandStatement: React.FC = () => {
                   // METHODOLOGY DIRECTIVE
                 </span>
                 <span style={{ fontSize: '0.7rem', color: '#02C415', fontFamily: 'var(--font-family-mono)', fontWeight: 600 }}>
-                  VERIFIED AUDIT
+                  ENGINEERING STANDARD
                 </span>
               </div>
               <div style={{ fontSize: '0.92rem', color: '#111827', fontWeight: 600, lineHeight: 1.5 }}>
-                Every engagement begins with problem diagnosis, type contracts, and SLA definitions before writing a line of production code.
+                Every engagement begins with problem diagnosis, type contracts, and clear delivery milestones before writing production code.
               </div>
               <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', paddingTop: '6px' }}>
                 <span style={{ fontSize: '0.72rem', padding: '4px 10px', backgroundColor: '#FFFFFF', border: '1px solid #E5E7EB', borderRadius: '999px', color: '#4B5563' }}>
@@ -249,7 +249,7 @@ export const IntroBrandStatement: React.FC = () => {
                   ✓ Zero Vendor Lock-in
                 </span>
                 <span style={{ fontSize: '0.72rem', padding: '4px 10px', backgroundColor: '#FFFFFF', border: '1px solid #E5E7EB', borderRadius: '999px', color: '#4B5563' }}>
-                  ✓ Sub-second p95 Latency
+                  ✓ Performance-First Delivery
                 </span>
               </div>
             </div>

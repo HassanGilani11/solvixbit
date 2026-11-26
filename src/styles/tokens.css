@@ -128,13 +128,18 @@
      7.5 GLASSMORPHISM & DEPTH SYSTEM
      ========================================================================== */
   --glass-bg-light: rgba(255, 255, 255, 0.78);
-  --glass-bg-dark: rgba(10, 14, 24, 0.82);
+  --glass-bg-light-subtle: rgba(255, 255, 255, 0.62);
+  --glass-bg-dark: rgba(10, 14, 24, 0.78);
+  --glass-bg-dark-strong: rgba(7, 11, 22, 0.84);
   --glass-border-light: rgba(0, 0, 0, 0.08);
   --glass-border-dark: rgba(255, 255, 255, 0.12);
   --glass-border-accent: rgba(89, 139, 255, 0.28);
+  --glass-border-green: rgba(2, 196, 21, 0.28);
+  --glass-highlight-light: inset 0 1px 0 rgba(255, 255, 255, 0.85);
+  --glass-highlight-dark: inset 0 1px 0 rgba(255, 255, 255, 0.14);
   --glass-blur-sm: 8px;
   --glass-blur-md: 16px;
-  --glass-blur-lg: 24px;
+  --glass-blur-lg: 22px;
 
   /* ==========================================================================
      8. CONTAINER & BREAKPOINTS

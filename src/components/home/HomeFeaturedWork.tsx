@@ -20,9 +20,9 @@ const CASE_STUDY_IMAGES: Record<string, string> = {
 };
 
 const CASE_STUDY_PREVIEWS: Record<string, { endpoint: string; badge: string }> = {
-  'fintech-payment-engine': { endpoint: 'apex.global/api/v2/settlement', badge: 'LATENCY <42MS // P99' },
-  'ecommerce-headless-scale': { endpoint: 'lumina.store/products/configurator', badge: 'STOREFRONT EDGE // 350MS' },
-  'enterprise-ai-copilot': { endpoint: 'veritas.ai/workspace/copilot', badge: 'RAG ACCURACY // 100%' },
+  'fintech-payment-engine': { endpoint: 'stratapay.example/api/v2/settlement', badge: 'FINTECH LEDGER // CASE STUDY' },
+  'ecommerce-headless-scale': { endpoint: 'aura-atelier.example/configurator', badge: 'HEADLESS 3D // CASE STUDY' },
+  'enterprise-ai-copilot': { endpoint: 'nexus-health.example/workspace', badge: 'PRIVATE RAG // CASE STUDY' },
 };
 
 export const HomeFeaturedWork: React.FC = () => {
@@ -496,31 +496,34 @@ export const HomeFeaturedWork: React.FC = () => {
                         }}
                       />
 
-                      {/* Floating Glassmorphic Telemetry Pill */}
+                      {/* Floating Glassmorphic Portfolio Information Overlay */}
                       <div
+                        className="sb-glass-overlay"
                         style={{
                           position: 'absolute',
                           bottom: '16px',
                           left: '16px',
-                          padding: '6px 12px',
-                          borderRadius: '6px',
-                          backgroundColor: 'rgba(15, 23, 42, 0.85)',
-                          backdropFilter: 'blur(10px)',
-                          WebkitBackdropFilter: 'blur(10px)',
-                          border: '1px solid rgba(255, 255, 255, 0.15)',
-                          color: '#FFFFFF',
+                          right: '16px',
+                          padding: '10px 14px',
+                          borderRadius: '10px',
                           fontSize: '0.72rem',
                           fontFamily: 'var(--font-family-mono)',
                           fontWeight: 700,
                           letterSpacing: '0.04em',
                           display: 'flex',
                           alignItems: 'center',
-                          gap: '6px',
+                          justifyContent: 'space-between',
+                          gap: '10px',
                           zIndex: 2,
                         }}
                       >
-                        <span style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: 'var(--color-secondary-green)' }} />
-                        <span>{meta.badge}</span>
+                        <span style={{ display: 'inline-flex', alignItems: 'center', gap: '7px' }}>
+                          <span style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: 'var(--color-secondary-green)', boxShadow: '0 0 8px #02C415' }} />
+                          <span>{meta.badge}</span>
+                        </span>
+                        <span style={{ color: '#93C5FD', fontSize: '0.68rem' }}>
+                          {project.year} • {project.industry.split('&')[0].trim()}
+                        </span>
                       </div>
                     </div>
                   </Link>

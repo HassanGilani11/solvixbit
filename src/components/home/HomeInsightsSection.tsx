@@ -130,7 +130,133 @@ export const HomeInsightsSection: React.FC = () => {
           </p>
         </div>
 
-        {/* 3-Column Editorial Grid */}
+        {/* Featured Lead Editorial Article + 2-Column Companion Grid */}
+        {featuredArticles[0] && (
+          <article
+            className="sb-insight-card sb-article-featured-card"
+            style={{ marginBottom: '28px' }}
+          >
+            <Link
+              href={`/insights/${featuredArticles[0].slug}`}
+              style={{
+                textDecoration: 'none',
+                display: 'block',
+                position: 'relative',
+                minHeight: '300px',
+                overflow: 'hidden',
+                backgroundColor: '#0E121A',
+              }}
+            >
+              <Image
+                src={featuredArticles[0].coverImage || '/images/insights/ai-automation-roadmap.jpg'}
+                alt={featuredArticles[0].title}
+                fill
+                sizes="(max-width: 960px) 100vw, 55vw"
+                className="sb-article-card__img"
+                style={{ objectFit: 'cover' }}
+              />
+              <div
+                style={{
+                  position: 'absolute',
+                  inset: 0,
+                  background: 'linear-gradient(to top, rgba(0, 0, 0, 0.65) 0%, rgba(0, 0, 0, 0.1) 60%)',
+                  pointerEvents: 'none',
+                }}
+              />
+              <div style={{ position: 'absolute', top: '16px', left: '16px', zIndex: 2, display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+                <span className="sb-glass-meta sb-article-pill">
+                  FEATURED GUIDE // {featuredArticles[0].category}
+                </span>
+                <span className="sb-glass-meta sb-article-pill">
+                  {featuredArticles[0].readingTime}
+                </span>
+              </div>
+            </Link>
+
+            <div
+              style={{
+                padding: 'clamp(1.75rem, 3.2vw, 2.75rem)',
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'space-between',
+                gap: '18px',
+              }}
+            >
+              <div>
+                <div
+                  style={{
+                    fontSize: '0.75rem',
+                    color: '#9CA3AF',
+                    marginBottom: '12px',
+                    fontFamily: 'var(--font-family-mono)',
+                  }}
+                >
+                  Published {featuredArticles[0].publishedAt} • {featuredArticles[0].author.name}
+                </div>
+
+                <h3
+                  style={{
+                    fontFamily: 'var(--font-family-heading)',
+                    fontSize: 'clamp(1.45rem, 2.3vw, 1.9rem)',
+                    fontWeight: 800,
+                    lineHeight: 1.22,
+                    letterSpacing: '-0.02em',
+                    margin: '0 0 14px 0',
+                  }}
+                >
+                  <Link
+                    href={`/insights/${featuredArticles[0].slug}`}
+                    style={{ textDecoration: 'none', color: '#FFFFFF' }}
+                  >
+                    {featuredArticles[0].title}
+                  </Link>
+                </h3>
+
+                <p
+                  style={{
+                    fontSize: '0.96rem',
+                    color: '#D1D5DB',
+                    lineHeight: 1.65,
+                    margin: '0 0 18px 0',
+                  }}
+                >
+                  {featuredArticles[0].excerpt}
+                </p>
+
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
+                  {featuredArticles[0].tags.slice(0, 4).map((tag, idx) => (
+                    <span
+                      key={idx}
+                      style={{
+                        fontSize: '0.72rem',
+                        color: '#CBD5E1',
+                        backgroundColor: 'rgba(255, 255, 255, 0.08)',
+                        padding: '4px 9px',
+                        borderRadius: '6px',
+                        fontFamily: 'var(--font-family-mono)',
+                      }}
+                    >
+                      #{tag}
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              <div>
+                <Link
+                  href={`/insights/${featuredArticles[0].slug}`}
+                  className="sb-btn sb-btn--md"
+                  style={{ textDecoration: 'none' }}
+                >
+                  <span>Read Full Guide</span>
+                  <ArrowUpRight size={15} className="sb-btn__arrow" />
+                </Link>
+              </div>
+            </div>
+          </article>
+        )}
+
+        {/* 2-Column Companion Editorial Grid */}
         <div
           style={{
             display: 'grid',
@@ -139,7 +265,7 @@ export const HomeInsightsSection: React.FC = () => {
             marginBottom: '48px',
           }}
         >
-          {featuredArticles.map((article) => (
+          {featuredArticles.slice(1).map((article) => (
             <article
               key={article.slug}
               className="sb-insight-card"

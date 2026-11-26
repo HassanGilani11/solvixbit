@@ -54,7 +54,7 @@ export const Navbar: React.FC<NavbarProps> = ({
   }, []);
 
   return (
-    <header className={cn('sb-navbar', className)} onMouseLeave={handleMouseLeave}>
+    <header className={cn('sb-navbar sb-glass-nav', className)} onMouseLeave={handleMouseLeave}>
       <Container>
         <div className="sb-navbar__inner">
           <Link
@@ -263,7 +263,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                   }}
                 >
                   <div style={{ fontSize: '0.7rem', fontFamily: 'var(--font-family-mono)', color: '#6B7280', fontWeight: 700, textTransform: 'uppercase', marginBottom: '12px', letterSpacing: '0.05em' }}>
-                    VERIFIED CLIENT CASE STUDIES
+                    FEATURED CASE STUDIES
                   </div>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                     {caseStudiesData.map((caseStudy) => (

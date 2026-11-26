@@ -61,19 +61,16 @@ export const HomeClosingCTA: React.FC<HomeClosingCTAProps> = ({ onStartProjectCl
       <Container>
         {/* Layered Architectural Closing Surface */}
         <div
-          className="sb-closing-card"
+          className="sb-closing-card sb-glass-cta"
           style={{
             position: 'relative',
             borderRadius: '24px',
-            backgroundColor: '#090D16',
             color: '#FFFFFF',
             padding: 'clamp(3rem, 7vw, 6rem) clamp(2rem, 5vw, 4.5rem)',
             textAlign: 'center',
             overflow: 'hidden',
-            boxShadow: '0 30px 70px -15px rgba(0, 0, 0, 0.4), 0 0 1px 1px rgba(255, 255, 255, 0.08)',
             maxWidth: '1080px',
             margin: '0 auto',
-            border: '1px solid #1E283D',
           }}
         >
           {/* Subtle Ambient Brand Glows */}

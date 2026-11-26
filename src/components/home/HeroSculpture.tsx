@@ -2,7 +2,6 @@
 
 import React, { useRef, useEffect, useState } from 'react';
 import * as THREE from 'three';
-import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment.js';
 import { checkPrefersReducedMotion } from '../../lib/animation/gsap';
 
 /**
@@ -44,6 +43,68 @@ function createRoundedPolygonShape(points: [number, number][], radius: number): 
   return shape;
 }
 
+/**
+ * Builds a high-contrast dark studio environment scene for PMREMGenerator.
+ * Dark surroundings + sharp bright softbox strips give glossy glass/chrome
+ * deep rich colors and razor-sharp specular edge highlights.
+ */
+function createDarkStudioEnvironment(renderer: THREE.WebGLRenderer): THREE.WebGLRenderTarget {
+  const pmrem = new THREE.PMREMGenerator(renderer);
+  pmrem.compileEquirectangularShader();
+
+  const envScene = new THREE.Scene();
+  envScene.background = new THREE.Color(0x020612);
+
+  // Overhead crisp white softbox strip
+  const topStrip = new THREE.Mesh(
+    new THREE.PlaneGeometry(14, 3),
+    new THREE.MeshBasicMaterial({ color: new THREE.Color(4.5, 4.8, 5.5), side: THREE.DoubleSide })
+  );
+  topStrip.position.set(0, 7, 2);
+  topStrip.rotation.x = Math.PI / 2.4;
+  envScene.add(topStrip);
+
+  // Left electric blue rim softbox
+  const leftStrip = new THREE.Mesh(
+    new THREE.PlaneGeometry(4, 12),
+    new THREE.MeshBasicMaterial({ color: new THREE.Color(0.5, 1.8, 5.0), side: THREE.DoubleSide })
+  );
+  leftStrip.position.set(-7, 1, 2);
+  leftStrip.rotation.y = Math.PI / 2.2;
+  envScene.add(leftStrip);
+
+  // Right emerald green rim softbox
+  const rightStrip = new THREE.Mesh(
+    new THREE.PlaneGeometry(4, 12),
+    new THREE.MeshBasicMaterial({ color: new THREE.Color(0.2, 4.2, 0.9), side: THREE.DoubleSide })
+  );
+  rightStrip.position.set(7, -1, 2);
+  rightStrip.rotation.y = -Math.PI / 2.2;
+  envScene.add(rightStrip);
+
+  // Subtle lower cool bounce
+  const bottomBounce = new THREE.Mesh(
+    new THREE.PlaneGeometry(14, 6),
+    new THREE.MeshBasicMaterial({ color: new THREE.Color(0.15, 0.35, 0.75), side: THREE.DoubleSide })
+  );
+  bottomBounce.position.set(0, -7, 1);
+  bottomBounce.rotation.x = -Math.PI / 2;
+  envScene.add(bottomBounce);
+
+  const target = pmrem.fromScene(envScene, 0.02);
+  pmrem.dispose();
+  topStrip.geometry.dispose();
+  (topStrip.material as THREE.Material).dispose();
+  leftStrip.geometry.dispose();
+  (leftStrip.material as THREE.Material).dispose();
+  rightStrip.geometry.dispose();
+  (rightStrip.material as THREE.Material).dispose();
+  bottomBounce.geometry.dispose();
+  (bottomBounce.material as THREE.Material).dispose();
+
+  return target;
+}
+
 function createRadialGlowTexture(innerColor: string, midColor: string): THREE.CanvasTexture {
   const canvas = document.createElement('canvas');
   canvas.width = 128;
@@ -75,9 +136,9 @@ export const HeroSculpture: React.FC = () => {
     dragStartX: 0,
     dragStartY: 0,
     rotX: 0.08,
-    rotY: -0.22,
+    rotY: -0.24,
     targetRotX: 0.08,
-    targetRotY: -0.22,
+    targetRotY: -0.24,
   });
 
   useEffect(() => {
@@ -101,8 +162,8 @@ export const HeroSculpture: React.FC = () => {
     let height = container.clientHeight || 460;
 
     const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(36, width / height, 0.1, 100);
-    camera.position.set(0, 0, 9.2);
+    const camera = new THREE.PerspectiveCamera(35, width / height, 0.1, 100);
+    camera.position.set(0, 0, 9.0);
 
     let renderer: THREE.WebGLRenderer;
     try {
@@ -116,53 +177,50 @@ export const HeroSculpture: React.FC = () => {
       renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
       renderer.outputColorSpace = THREE.SRGBColorSpace;
       renderer.toneMapping = THREE.ACESFilmicToneMapping;
-      renderer.toneMappingExposure = 1.25;
+      renderer.toneMappingExposure = 1.1;
     } catch {
       setWebGLSupported(false);
       return;
     }
 
-    // Studio environment map for crisp glass/acrylic specular reflections
-    const pmremGenerator = new THREE.PMREMGenerator(renderer);
-    const roomEnv = new RoomEnvironment();
-    const envTarget = pmremGenerator.fromScene(roomEnv, 0.04);
+    // High-contrast dark studio environment for deep glass & razor-sharp specular highlights
+    const envTarget = createDarkStudioEnvironment(renderer);
     scene.environment = envTarget.texture;
-    roomEnv.dispose();
 
-    // Lighting setup
-    const ambientLight = new THREE.AmbientLight(0xdbeafe, 0.35);
+    // Focused studio lights
+    const ambientLight = new THREE.AmbientLight(0x93c5fd, 0.25);
     scene.add(ambientLight);
 
-    const topRimLight = new THREE.DirectionalLight(0xffffff, 3.2);
-    topRimLight.position.set(2, 8, 6);
+    const topRimLight = new THREE.DirectionalLight(0xffffff, 2.8);
+    topRimLight.position.set(1.5, 8, 6);
     scene.add(topRimLight);
 
-    const blueKeyLight = new THREE.DirectionalLight(0x598bff, 3.6);
-    blueKeyLight.position.set(-7, 4, 5);
+    const blueKeyLight = new THREE.DirectionalLight(0x3b82f6, 3.2);
+    blueKeyLight.position.set(-7, 3, 5);
     scene.add(blueKeyLight);
 
-    const greenFillLight = new THREE.DirectionalLight(0x02c415, 3.0);
+    const greenFillLight = new THREE.DirectionalLight(0x02c415, 2.8);
     greenFillLight.position.set(7, -3, 5);
     scene.add(greenFillLight);
 
-    const cursorLight = new THREE.PointLight(0xffffff, 4.5, 16);
-    cursorLight.position.set(0, 0, 5.5);
+    const cursorLight = new THREE.PointLight(0xffffff, 5.0, 14);
+    cursorLight.position.set(0, 0, 5.0);
     scene.add(cursorLight);
 
     const sculptureGroup = new THREE.Group();
     scene.add(sculptureGroup);
 
     const extrudeSettings: THREE.ExtrudeGeometryOptions = {
-      depth: 0.34,
+      depth: 0.36,
       bevelEnabled: true,
-      bevelSegments: 8,
+      bevelSegments: 10,
       steps: 2,
       bevelSize: 0.11,
-      bevelThickness: 0.13,
-      curveSegments: 16,
+      bevelThickness: 0.14,
+      curveSegments: 20,
     };
 
-    // 1. Left Chevron "<" — Electric Blue Glossy Glass
+    // 1. Left Chevron "<" — Deep Cobalt Electric Blue Crystal
     const leftChevronPoints: [number, number][] = [
       [0.62, 1.15],
       [-0.78, 0.22],
@@ -177,23 +235,23 @@ export const HeroSculpture: React.FC = () => {
     leftGeo.center();
 
     const blueGlassMat = new THREE.MeshPhysicalMaterial({
-      color: 0x0b57ff,
-      emissive: 0x041e66,
-      emissiveIntensity: 0.32,
-      roughness: 0.07,
-      metalness: 0.25,
+      color: 0x0747d9,
+      emissive: 0x041d6b,
+      emissiveIntensity: 0.45,
+      roughness: 0.04,
+      metalness: 0.42,
       clearcoat: 1.0,
-      clearcoatRoughness: 0.04,
-      ior: 1.54,
-      reflectivity: 0.95,
-      envMapIntensity: 0.95,
+      clearcoatRoughness: 0.02,
+      ior: 1.6,
+      reflectivity: 1.0,
+      envMapIntensity: 1.9,
     });
     const leftMesh = new THREE.Mesh(leftGeo, blueGlassMat);
     leftMesh.position.set(-1.38, 0.08, 0.1);
-    leftMesh.rotation.y = 0.12;
+    leftMesh.rotation.y = 0.14;
     sculptureGroup.add(leftMesh);
 
-    // 2. Center Slash "/" — Frosted Pearl White / Ice
+    // 2. Center Slash "/" — Frosted Pearl Silver-Ice
     const slashPoints: [number, number][] = [
       [0.24, 1.38],
       [-0.58, -1.32],
@@ -205,22 +263,22 @@ export const HeroSculpture: React.FC = () => {
     slashGeo.center();
 
     const whiteGlassMat = new THREE.MeshPhysicalMaterial({
-      color: 0xeef4ff,
-      emissive: 0x94b8ff,
-      emissiveIntensity: 0.2,
-      roughness: 0.12,
-      metalness: 0.1,
+      color: 0xdbeafe,
+      emissive: 0x3b82f6,
+      emissiveIntensity: 0.12,
+      roughness: 0.08,
+      metalness: 0.28,
       clearcoat: 1.0,
-      clearcoatRoughness: 0.06,
-      ior: 1.48,
-      reflectivity: 0.9,
-      envMapIntensity: 1.35,
+      clearcoatRoughness: 0.03,
+      ior: 1.52,
+      reflectivity: 0.95,
+      envMapIntensity: 1.6,
     });
     const slashMesh = new THREE.Mesh(slashGeo, whiteGlassMat);
-    slashMesh.position.set(0.02, -0.02, 0.22);
+    slashMesh.position.set(0.02, -0.02, 0.24);
     sculptureGroup.add(slashMesh);
 
-    // 3. Right Chevron ">" — Emerald Green Glossy Glass
+    // 3. Right Chevron ">" — Deep Emerald Green Crystal
     const rightChevronPoints: [number, number][] = [
       [-0.62, 1.15],
       [-0.92, 0.74],
@@ -235,29 +293,29 @@ export const HeroSculpture: React.FC = () => {
     rightGeo.center();
 
     const greenGlassMat = new THREE.MeshPhysicalMaterial({
-      color: 0x00b814,
-      emissive: 0x004d0a,
-      emissiveIntensity: 0.3,
-      roughness: 0.07,
-      metalness: 0.24,
+      color: 0x00a814,
+      emissive: 0x004709,
+      emissiveIntensity: 0.42,
+      roughness: 0.04,
+      metalness: 0.4,
       clearcoat: 1.0,
-      clearcoatRoughness: 0.04,
-      ior: 1.54,
-      reflectivity: 0.95,
-      envMapIntensity: 0.95,
+      clearcoatRoughness: 0.02,
+      ior: 1.6,
+      reflectivity: 1.0,
+      envMapIntensity: 1.9,
     });
     const rightMesh = new THREE.Mesh(rightGeo, greenGlassMat);
-    rightMesh.position.set(1.42, -0.08, -0.05);
-    rightMesh.rotation.y = -0.14;
+    rightMesh.position.set(1.42, -0.08, -0.04);
+    rightMesh.rotation.y = -0.15;
     sculptureGroup.add(rightMesh);
 
-    // 4. Floating Orbs (Bottom-Left Green & Top-Right Blue)
-    const greenGlowTex = createRadialGlowTexture('rgba(2, 224, 32, 0.65)', 'rgba(2, 196, 21, 0.18)');
-    const blueGlowTex = createRadialGlowTexture('rgba(89, 139, 255, 0.65)', 'rgba(22, 104, 255, 0.18)');
+    // 4. Floating Glossy Orbs (Bottom-Left Green & Top-Right Blue)
+    const greenGlowTex = createRadialGlowTexture('rgba(2, 224, 32, 0.55)', 'rgba(2, 196, 21, 0.14)');
+    const blueGlowTex = createRadialGlowTexture('rgba(89, 139, 255, 0.55)', 'rgba(22, 104, 255, 0.14)');
 
     const greenOrbGeo = new THREE.SphereGeometry(0.45, 48, 48);
     const greenOrbGroup = new THREE.Group();
-    greenOrbGroup.position.set(-1.12, -1.45, 0.38);
+    greenOrbGroup.position.set(-1.12, -1.42, 0.4);
     const greenOrbMesh = new THREE.Mesh(greenOrbGeo, greenGlassMat);
     greenOrbGroup.add(greenOrbMesh);
 
@@ -269,13 +327,13 @@ export const HeroSculpture: React.FC = () => {
         depthWrite: false,
       })
     );
-    greenHalo.scale.set(2.1, 2.1, 1);
+    greenHalo.scale.set(2.2, 2.2, 1);
     greenOrbGroup.add(greenHalo);
     sculptureGroup.add(greenOrbGroup);
 
     const blueOrbGeo = new THREE.SphereGeometry(0.43, 48, 48);
     const blueOrbGroup = new THREE.Group();
-    blueOrbGroup.position.set(1.92, 1.55, 0.2);
+    blueOrbGroup.position.set(1.92, 1.52, 0.22);
     const blueOrbMesh = new THREE.Mesh(blueOrbGeo, blueGlassMat);
     blueOrbGroup.add(blueOrbMesh);
 
@@ -287,9 +345,43 @@ export const HeroSculpture: React.FC = () => {
         depthWrite: false,
       })
     );
-    blueHalo.scale.set(2.1, 2.1, 1);
+    blueHalo.scale.set(2.2, 2.2, 1);
     blueOrbGroup.add(blueHalo);
     sculptureGroup.add(blueOrbGroup);
+
+    // 5. Subtle Orbiting Precision Ring + Floating Micro-Particles
+    const orbitCurve = new THREE.EllipseCurve(0, 0, 2.85, 2.85, 0, 2 * Math.PI, false, 0);
+    const orbitGeo = new THREE.BufferGeometry().setFromPoints(orbitCurve.getPoints(120));
+    const orbitMat = new THREE.LineBasicMaterial({
+      color: 0x598bff,
+      transparent: true,
+      opacity: 0.18,
+    });
+    const orbitRing = new THREE.Line(orbitGeo, orbitMat);
+    orbitRing.rotation.set(1.15, 0.35, 0);
+    sculptureGroup.add(orbitRing);
+
+    const particleCount = 36;
+    const pPositions = new Float32Array(particleCount * 3);
+    for (let i = 0; i < particleCount; i++) {
+      const angle = (i / particleCount) * Math.PI * 2;
+      const radius = 2.4 + (i % 5) * 0.42;
+      pPositions[i * 3] = Math.cos(angle) * radius;
+      pPositions[i * 3 + 1] = ((i % 7) - 3) * 0.62;
+      pPositions[i * 3 + 2] = Math.sin(angle) * radius * 0.6;
+    }
+    const particlesGeo = new THREE.BufferGeometry();
+    particlesGeo.setAttribute('position', new THREE.BufferAttribute(pPositions, 3));
+    const particlesMat = new THREE.PointsMaterial({
+      color: 0x93c5fd,
+      size: 0.055,
+      transparent: true,
+      opacity: 0.6,
+      blending: THREE.AdditiveBlending,
+      depthWrite: false,
+    });
+    const particles = new THREE.Points(particlesGeo, particlesMat);
+    sculptureGroup.add(particles);
 
     // Pointer Interactions
     const handlePointerMove = (e: PointerEvent) => {
@@ -344,7 +436,6 @@ export const HeroSculpture: React.FC = () => {
     };
     window.addEventListener('resize', handleResize);
 
-    // Animation Loop
     let animId: number;
     const clock = new THREE.Clock();
 
@@ -353,10 +444,9 @@ export const HeroSculpture: React.FC = () => {
       const t = clock.getElapsedTime();
       const state = interactionRef.current;
 
-      // Gently spring back to hero pose when not dragging
       if (!state.isDragging) {
-        const baseRotY = -0.22 + state.targetX * 0.24;
-        const baseRotX = 0.08 - state.targetY * 0.16;
+        const baseRotY = -0.24 + state.targetX * 0.28;
+        const baseRotX = 0.08 - state.targetY * 0.18;
         state.targetRotY += (baseRotY - state.targetRotY) * 0.04;
         state.targetRotX += (baseRotX - state.targetRotX) * 0.04;
       }
@@ -373,8 +463,10 @@ export const HeroSculpture: React.FC = () => {
         slashMesh.position.y = -0.02 + Math.sin(t * 1.4 + 1.2) * 0.04;
         rightMesh.position.y = -0.08 + Math.sin(t * 1.4 + 2.0) * 0.05;
 
-        greenOrbGroup.position.y = -1.45 + Math.sin(t * 1.6 + 0.6) * 0.12;
-        blueOrbGroup.position.y = 1.55 + Math.cos(t * 1.5 + 0.3) * 0.12;
+        greenOrbGroup.position.y = -1.42 + Math.sin(t * 1.6 + 0.6) * 0.12;
+        blueOrbGroup.position.y = 1.52 + Math.cos(t * 1.5 + 0.3) * 0.12;
+        orbitRing.rotation.z = t * 0.18;
+        particles.rotation.y = t * 0.12;
       }
 
       cursorLight.position.x = state.targetX * 4.5;
@@ -398,13 +490,16 @@ export const HeroSculpture: React.FC = () => {
       rightGeo.dispose();
       greenOrbGeo.dispose();
       blueOrbGeo.dispose();
+      orbitGeo.dispose();
+      orbitMat.dispose();
+      particlesGeo.dispose();
+      particlesMat.dispose();
       blueGlassMat.dispose();
       whiteGlassMat.dispose();
       greenGlassMat.dispose();
       greenGlowTex.dispose();
       blueGlowTex.dispose();
       envTarget.dispose();
-      pmremGenerator.dispose();
       renderer.dispose();
     };
   }, []);
@@ -430,8 +525,8 @@ export const HeroSculpture: React.FC = () => {
           inset: '8%',
           borderRadius: '50%',
           background:
-            'radial-gradient(circle at 38% 55%, rgba(22, 104, 255, 0.24) 0%, rgba(2, 196, 21, 0.14) 55%, transparent 75%)',
-          filter: 'blur(42px)',
+            'radial-gradient(circle at 38% 55%, rgba(22, 104, 255, 0.28) 0%, rgba(2, 196, 21, 0.16) 55%, transparent 75%)',
+          filter: 'blur(46px)',
           pointerEvents: 'none',
         }}
       />
@@ -449,7 +544,6 @@ export const HeroSculpture: React.FC = () => {
           }}
         />
       ) : (
-        /* Crisp SVG Fallback if WebGL is unavailable */
         <svg
           viewBox="0 0 420 340"
           role="img"

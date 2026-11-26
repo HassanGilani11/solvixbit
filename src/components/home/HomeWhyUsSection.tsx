@@ -217,7 +217,7 @@ export const HomeWhyUsSection: React.FC = () => {
                     textTransform: 'uppercase',
                   }}
                 >
-                  GUARANTEED OPERATIONAL STANDARD
+                  OPERATIONAL ENGINEERING STANDARD
                 </span>
               </div>
 
@@ -257,8 +257,8 @@ export const HomeWhyUsSection: React.FC = () => {
                   <div style={{ fontSize: '1.1rem', fontWeight: 800, color: '#598BFF', fontFamily: 'var(--font-family-mono)' }}>
                     &lt;24h
                   </div>
-                  <div style={{ fontSize: '0.68rem', color: '#6B7280', textTransform: 'uppercase', fontFamily: 'var(--font-family-mono)' }}>
-                    Response SLA
+                  <div style={{ fontSize: '0.68rem', color: '#9CA3AF', textTransform: 'uppercase', fontFamily: 'var(--font-family-mono)' }}>
+                    Target Response
                   </div>
                 </div>
                 <div>

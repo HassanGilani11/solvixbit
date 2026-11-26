@@ -45,15 +45,15 @@ const CLUSTERS: CapabilityCluster[] = [
     description:
       'We engineer reactive, type-safe web applications and headless storefronts delivering fluid 60fps micro-animations, strict WCAG 2.2 AA accessibility, and perfect Core Web Vitals across every viewport.',
     telemetryMetrics: [
-      { label: 'First Contentful Paint', value: '<780ms', spec: 'p95 mobile global', accent: '#598BFF' },
-      { label: 'Type Safety Guarantees', value: '100%', spec: 'Strict compiler rules', accent: '#02C415' },
-      { label: 'Accessibility Standard', value: 'WCAG 2.2', spec: 'AA audit-verified', accent: '#38BDF8' },
+      { label: 'Core Web Vitals', value: 'Fast FCP', spec: 'Edge-cached SSR target', accent: '#598BFF' },
+      { label: 'Type Safety', value: 'Strict TS', spec: 'End-to-end contracts', accent: '#02C415' },
+      { label: 'Accessibility Standard', value: 'WCAG 2.2', spec: 'AA-oriented engineering', accent: '#38BDF8' },
     ],
     pipeline: [
       { label: 'Edge CDN', detail: 'Global Anycast Routing' },
       { label: 'Next.js 15 SSR', detail: 'Streaming Server HTML' },
       { label: '60fps Hydration', detail: 'GPU-Accelerated Motion' },
-      { label: 'Core Web Vitals', detail: '99+ Lighthouse Score' },
+      { label: 'Core Web Vitals', detail: 'Performance-Optimized' },
     ],
     technologies: [
       {
@@ -135,13 +135,13 @@ const CLUSTERS: CapabilityCluster[] = [
     description:
       'We architect private, zero-data-retention AI retrieval and document processing systems. Pairing optical character recognition with deterministic validation pipelines that eradicate administrative drag.',
     telemetryMetrics: [
-      { label: 'Grounding Verification', value: '100%', spec: 'Zero-hallucination guardrails', accent: '#02C415' },
-      { label: 'Turnaround Reduction', value: '92%', spec: 'Hours to sub-4 minutes', accent: '#598BFF' },
-      { label: 'Data Isolation', value: 'SOC 2', spec: 'Private VPC endpoints', accent: '#38BDF8' },
+      { label: 'Grounding Architecture', value: 'Citations', spec: 'Deterministic guardrails', accent: '#02C415' },
+      { label: 'Workflow Automation', value: 'HITL Gated', spec: 'Human-in-loop review', accent: '#598BFF' },
+      { label: 'Data Isolation', value: 'Private VPC', spec: 'Zero-retention endpoints', accent: '#38BDF8' },
     ],
     pipeline: [
       { label: 'OCR Ingestion', detail: 'Structured Extraction' },
-      { label: 'Vector RAG', detail: '<20ms Cosine Search' },
+      { label: 'Vector RAG', detail: 'Semantic Retrieval' },
       { label: 'Agentic Logic', detail: 'Deterministic Guardrails' },
       { label: 'Audit Trail', detail: 'Human-in-Loop Signoff' },
     ],
@@ -207,9 +207,9 @@ const CLUSTERS: CapabilityCluster[] = [
     description:
       'We decouple legacy monolithic stores into lightning-fast headless frontends featuring custom cart transform functions, localized currency routing, and bespoke 3D WebGL configurators.',
     telemetryMetrics: [
-      { label: 'Conversion Rate Lift', value: '+34%', spec: 'Verified international avg', accent: '#02C415' },
-      { label: 'Checkout Availability', value: '99.99%', spec: 'Zero peak drop-off', accent: '#598BFF' },
-      { label: 'Global Edge Latency', value: '350ms', spec: '18 APAC & EMEA regions', accent: '#38BDF8' },
+      { label: 'Storefront Architecture', value: 'Headless', spec: 'Decoupled Next.js edge', accent: '#02C415' },
+      { label: 'Checkout Resilience', value: 'Idempotent', spec: 'High-concurrency ready', accent: '#598BFF' },
+      { label: 'Global Localization', value: 'Multi-Region', spec: 'Currency & tax routing', accent: '#38BDF8' },
     ],
     pipeline: [
       { label: 'Edge Storefront', detail: 'Instant Geo-Localization' },
@@ -279,9 +279,9 @@ const CLUSTERS: CapabilityCluster[] = [
     description:
       'We architect multi-region cloud clusters on AWS and edge infrastructure with automated CI/CD canary rollouts, containerization, and proactive telemetry observability.',
     telemetryMetrics: [
-      { label: 'Production Uptime SLA', value: '99.99%', spec: 'Multi-AZ failover target', accent: '#02C415' },
-      { label: 'Infrastructure as Code', value: '100%', spec: 'Versioned Terraform', accent: '#598BFF' },
-      { label: 'Cloud Cost Reduction', value: '-45%', spec: 'Auto-scaling clusters', accent: '#A78BFA' },
+      { label: 'Resilience Target', value: 'Multi-AZ', spec: 'Automated failover design', accent: '#02C415' },
+      { label: 'Infrastructure as Code', value: 'Terraform', spec: 'Versioned cloud state', accent: '#598BFF' },
+      { label: 'Compute Efficiency', value: 'Auto-Scale', spec: 'Right-sized containers', accent: '#A78BFA' },
     ],
     pipeline: [
       { label: 'Edge WAF', detail: 'Zero-Trust Filtering' },
@@ -691,13 +691,9 @@ export const CapabilitiesEcosystem: React.FC = () => {
           role="tabpanel"
           id={`panel-${selected.id}`}
           aria-labelledby={`tab-${selected.id}`}
+          className="sb-glass-capability"
           style={{
-            background: 'linear-gradient(160deg, rgba(15, 23, 42, 0.72) 0%, rgba(7, 12, 24, 0.88) 100%)',
-            backdropFilter: 'blur(20px)',
-            WebkitBackdropFilter: 'blur(20px)',
             borderRadius: '22px',
-            border: '1px solid rgba(255, 255, 255, 0.1)',
-            boxShadow: '0 28px 64px -18px rgba(0, 0, 0, 0.7)',
             padding: 'clamp(1.75rem, 3.8vw, 3.25rem)',
           }}
         >

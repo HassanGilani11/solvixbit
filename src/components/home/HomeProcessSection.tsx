@@ -44,7 +44,7 @@ const STAGES: ProcessStage[] = [
     description: 'Disciplined sprint-based development with strict type-safety, automated tests, clean component boundaries, and peer code reviews.',
     duration: 'Sprints (2-wk cycles)',
     deliverables: ['Type-Safe Codebase', 'Automated Test Suites', 'Staging Testbed & Preview Deploys'],
-    keyOutcome: 'Production-ready code with >85% test coverage.',
+    keyOutcome: 'Production-ready code with automated regression coverage.',
   },
   {
     step: '04',
@@ -61,8 +61,8 @@ const STAGES: ProcessStage[] = [
     subtitle: 'Continuous Telemetry & Expansion',
     description: 'Proactive performance monitoring, latency reduction, and iterative feature development as business volume grows.',
     duration: 'Ongoing Retainer',
-    deliverables: ['Telemetry Dashboards', 'Sub-Second Optimization', 'Ongoing Architectural Advisory'],
-    keyOutcome: 'Sub-second p99 latency and sustained uptime.',
+    deliverables: ['Telemetry Dashboards', 'Performance Optimization', 'Ongoing Architectural Advisory'],
+    keyOutcome: 'Low-latency performance and sustained system reliability.',
   },
 ];
 
@@ -304,140 +304,231 @@ export const HomeProcessSection: React.FC = () => {
           </div>
         </div>
 
-        {/* 5-Stage Interconnected Cards Grid */}
+        {/* Connected Timeline Selector + Active Stage Spotlight (Avoids Repetitive Cards) */}
         <div
           className="sb-process-timeline-grid"
           style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
-            gap: '18px',
-            position: 'relative',
-            marginBottom: '28px',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 340px), 1fr))',
+            gap: '24px',
+            alignItems: 'stretch',
+            marginBottom: '24px',
           }}
         >
-          {STAGES.map((stage, idx) => {
-            const isCurrent = idx === activeStep;
-
-            return (
-              <div
-                key={stage.step}
-                className="sb-process-step-card"
-                onClick={() => setActiveStep(idx)}
-                style={{
-                  backgroundColor: '#FFFFFF',
-                  border: isCurrent ? '2px solid var(--color-primary-blue)' : '1px solid #E5E7EB',
-                  borderRadius: '14px',
-                  padding: 'clamp(1.25rem, 2vw, 1.75rem)',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  cursor: 'pointer',
-                  transition: 'all 200ms cubic-bezier(0.16, 1, 0.3, 1)',
-                  position: 'relative',
-                  boxShadow: isCurrent ? '0 12px 28px -6px rgba(89, 139, 255, 0.18)' : '0 2px 6px rgba(0, 0, 0, 0.02)',
-                  transform: isCurrent ? 'translateY(-2px)' : 'none',
-                }}
-              >
-                {/* Step indicator & Duration Tag */}
-                <div
+          {/* Left: Compact Connected Stage Rail */}
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '10px',
+              position: 'relative',
+            }}
+          >
+            {STAGES.map((stage, idx) => {
+              const isCurrent = idx === activeStep;
+              const isPast = idx < activeStep;
+              return (
+                <button
+                  key={stage.step}
+                  type="button"
+                  className="sb-process-step-card"
+                  onClick={() => setActiveStep(idx)}
+                  aria-pressed={isCurrent}
                   style={{
+                    textAlign: 'left',
                     display: 'flex',
-                    justifyContent: 'space-between',
                     alignItems: 'center',
-                    marginBottom: '12px',
+                    justifyContent: 'space-between',
+                    gap: '14px',
+                    padding: '16px 20px',
+                    borderRadius: '14px',
+                    cursor: 'pointer',
+                    backgroundColor: isCurrent ? '#000000' : '#FFFFFF',
+                    color: isCurrent ? '#FFFFFF' : '#111827',
+                    border: isCurrent
+                      ? '1px solid var(--color-primary-blue)'
+                      : '1px solid #E5E7EB',
+                    boxShadow: isCurrent
+                      ? '0 14px 30px -10px rgba(89, 139, 255, 0.28)'
+                      : '0 2px 6px rgba(0, 0, 0, 0.02)',
+                    transition: 'all 220ms cubic-bezier(0.16, 1, 0.3, 1)',
                   }}
                 >
-                  <span
-                    style={{
-                      fontFamily: 'var(--font-family-mono)',
-                      fontSize: '1.15rem',
-                      fontWeight: 800,
-                      color: isCurrent ? 'var(--color-primary-blue)' : '#9CA3AF',
-                    }}
-                  >
-                    {stage.step}
-                  </span>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+                    <span
+                      style={{
+                        width: '32px',
+                        height: '32px',
+                        borderRadius: '50%',
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        fontFamily: 'var(--font-family-mono)',
+                        fontSize: '0.78rem',
+                        fontWeight: 800,
+                        backgroundColor: isCurrent
+                          ? 'var(--color-primary-blue)'
+                          : isPast
+                          ? '#02C415'
+                          : '#F3F4F6',
+                        color: isCurrent || isPast ? '#FFFFFF' : '#4B5563',
+                        flexShrink: 0,
+                      }}
+                    >
+                      {isPast ? '✓' : stage.step}
+                    </span>
+                    <div>
+                      <div style={{ fontSize: '1.05rem', fontWeight: 700, lineHeight: 1.2 }}>
+                        {stage.name}
+                      </div>
+                      <div
+                        style={{
+                          fontSize: '0.74rem',
+                          fontFamily: 'var(--font-family-mono)',
+                          color: isCurrent ? '#93C5FD' : '#6B7280',
+                          marginTop: '2px',
+                        }}
+                      >
+                        {stage.subtitle}
+                      </div>
+                    </div>
+                  </div>
 
                   <span
                     style={{
                       fontSize: '0.68rem',
                       fontFamily: 'var(--font-family-mono)',
                       fontWeight: 700,
-                      color: isCurrent ? 'var(--color-primary-blue)' : '#6B7280',
-                      backgroundColor: isCurrent ? 'rgba(89, 139, 255, 0.1)' : '#F3F4F6',
-                      padding: '2px 8px',
-                      borderRadius: '4px',
+                      color: isCurrent ? '#FFFFFF' : '#6B7280',
+                      backgroundColor: isCurrent ? 'rgba(89, 139, 255, 0.22)' : '#F3F4F6',
+                      padding: '4px 9px',
+                      borderRadius: '6px',
+                      whiteSpace: 'nowrap',
                     }}
                   >
                     {stage.duration}
                   </span>
-                </div>
+                </button>
+              );
+            })}
+          </div>
 
-                <h3
+          {/* Right: Active Stage Glass Spotlight Panel */}
+          <div
+            className="sb-glass-meta--light"
+            style={{
+              borderRadius: '20px',
+              padding: 'clamp(1.75rem, 3.2vw, 2.5rem)',
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'space-between',
+              gap: '20px',
+            }}
+          >
+            <div>
+              <div
+                style={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  flexWrap: 'wrap',
+                  gap: '10px',
+                  marginBottom: '14px',
+                }}
+              >
+                <span
                   style={{
-                    fontFamily: 'var(--font-family-heading)',
-                    fontSize: '1.2rem',
-                    fontWeight: 700,
-                    color: '#000000',
-                    marginBottom: '3px',
-                  }}
-                >
-                  {stage.name}
-                </h3>
-
-                <div
-                  style={{
-                    fontSize: '0.75rem',
                     fontFamily: 'var(--font-family-mono)',
+                    fontSize: '0.75rem',
+                    fontWeight: 800,
                     color: 'var(--color-primary-blue)',
-                    marginBottom: '10px',
-                    fontWeight: 600,
+                    letterSpacing: '0.06em',
                   }}
                 >
-                  {stage.subtitle}
-                </div>
-
-                <p
+                  STAGE {currentStage.step} // {currentStage.subtitle.toUpperCase()}
+                </span>
+                <span
                   style={{
-                    fontSize: '0.85rem',
-                    color: '#4B5563',
-                    lineHeight: 1.5,
-                    marginBottom: '14px',
-                    flexGrow: 1,
+                    fontSize: '0.72rem',
+                    fontFamily: 'var(--font-family-mono)',
+                    fontWeight: 700,
+                    color: '#048A10',
+                    backgroundColor: 'rgba(2, 196, 21, 0.1)',
+                    padding: '4px 10px',
+                    borderRadius: '999px',
                   }}
                 >
-                  {stage.description}
-                </p>
+                  {currentStage.duration}
+                </span>
+              </div>
 
-                {/* Key Deliverables */}
+              <h3
+                style={{
+                  fontFamily: 'var(--font-family-heading)',
+                  fontSize: 'clamp(1.6rem, 2.5vw, 2.1rem)',
+                  fontWeight: 800,
+                  color: '#000000',
+                  letterSpacing: '-0.025em',
+                  margin: '0 0 12px 0',
+                }}
+              >
+                {currentStage.name}
+              </h3>
+
+              <p
+                style={{
+                  fontSize: '1rem',
+                  color: '#4B5563',
+                  lineHeight: 1.65,
+                  margin: '0 0 22px 0',
+                }}
+              >
+                {currentStage.description}
+              </p>
+
+              <div
+                style={{
+                  borderTop: '1px solid #E5E7EB',
+                  paddingTop: '18px',
+                }}
+              >
                 <div
                   style={{
-                    borderTop: '1px solid #F3F4F6',
-                    paddingTop: '12px',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    gap: '5px',
+                    fontSize: '0.72rem',
+                    fontFamily: 'var(--font-family-mono)',
+                    fontWeight: 700,
+                    color: '#6B7280',
+                    letterSpacing: '0.06em',
+                    marginBottom: '12px',
                   }}
                 >
-                  {stage.deliverables.map((item) => (
-                    <span
+                  STAGE DELIVERABLES
+                </div>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                  {currentStage.deliverables.map((item) => (
+                    <div
                       key={item}
                       style={{
-                        fontSize: '0.72rem',
-                        color: '#6B7280',
                         display: 'flex',
                         alignItems: 'center',
-                        gap: '6px',
-                        lineHeight: 1.3,
+                        gap: '10px',
+                        padding: '10px 14px',
+                        backgroundColor: '#FFFFFF',
+                        border: '1px solid #E5E7EB',
+                        borderRadius: '10px',
+                        fontSize: '0.875rem',
+                        fontWeight: 600,
+                        color: '#111827',
                       }}
                     >
                       <span style={{ color: 'var(--color-secondary-green)', fontWeight: 800 }}>✓</span>
-                      {item}
-                    </span>
+                      <span>{item}</span>
+                    </div>
                   ))}
                 </div>
               </div>
-            );
-          })}
+            </div>
+          </div>
         </div>
 
         {/* Milestone Deep-Dive Telemetry Strip for Selected Stage */}
