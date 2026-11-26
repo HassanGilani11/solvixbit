@@ -623,52 +623,70 @@ export const HomeSolutionsSection: React.FC = () => {
                       </div>
                     </div>
 
-                    {/* Outcomes Metrics */}
+                    {/* Target Outcomes */}
                     {sol.outcomes && sol.outcomes.length > 0 && (
                       <div
                         style={{
-                          display: 'grid',
-                          gridTemplateColumns: 'repeat(3, 1fr)',
-                          gap: '8px',
                           marginBottom: '12px',
                           paddingTop: '10px',
                           borderTop: '1px solid rgba(255, 255, 255, 0.08)',
                         }}
                       >
-                        {sol.outcomes.slice(0, 3).map((outcome) => (
-                          <div
-                            key={outcome.label}
-                            style={{
-                              paddingLeft: '10px',
-                              borderLeft: '2px solid #598BFF',
-                            }}
-                          >
+                        <div
+                          style={{
+                            fontSize: '0.58rem',
+                            fontFamily: 'var(--font-family-mono)',
+                            fontWeight: 700,
+                            color: '#64748B',
+                            letterSpacing: '0.07em',
+                            textTransform: 'uppercase',
+                            marginBottom: '6px',
+                          }}
+                        >
+                          TARGET ENGINEERING OUTCOMES
+                        </div>
+                        <div
+                          style={{
+                            display: 'grid',
+                            gridTemplateColumns: 'repeat(3, 1fr)',
+                            gap: '8px',
+                          }}
+                        >
+                          {sol.outcomes.slice(0, 3).map((outcome) => (
                             <div
+                              key={outcome.label}
                               style={{
-                                fontSize: '1.05rem',
-                                fontWeight: 800,
-                                color: '#FFFFFF',
-                                fontFamily: 'var(--font-family-mono)',
-                                lineHeight: 1.1,
+                                paddingLeft: '10px',
+                                borderLeft: '2px solid #598BFF',
                               }}
                             >
-                              {outcome.value}
+                              <div
+                                style={{
+                                  fontSize: '1.05rem',
+                                  fontWeight: 800,
+                                  color: '#FFFFFF',
+                                  fontFamily: 'var(--font-family-mono)',
+                                  lineHeight: 1.1,
+                                }}
+                              >
+                                {outcome.value}
+                              </div>
+                              <div
+                                style={{
+                                  fontSize: '0.66rem',
+                                  fontWeight: 700,
+                                  color: '#94A3B8',
+                                  textTransform: 'uppercase',
+                                  letterSpacing: '0.03em',
+                                  marginTop: '3px',
+                                  lineHeight: 1.25,
+                                }}
+                              >
+                                {outcome.label}
+                              </div>
                             </div>
-                            <div
-                              style={{
-                                fontSize: '0.66rem',
-                                fontWeight: 700,
-                                color: '#94A3B8',
-                                textTransform: 'uppercase',
-                                letterSpacing: '0.03em',
-                                marginTop: '3px',
-                                lineHeight: 1.25,
-                              }}
-                            >
-                              {outcome.label}
-                            </div>
-                          </div>
-                        ))}
+                          ))}
+                        </div>
                       </div>
                     )}
                   </div>

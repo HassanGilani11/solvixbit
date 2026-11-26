@@ -213,7 +213,7 @@ export const HomeFeaturedWork: React.FC = () => {
                 margin: '0 0 14px 0',
               }}
             >
-              Proven commercial impact, engineered to endure.
+              Representative architectures, engineered to endure.
             </h2>
 
             <p
