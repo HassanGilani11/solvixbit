@@ -281,7 +281,7 @@ export const HomeSolutionsSection: React.FC = () => {
                       boxShadow: '0 0 8px #598BFF',
                     }}
                   />
-                  05 // STRATEGIC BUSINESS SOLUTIONS
+                  04 // STRATEGIC BUSINESS SOLUTIONS
                 </span>
               </div>
 

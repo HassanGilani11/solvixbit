@@ -12,9 +12,18 @@ import { ANIMATION_CONFIG } from '../../lib/animation/config';
 
 initGSAP();
 
+const HOMEPAGE_ARTICLE_SLUGS = [
+  'where-should-your-business-start-with-ai-automation',
+  'from-mvp-to-scalable-saas-what-to-build-first',
+  'is-headless-commerce-right-for-your-business',
+];
+
 export const HomeInsightsSection: React.FC = () => {
   const sectionRef = useRef<HTMLElement>(null);
-  const featuredArticles = ARTICLES.slice(0, 3);
+  const curatedArticles = HOMEPAGE_ARTICLE_SLUGS.map((slug) =>
+    ARTICLES.find((article) => article.slug === slug)
+  ).filter((article): article is (typeof ARTICLES)[number] => Boolean(article));
+  const featuredArticles = curatedArticles.length === 3 ? curatedArticles : ARTICLES.slice(0, 3);
 
   useGSAP(
     () => {

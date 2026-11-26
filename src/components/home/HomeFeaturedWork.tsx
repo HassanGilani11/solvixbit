@@ -20,9 +20,9 @@ const CASE_STUDY_IMAGES: Record<string, string> = {
 };
 
 const CASE_STUDY_PREVIEWS: Record<string, { endpoint: string; badge: string }> = {
-  'fintech-payment-engine': { endpoint: 'stratapay.example/api/v2/settlement', badge: 'FINTECH LEDGER // CASE STUDY' },
-  'ecommerce-headless-scale': { endpoint: 'aura-atelier.example/configurator', badge: 'HEADLESS 3D // CASE STUDY' },
-  'enterprise-ai-copilot': { endpoint: 'nexus-health.example/workspace', badge: 'PRIVATE RAG // CASE STUDY' },
+  'fintech-payment-engine': { endpoint: 'stratapay.example/api/v2/settlement', badge: 'FINTECH LEDGER // CONCEPT' },
+  'ecommerce-headless-scale': { endpoint: 'aura-atelier.example/configurator', badge: 'HEADLESS 3D // CONCEPT' },
+  'enterprise-ai-copilot': { endpoint: 'nexus-health.example/workspace', badge: 'PRIVATE RAG // CONCEPT' },
 };
 
 export const HomeFeaturedWork: React.FC = () => {
@@ -198,7 +198,7 @@ export const HomeFeaturedWork: React.FC = () => {
                 }}
               >
                 <span style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: 'var(--color-primary-blue)' }} />
-                04 // FEATURED CASE HIGHLIGHTS
+                05 // FEATURED CASE HIGHLIGHTS
               </span>
             </div>
 
@@ -225,7 +225,7 @@ export const HomeFeaturedWork: React.FC = () => {
                 margin: 0,
               }}
             >
-              A selection of representative architecture case studies and mission-critical digital systems engineered to rigorous standards.
+              A selection of illustrative architecture case studies and digital system concepts engineered to rigorous standards.
             </p>
           </div>
 
@@ -289,7 +289,7 @@ export const HomeFeaturedWork: React.FC = () => {
                         letterSpacing: '0.04em',
                       }}
                     >
-                      {project.client} • ARCHITECTURE CASE STUDY
+                      {project.client} • ILLUSTRATIVE CASE STUDY
                     </span>
                   </div>
 
@@ -331,37 +331,55 @@ export const HomeFeaturedWork: React.FC = () => {
                     {project.summary}
                   </p>
 
-                  {/* Quantifiable Verified Metrics Strip */}
+                  {/* Illustrative Architecture Metrics Strip */}
                   <div
                     style={{
-                      display: 'grid',
-                      gridTemplateColumns: 'repeat(3, 1fr)',
-                      gap: '12px',
                       backgroundColor: '#F9FAFB',
-                      padding: '16px 18px',
+                      padding: '14px 18px 16px',
                       borderRadius: 'var(--radius-md)',
                       border: '1px solid #E5E7EB',
                       marginBottom: '26px',
                     }}
                   >
-                    {project.metrics.map((m) => (
-                      <div key={m.label} className="sb-project-metric-card">
-                        <div
-                          style={{
-                            fontFamily: 'var(--font-family-heading)',
-                            fontSize: 'clamp(1.25rem, 2vw, 1.6rem)',
-                            fontWeight: 800,
-                            color: 'var(--color-primary-blue)',
-                            lineHeight: 1.1,
-                          }}
-                        >
-                          {m.value}
+                    <div
+                      style={{
+                        fontSize: '0.62rem',
+                        fontFamily: 'var(--font-family-mono)',
+                        fontWeight: 700,
+                        color: '#6B7280',
+                        letterSpacing: '0.06em',
+                        textTransform: 'uppercase',
+                        marginBottom: '10px',
+                      }}
+                    >
+                      ILLUSTRATIVE TARGET BENCHMARKS
+                    </div>
+                    <div
+                      style={{
+                        display: 'grid',
+                        gridTemplateColumns: 'repeat(3, 1fr)',
+                        gap: '12px',
+                      }}
+                    >
+                      {project.metrics.map((m) => (
+                        <div key={m.label} className="sb-project-metric-card">
+                          <div
+                            style={{
+                              fontFamily: 'var(--font-family-heading)',
+                              fontSize: 'clamp(1.25rem, 2vw, 1.6rem)',
+                              fontWeight: 800,
+                              color: 'var(--color-primary-blue)',
+                              lineHeight: 1.1,
+                            }}
+                          >
+                            {m.value}
+                          </div>
+                          <div style={{ fontSize: '0.72rem', color: '#6B7280', marginTop: '3px', fontWeight: 600 }}>
+                            {m.label}
+                          </div>
                         </div>
-                        <div style={{ fontSize: '0.72rem', color: '#6B7280', marginTop: '3px', fontWeight: 600 }}>
-                          {m.label}
-                        </div>
-                      </div>
-                    ))}
+                      ))}
+                    </div>
                   </div>
 
                   {/* Core Technologies Badges */}

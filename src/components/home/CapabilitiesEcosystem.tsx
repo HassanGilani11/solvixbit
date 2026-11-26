@@ -43,7 +43,7 @@ const CLUSTERS: CapabilityCluster[] = [
     accentColor: '#598BFF',
     outcome: 'Sub-second, accessible digital interfaces that convert visitors.',
     description:
-      'We engineer reactive, type-safe web applications and headless storefronts delivering fluid 60fps micro-animations, strict WCAG 2.2 AA accessibility, and perfect Core Web Vitals across every viewport.',
+      'We engineer reactive, type-safe web applications and headless storefronts delivering fluid 60fps micro-animations, WCAG 2.2 AA-oriented accessibility, and Core Web Vitals optimization across every viewport.',
     telemetryMetrics: [
       { label: 'Core Web Vitals', value: 'Fast FCP', spec: 'Edge-cached SSR target', accent: '#598BFF' },
       { label: 'Type Safety', value: 'Strict TS', spec: 'End-to-end contracts', accent: '#02C415' },

@@ -270,7 +270,7 @@ export const HeroSection: React.FC<HeroSectionProps> = () => {
               </span>
             </h1>
 
-            {/* Supporting Brand Message */}
+            {/* Supporting Brand Headline */}
             <p
               className="sb-hero-headline-line"
               style={{
@@ -283,7 +283,7 @@ export const HeroSection: React.FC<HeroSectionProps> = () => {
                 margin: '0 0 14px 0',
               }}
             >
-              Big ideas deserve better technology.
+              We turn bold ideas into digital experiences.
             </p>
 
             {/* Supporting Narrative */}
